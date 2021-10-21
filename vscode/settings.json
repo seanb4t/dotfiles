@@ -18,8 +18,8 @@
   "window.title": "${activeEditorMedium}${separator}${rootName}",
   "files.trimTrailingWhitespace": true,
   "editor.minimap.enabled": false,
-  "editor.renderWhitespace": "all",
-  "workbench.colorTheme": "Dracula Pro",
+  "editor.renderWhitespace": "none",
+"workbench.colorTheme": "Material Theme Darker High Contrast",
   "extensions.ignoreRecommendations": false,
   "go.coverageDecorator": {
     "type": "gutter"
@@ -76,7 +76,6 @@
   "gitlens.views.lineHistory.location": "explorer",
   "gitlens.views.compare.location": "gitlens",
   "gitlens.views.search.location": "gitlens",
-  "terminal.integrated.shell.linux": "/home/linuxbrew/.linuxbrew/bin/zsh",
   "vsicons.dontShowNewVersionMessage": true,
   "terminal.integrated.fontFamily": "JetBrains Mono for Powerline",
   "workbench.iconTheme": "vscode-icons",
@@ -90,7 +89,7 @@
   },
   "java.semanticHighlighting.enabled": true,
 "debug.console.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
-"python.languageServer": "Microsoft",
+"python.languageServer": "Pylance",
 "python.insidersChannel": "off",
 "settingsSync.ignoredExtensions": [],
 "settingsSync.ignoredSettings": [],
@@ -123,5 +122,80 @@
 },
 "editor.formatOnPaste": false,
 "editor.formatOnSave": false,
-"editor.formatOnType": false
+"editor.formatOnType": false,
+"java.imports.gradle.wrapper.checksums": [
+  {
+    "sha256": "b6d4889c970eaf6e0c7e75166d24512072d441942f26f6f2fe5b43045d15b46c",
+    "allowed": true
+  },
+  {
+    "sha256": "e996d452d2645e70c01c11143ca2d3742734a28da2bf61f25c82bdc288c9e637",
+    "allowed": true
+  }
+],
+"markdown.preview.breaks": true,
+"instantmarkdown.autoOpenBrowser": false,
+"markdown.extension.print.theme": "dark",
+"html.autoClosingTags": false,
+"auto-close-tag.enableAutoCloseSelfClosingTag": false,
+"go.toolsManagement.autoUpdate": true,
+"shellformat.useEditorConfig": true,
+"terminal.integrated.defaultProfile.linux": "bash",
+"terminal.integrated.profiles.linux": {
+  "bash": {
+    "path": "bash",
+    "icon": "terminal-bash"
+  },
+  "zsh": {
+    "path": "zsh"
+  },
+  "fish": {
+    "path": "fish"
+  },
+  "tmux": {
+    "path": "tmux",
+    "icon": "terminal-tmux"
+  },
+  "pwsh": {
+    "path": "pwsh",
+    "icon": "terminal-powershell"
+  }
+},
+"terminal.integrated.defaultProfile.osx": "zsh",
+"terminal.integrated.profiles.osx": {
+  "bash": {
+    "path": "bash",
+    "args": [
+      "-l"
+    ],
+    "icon": "terminal-bash"
+  },
+  "zsh": {
+    "path": "zsh",
+    "args": [
+      "-l"
+    ]
+  },
+  "fish": {
+    "path": "fish",
+    "args": [
+      "-l"
+    ]
+  },
+  "tmux": {
+    "path": "tmux",
+    "icon": "terminal-tmux"
+  },
+  "pwsh": {
+    "path": "pwsh",
+    "icon": "terminal-powershell"
+  }
+},
+"security.workspace.trust.untrustedFiles": "open",
+"editor.bracketPairColorization.enabled": true,
+"editor.guides.bracketPairs": true,
+"bracketPairColorizer.colorMode": "Independent",
+"bracketPairColorizer.forceUniqueOpeningColor": true,
+"bracketPairColorizer.showBracketsInRuler": true,
+"git.confirmSync": false
 }

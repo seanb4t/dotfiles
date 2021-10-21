@@ -1,9 +1,12 @@
+# -*- mode: sh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# code: language=shell insertSpaces=true tabSize=2
+
 #
 # Executes commands at login pre-zshrc.
 #
 
 # shortcut to this dotfiles path is $DOTFILES
-export DOTFILES="$HOME/.dotfiles"
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
 #
 # Browser
@@ -15,30 +18,8 @@ fi
 
 
 # your project folder that we can `c [tab]` to
-export PROJECTS="$HOME/Code"
+export PROJECTS="${PROJECTS:-$HOME/Code}"
 
-#
-# Editors
-#
-
-# your default editor
-code="code"
-if command -v code-insiders >/dev/null 2>&1; then
-  code="code-insiders"
-fi
-export EDITOR="$(command -v vim)"
-export VISUAL="$(command -v ${code}) -nw"
-export VEDITOR="$(command -v ${code}) -nw"
-
-#
-# Shell Config env
-#
-export ENHANCD_FILTER=fzf
-export ENHANCD_DISABLE_DOT=1
-export ENHANCD_DISABLE_HYPHEN=1
-
-export NVM_LAZY_LOAD=true
-export NVM_AUTO_USE=true
 
 #
 # Language
@@ -55,21 +36,6 @@ fi
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path
 
-# Set the the list of directories that cd searches.
-# cdpath=(
-#   $cdpath
-# )
-
-# Set the list of directories that Zsh searches for programs.
-path=(
-  /usr/local/{bin,sbin}
-  $path
-)
-
-[[ -d /home/linuxbrew/.linuxbrew/bin ]] && path=(
-  /home/linuxbrew/.linuxbrew/{bin,sbin}
-  $path
-)
 
 #
 # Less

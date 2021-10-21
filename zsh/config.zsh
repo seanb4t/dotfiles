@@ -31,7 +31,7 @@ setopt AUTO_CD
 
 # Job Control
 setopt AUTO_CONTINUE
-setopt MONITOR
+#setopt MONITOR
 
 # don't nice background tasks
 setopt NO_BG_NICE
