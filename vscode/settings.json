@@ -197,5 +197,6 @@
 "bracketPairColorizer.colorMode": "Independent",
 "bracketPairColorizer.forceUniqueOpeningColor": true,
 "bracketPairColorizer.showBracketsInRuler": true,
-"git.confirmSync": false
+"git.confirmSync": false,
+"redhat.telemetry.enabled": true
 }
