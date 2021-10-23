@@ -1,2 +1,0 @@
-
-path=(~/.cargo/bin $path)
