@@ -1,0 +1,10 @@
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[user]
+	name = Sean Brandt
+	email = seanb4t@fzymgc.dev
+[include]
+	path = /Users/sean/.gitconfig.local

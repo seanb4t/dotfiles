@@ -1,0 +1,53 @@
+Host *
+  UseKeyChain yes
+  ForwardAgent yes
+
+Host ds.fzymgc.house ds
+  User admin
+  Port 65322
+
+Host github.com
+  ControlMaster auto
+  ControlPath ~/.ssh/connections/%r_%h_%p
+  ControlPersist 1h
+
+Host asgard.fzymgc.house asgard homeassistant hass
+  User fzymgc
+  HostName asgard.local
+
+Host fate1 fate2 fate3
+  User fzymgc
+
+Host router 192.168.28.1 udmpro
+  User root
+  HostName 192.168.28.1
+
+Host nas1
+  HostName 192.168.28.200
+
+Host 192.168.20.2 k8s1 k8s1.fzymgc.house
+  HostName 192.168.20.2
+  User fzymgc
+  ForwardAgent yes
+
+Host 192.168.40.10
+  HostName 192.168.40.10
+  User fzymgc
+
+Host odin salt odin.fzymgc.house salt.fzymgc.house
+  HostName odin
+  User fzymgc
+  ForwardAgent yes
+
+Host ns3
+  HostName ns3
+  User fzymgc
+
+Host vsphere.fzymgc.house vsphere
+  HostName vsphere.fzymgc.house
+  User root
+  PreferredAuthentications password
+
+Host ns3
+  HostName ns3
+  User fzymgc

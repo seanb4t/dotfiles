@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+exec op get item --vault=fzymgc-house "ansible-vault-password" | jq -r '.details.password'

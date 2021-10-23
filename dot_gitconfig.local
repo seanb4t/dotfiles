@@ -1,0 +1,102 @@
+[alias]
+  br = branch
+  changed = show --pretty=\"format:\" --name-only
+  ci = commit
+  co = checkout
+  commend = commit --amend --no-edit
+  fa = fetch --all -p --tags
+  fm = fetch-merge
+  g = grep --break --heading --line-number
+  gi = grep --break --heading --line-number -i
+  ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+  ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+  lt = log --tags --decorate --simplify-by-decoration --oneline
+  please = push --force-with-lease
+  st = status -sb
+  whatadded = log --diff-filter=A
+[apply]
+  whitespace = nowarn
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = true
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+[core]
+  excludesfile = ~/.gitignore
+  compression = -1
+  autocrlf = input
+  whitespace = trailing-space,space-before-tab
+  precomposeunicode = true
+  pager = diff-so-fancy | less --tabs=4 -RFX
+[branch]
+  autosetupmerge = true
+  autosetuprebase = always
+
+[github]
+  user = sean-brandt
+  token = ae00d4156051a23810e556e03115fa2e
+[difftool "diffmerge"]
+  cmd = diffmerge $LOCAL $REMOTE
+[help]
+  autocorrect = 1
+[merge]
+  tool = diffmerge
+[mergetool "diffmerge"]
+  cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+  trustExitCode = true
+  keepBackup = false
+[diff]
+  tool = diffmerge
+[difftool]
+  prompt = false
+[grep]
+  extendRegexp = true
+  lineNumber = true
+[push]
+  default = simple
+[submodule]
+  fetchJobs = 4
+[commit]
+  template = ~/.dotfiles/git/template.txt
+[log]
+  showSignature = false
+  decorate = true
+[status]
+  submoduleSummary = true
+
+# gitconfig
+[diff "ansible-vault"]
+	textconv = ansible-vault view
+	# Do not cache the vault contents
+	cachetextconv = false
+
+[delta]
+    features = side-by-side line-numbers decorations
+    syntax-theme = Dracula
+    plus-style = syntax "#003800"
+    minus-style = syntax "#3f0001"
+
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+    file-decoration-style = none
+    hunk-header-decoration-style = cyan box ul
+
+[delta "line-numbers"]
+    line-numbers-left-style = cyan
+    line-numbers-right-style = cyan
+    line-numbers-minus-style = 124
+    line-numbers-plus-style = 28
