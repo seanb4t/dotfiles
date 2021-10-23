@@ -1,3 +1,10 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+
+#!/usr/bin/env zsh
+# -*- mode: sh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# code: language=shell insertSpaces=true tabSize=2
+
+brew bundle install --quiet --no-lock --file=/dev/stdin <<EOF
 tap "aylei/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask"
@@ -35,3 +42,6 @@ brew "mutagen-io/mutagen/mutagen"
 cask "1password-cli"
 cask "git-credential-manager-core"
 cask "github"
+EOF
+
+{{ end -}}
