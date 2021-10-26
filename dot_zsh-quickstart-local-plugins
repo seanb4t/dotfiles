@@ -127,13 +127,7 @@ zgenom load zsh-users/zsh-autosuggestions
 # directories.
 zgenom load supercrabtree/k
 
-
-if hash tmux &>/dev/null; then
-    zgenom prezto tmux
-fi
-
 zgenom load romkatv/powerlevel10k powerlevel10k
 
 # Save it all to init script
 zgenom save
-
