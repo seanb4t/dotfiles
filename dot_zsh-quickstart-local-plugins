@@ -43,6 +43,9 @@ zgenom load djui/alias-tips
 # Add my collection of git helper scripts.
 zgenom load unixorn/git-extra-commands
 
+# Add git aliases
+zgenom load mdumitru/git-aliases
+
 # Supercharge your history search with fzf
 zgenom load unixorn/fzf-zsh-plugin
 

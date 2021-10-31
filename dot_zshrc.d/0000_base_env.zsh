@@ -10,3 +10,10 @@ export QUICKSTART_KIT_REFRESH_IN_DAYS=7
 ## Update brew every day
 #
 export HOMEBREW_AUTO_UPDATE_SECS=86400
+
+#
+## SSH agent config
+#
+zstyle :omz:plugins:ssh-agent agent-forwarding on
+zstyle :omz:plugins:ssh-agent identities id_ed25519 id_rsa seanb4t_ed25519
+zstyle :omz:plugins:ssh-agent ssh-add-args -K -k -q --apple-use-keychain --apple-load-keychain
