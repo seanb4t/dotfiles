@@ -1,3 +1,7 @@
+Host 192.168.20.1
+  HostName 192.168.20.1
+  User pi
+
 Host *
   UseKeyChain yes
   ForwardAgent yes

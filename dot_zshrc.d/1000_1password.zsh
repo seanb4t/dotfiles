@@ -7,6 +7,13 @@ if (( ${+commands[op]} )); then
   compdef _op op
 fi
 
+# This function will run `op signin` with any supplied arguments and eval the
+# command into the current shell.
+function 1ps() {
+    eval $(command op signin "$@")
+    return $?
+}
+
 # opswd puts the password of the named service into the clipboard. If there's a
 # one time password, it will be copied into the clipboard after 5 seconds. The
 # clipboard is cleared after another 10 seconds.
