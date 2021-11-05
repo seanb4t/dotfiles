@@ -3,8 +3,11 @@
 # code: language=shell insertSpaces=true tabSize=2
 
 
+
 export DONT_PRINT_SSH_KEY_LIST=1
 export QUICKSTART_KIT_REFRESH_IN_DAYS=7
+
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:${PATH}"
 
 #
 ## Update brew every day

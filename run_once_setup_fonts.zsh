@@ -8,10 +8,9 @@ install() {
 if [ "$(uname -s)" = "Darwin" ]; then
         if command -v brew >/dev/null 2>&1; then
                 brew tap | grep -q homebrew/cask-fonts || brew tap homebrew/cask-fonts
-                brew install font-firacode-nerd-font \
-                        font-jetbrains-mono-powerline \
-                        font-jetbrains-mono \
-                        font-firacode-nerd-font-mono \
+                brew install font-jetbrains-mono \
+                        font-jetbrains-mono-nerd-font \
+                        font-fira-code-nerd-font \
                         font-meslo-for-powerline \
                         font-meslo-lg \
                         font-meslo-lg-dz \

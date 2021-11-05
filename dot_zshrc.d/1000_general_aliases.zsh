@@ -17,12 +17,6 @@ has bat && alias cat=bat && alias catp='bat -pp'
 has rg && alias grep=rg && alias ack=rg
 
 #
-## find
-#
-has fd && alias find=fd
-
-
-#
 ## exa / ls
 #
 if has exa; then

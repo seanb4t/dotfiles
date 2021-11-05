@@ -4,6 +4,9 @@
 # -*- mode: sh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
 # code: language=shell insertSpaces=true tabSize=2
 
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:${PATH}"
+
+
 brew bundle install --quiet --no-lock --file=/dev/stdin <<EOF
 tap "aylei/tap"
 tap "homebrew/bundle"
@@ -14,7 +17,10 @@ tap "homebrew/command-not-found"
 tap "homebrew/core"
 tap "microsoft/git"
 tap "mutagen-io/mutagen"
+brew "awscli"
+brew "azure-cli"
 brew "bat"
+brew "chezmoi"
 brew "diff-so-fancy"
 brew "exa"
 brew "fd"
@@ -36,13 +42,32 @@ brew "pre-commit"
 brew "ripgrep"
 brew "rsync"
 brew "rust"
+brew "simnalamburt/x/podman-apple-silicon"
+brew "stow"
 brew "s3cmd"
 brew "wget"
 brew "zsh"
 brew "mutagen-io/mutagen/mutagen"
+cask "dropbox"
+cask "brave-browser"
+cask "google-chrome"
+cask "alfred"
+cask "discord"
+cask "slack"
+cask "bartender"
 cask "1password-cli"
 cask "git-credential-manager-core"
 cask "github"
+cask "iterm2"
+cask "visual-studio-code"
 EOF
+
+mkdir -p ~/.ssh/connections
+
+
+pip3 install --upgrade pip
+pip3 install pynvim
+
+[[ -d ~/.sdkman ]] || curl -s "https://get.sdkman.io" | bash
 
 {{ end -}}
