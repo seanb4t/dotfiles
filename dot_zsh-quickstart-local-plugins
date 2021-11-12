@@ -6,6 +6,8 @@
 ZGEN_LOADED=()
 ZGEN_COMPLETIONS=()
 
+export PATH=/opt/homebrew/bin:$PATH
+
 zgenom oh-my-zsh
 
 # If zsh-syntax-highlighting is bundled after zsh-history-substring-search,
@@ -113,6 +115,7 @@ zgenom load gradle/gradle-completion
  # Install ohmyzsh osx plugin if on macOS
 [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/osx
 
+zgenom load dbz/kube-aliases
 
 # Load me last
 GENCOMPL_FPATH=$HOME/.zsh/complete
