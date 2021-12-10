@@ -6,6 +6,7 @@
 ZGEN_LOADED=()
 ZGEN_COMPLETIONS=()
 
+export POWERLEVEL9K_INSTANT_PROMPT=quiet
 export PATH=/opt/homebrew/bin:$PATH
 
 zgenom oh-my-zsh
@@ -95,7 +96,8 @@ zgenom load zsh-users/zsh-completions src
 # Docker completion
 zgenom load srijanshetty/docker-zsh
 
-zgenom load zpm-zsh/autoenv
+#zgenom load zpm-zsh/autoenv
+zgenom load Tarrasch/zsh-autoenv
 zgenom load zpm-zsh/clipboard
 zgenom load zpm-zsh/colorize
 zgenom load zpm-zsh/colors
@@ -111,9 +113,6 @@ zgenom load seanb4t/op.plugin.zsh
 zgenom load seanb4t/zsh-aliases
 zgenom load rbirnie/oh-my-zsh-keybase
 zgenom load gradle/gradle-completion
-
- # Install ohmyzsh osx plugin if on macOS
-[[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/osx
 
 zgenom load dbz/kube-aliases
 

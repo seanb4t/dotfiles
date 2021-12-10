@@ -20,3 +20,6 @@ export HOMEBREW_AUTO_UPDATE_SECS=86400
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 zstyle :omz:plugins:ssh-agent identities id_ed25519 id_rsa seanb4t_ed25519
 zstyle :omz:plugins:ssh-agent ssh-add-args -K -k -q --apple-use-keychain --apple-load-keychain
+
+
+[[ -d ~/go/bin ]] && export PATH="${HOME}/go/bin:${PATH}"
