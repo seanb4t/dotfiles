@@ -10,11 +10,22 @@ end_of_line = lf
 indent_size = 2
 indent_style = space
 insert_final_newline = true
-max_line_length = 80
+max_line_length = 120
 trim_trailing_whitespace = true
 
-[*.{xml,py,java,go,sh}]
-indent_style = tab
+[*.sh]
+# like -i=4
+indent_size = 2
+
+shell_variant      = posix # like -ln=posix
+binary_next_line   = true  # like -bn
+switch_case_indent = true  # like -ci
+space_redirects    = true  # like -sr
+keep_padding       = true  # like -kp
+function_next_line = true  # like -fn
+
+[*.{xml,java}]
+indent_style = space
 indent_size = 4
 
 [Makefile]
@@ -24,4 +35,3 @@ indent_size = 4
 [*.tf]
 indent_size = 2
 max_line_length = 140
-
