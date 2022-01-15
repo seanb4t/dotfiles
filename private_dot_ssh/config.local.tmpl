@@ -3,7 +3,9 @@ Host 192.168.20.1
   User pi
 
 Host *
+  {{- if (eq .chezmoi.os "darwin") -}}
   UseKeyChain yes
+  {{- end -}}
   ForwardAgent yes
 
 Host ds.fzymgc.house ds
