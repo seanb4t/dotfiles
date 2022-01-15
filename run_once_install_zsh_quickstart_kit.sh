@@ -2,7 +2,7 @@
 
 set -e
 
-[[ -d "${HOME}/.zsh_quickstart_kit" ]]; then
+if [[ -d "${HOME}/.zsh_quickstart_kit" ]]; then
   cd "${HOME}/.zsh_quickstart_kit"
   git pull
 else
