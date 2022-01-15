@@ -2,6 +2,9 @@
 
 set -e
 
+[[ -d /home/linuxbrew ]] && export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+[[ -d /opt/homebrew ]] && export PATH=/opt/homebrew/bin:$PATH
+
 if [[ -d "${HOME}/.zsh_quickstart_kit" ]]; then
   cd "${HOME}/.zsh_quickstart_kit"
   git pull
