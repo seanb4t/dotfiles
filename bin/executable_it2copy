@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-###
-# from: https://raw.githubusercontent.com/gnachman/iTerm2-shell-integration/main/utilities/it2copy
-###
-
 trap clean_up EXIT
 trap clean_up INT
 
@@ -79,3 +75,4 @@ inosc=1
 printf '1337;Copy=:%s' "$data"
 print_st
 inosc=0
+
