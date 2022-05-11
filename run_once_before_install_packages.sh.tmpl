@@ -160,6 +160,10 @@ if [[ ! -f /usr/bin/op ]]; then
   sudo apt update && sudo apt install 1password-cli
 fi
 
+gpgconf --kill all
+
+eval $(op signin --account fzymgc.1password.com)
+
 if [[ ! -d ~/.gnupg ]]; then
   for i in $(op document list |grep gpg-key|awk '{print $1}'); do
   op document get $i | gpg --import-options restore --import
