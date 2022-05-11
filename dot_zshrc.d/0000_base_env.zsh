@@ -24,3 +24,7 @@ zstyle :omz:plugins:ssh-agent ssh-add-args -K -k -q --apple-use-keychain --apple
 
 
 [[ -d ~/go/bin ]] && export PATH="${HOME}/go/bin:${PATH}"
+
+if command -v direnv > /dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
