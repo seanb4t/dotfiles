@@ -160,4 +160,14 @@ if [[ ! -f /usr/bin/op ]]; then
   sudo apt update && sudo apt install 1password-cli
 fi
 
+if [[ ! -d ~/.gnupg ]]; then
+  for i in $(op document list |grep gpg-key|awk '{print $1}'); do
+  op document get $i | gpg --import-options restore --import
+  done
+fi
+
+if [[ ! -d ~/.password-store ]]; then
+  pass init 0A5C6C7B591ED2C8
+fi
+
 {{ end -}}
