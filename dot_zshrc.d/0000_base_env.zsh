@@ -28,3 +28,8 @@ zstyle :omz:plugins:ssh-agent ssh-add-args -K -k -q --apple-use-keychain --apple
 if command -v direnv > /dev/null 2>&1; then
     eval "$(direnv hook zsh)"
 fi
+
+if [[ $(uname) != "Darwin" ]]; then
+  export GPG_TTY=$(tty)
+fi
+
