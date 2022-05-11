@@ -146,7 +146,7 @@ if [[ ! -d /usr/local/share/gcm-core ]]; then
   sudo dpkg -i /tmp/gcmcore.deb
 fi
 
-if [[ -f /usr/bin/op ]]; then
+if [[ ! -f /usr/bin/op ]]; then
   [[ -f /usr/share/keyrings/1password-archive-keyring.gpg ]] || curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
   sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
   [[ -f /etc/apt/sources.list.d/1password.list ]] || echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
