@@ -9,7 +9,7 @@ ZGEN_COMPLETIONS=()
 export POWERLEVEL9K_INSTANT_PROMPT=quiet
 export PATH=/opt/homebrew/bin:$PATH
 
-zgenom oh-my-zsh
+zgenom ohmyzsh
 
 # If zsh-syntax-highlighting is bundled after zsh-history-substring-search,
 # they break, so get the order right.
@@ -60,27 +60,27 @@ zgenom load peterhurford/git-it-on.zsh
 
 # Load some oh-my-zsh plugins
 
-zgenom oh-my-zsh plugins/aws
-zgenom oh-my-zsh plugins/colored-man-pages
-zgenom oh-my-zsh plugins/colorize
-zgenom oh-my-zsh plugins/extract
-zgenom oh-my-zsh plugins/gitfast
-zgenom oh-my-zsh plugins/github
-zgenom oh-my-zsh plugins/kubectl
-zgenom oh-my-zsh plugins/kubectx
-zgenom oh-my-zsh plugins/kube-ps1
-zgenom oh-my-zsh plugins/pip
-zgenom oh-my-zsh plugins/python
-zgenom oh-my-zsh plugins/ripgrep
-zgenom oh-my-zsh plugins/rsync
-zgenom oh-my-zsh plugins/sudo
-zgenom oh-my-zsh plugins/terraform
-zgenom oh-my-zsh plugins/vscode
+zgenom ohmyzsh plugins/aws
+zgenom ohmyzsh plugins/colored-man-pages
+zgenom ohmyzsh plugins/colorize
+zgenom ohmyzsh plugins/extract
+zgenom ohmyzsh plugins/gitfast
+zgenom ohmyzsh plugins/github
+zgenom ohmyzsh plugins/kubectl
+zgenom ohmyzsh plugins/kubectx
+zgenom ohmyzsh plugins/kube-ps1
+zgenom ohmyzsh plugins/pip
+zgenom ohmyzsh plugins/python
+zgenom ohmyzsh plugins/ripgrep
+zgenom ohmyzsh plugins/rsync
+zgenom ohmyzsh plugins/sudo
+zgenom ohmyzsh plugins/terraform
+zgenom ohmyzsh plugins/vscode
 
 if [[ $(uname -a | grep -ci Darwin) = 1 ]]; then
   # Load macOS-specific plugins
-  zgenom oh-my-zsh plugins/brew
-  zgenom oh-my-zsh plugins/macos
+  zgenom ohmyzsh plugins/brew
+  zgenom ohmyzsh plugins/macos
 fi
 
 
