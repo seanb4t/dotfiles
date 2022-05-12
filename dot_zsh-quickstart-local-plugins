@@ -109,8 +109,6 @@ zgenom load reegnz/jq-zsh-plugin
 zgenom load droctothorpe/kubecolor
 zgenom load hcgraf/zsh-sudo
 zgenom load hlissner/zsh-autopair
-zgenom load seanb4t/op.plugin.zsh
-zgenom load seanb4t/zsh-aliases
 zgenom load rbirnie/oh-my-zsh-keybase
 zgenom load gradle/gradle-completion
 
