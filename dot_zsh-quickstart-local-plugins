@@ -9,8 +9,6 @@ ZGEN_COMPLETIONS=()
 export POWERLEVEL9K_INSTANT_PROMPT=quiet
 export PATH=/opt/homebrew/bin:$PATH
 
-zgenom oh-my-zsh
-
 # If zsh-syntax-highlighting is bundled after zsh-history-substring-search,
 # they break, so get the order right.
 zgenom load zsh-users/zsh-syntax-highlighting
