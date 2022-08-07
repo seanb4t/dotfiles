@@ -1,0 +1,29 @@
+#!/usr/bin/env fish
+
+function __install_linux
+  set -l GCM_CORE_VERSION "2.0.785"
+  set -l SOURCE_URL "https://github.com/GitCredentialManager/git-credential-manager/releases/download/v$GCM_CORE_VERSION/gcm-linux_amd64.$GCM_CORE_VERSION.deb"
+
+  dpkg -l|grep gcm | string match -qr "^ii\s+gcm\s+(?<gcm_installed_version>\d+\.\d+\.\d+)"
+
+  if test "$gcm_installed_version" != "$GCM_CORE_VERSION"
+    cd /tmp
+    wget SOURCE_URL
+    sudo dpkg -i gcm-linux_amd64.$GCM_CORE_VERSION.deb
+  end
+
+end
+
+function __install_mac
+  HOMEBREW_NO_AUTO_UPDATE=1 if not brew list -q1 git-credential-manager-core > /dev/null
+    brew install git-credential-manager-core
+  end
+end
+
+{{ if eq .chezmoi.os "darwin" -}}
+__install_mac
+{{ else if eq .chezmoi.os "linux" -}}
+__install_linux
+{{ end -}}
+
+git-credential-manager-core configure
