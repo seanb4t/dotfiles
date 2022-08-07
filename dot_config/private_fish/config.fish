@@ -3,17 +3,20 @@ if status is-interactive
 
   # Third party completions
   ## kubectl / kubernetes
-  kubectl completion fish | source
+  command -v kubectl > /dev/null && kubectl completion fish | source
 
   ## helm completion
-  helm completion fish | source
+  command -v helm > /dev/null && helm completion fish | source
 
-  ## 1password cli completion, unset connect related vars
-  set -u OP_CONNECT_HOST
-  set -u OP_CONNECT_TOKEN
-  op completion fish | source
+  if command -v op > /dev/null
+    ## 1password cli completion, unset connect related vars
+    set -u OP_CONNECT_HOST
+    set -u OP_CONNECT_TOKEN
+    op completion fish | source
+  end
+
   # flux
-  flux completion fish | source
+  command -v flux > /dev/null && flux completion fish | source
 
 end
 
@@ -22,3 +25,5 @@ set -gx VISUAL nvim
 set -gx PAGER less
 set -gx LESS "-R -M -X"
 
+# configure brew vars
+set -gx HOMEBREW_NO_ENV_HINTS 1
