@@ -27,3 +27,9 @@ set -gx LESS "-R -M -X"
 
 # configure brew vars
 set -gx HOMEBREW_NO_ENV_HINTS 1
+
+# do not wrap ls with grc
+set -gx -a grc_plugin_ignore_execs ls exa
+
+# set gpg tty
+set -gx GPG_TTY (tty)
