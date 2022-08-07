@@ -33,7 +33,6 @@ lsof
 lsmod
 lsblk
 lsattr
-ls
 lolcat
 log
 ldap
