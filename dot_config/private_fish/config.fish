@@ -33,3 +33,6 @@ set -gx -a grc_plugin_ignore_execs ls exa
 
 # set gpg tty
 set -gx GPG_TTY (tty)
+
+# add krew to config
+set -gx PATH $PATH $HOME/.krew/bin
