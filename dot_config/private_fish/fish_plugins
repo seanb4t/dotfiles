@@ -1,4 +1,3 @@
-ilancosman/tide@v5
 patrickf1/fzf.fish
 andreiborisov/sponge
 jorgebucaran/autopair.fish
@@ -11,3 +10,7 @@ oh-my-fish/plugin-foreign-env
 oh-my-fish/plugin-sudope
 oh-my-fish/plugin-grc
 seanb4t/fish-exa
+ilancosman/tide@v5.5.1
+jorgebucaran/fisher
+oh-my-fish/plugin-direnv
+kidonng/vscode.fish

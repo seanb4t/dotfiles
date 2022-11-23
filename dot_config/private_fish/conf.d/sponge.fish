@@ -1,9 +1,14 @@
 # Sponge version
-set --global sponge_version 1.0.4
+set --global sponge_version 1.1.0
 
 # Allow to repeat previous command by default
 if not set --query --universal sponge_delay
   set --universal sponge_delay 2
+end
+
+# Purge entries both after `sponge_delay` entries and on exit by default
+if not set --query --universal sponge_purge_only_on_exit
+  set --universal sponge_purge_only_on_exit false
 end
 
 # Add default filters
