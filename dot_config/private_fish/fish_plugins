@@ -2,6 +2,15 @@ jorgebucaran/fisher
 oh-my-fish/plugin-brew
 oh-my-fish/plugin-gi
 oh-my-fish/plugin-foreign-env
+oh-my-fish/plugin-rustup
+oh-my-fish/plugin-rbenv
+oh-my-fish/plugin-osx
+oh-my-fish/plugin-pyenv
+oh-my-fish/plugin-python
+oh-my-fish/plugin-tiny
+oh-my-fish/plugin-pbcopy
+oh-my-fish/plugin-tmux
+oh-my-fish/plugin-title
 gazorby/fish-abbreviation-tips
 decors/fish-colored-man
 ilancosman/tide@v5.5.1
