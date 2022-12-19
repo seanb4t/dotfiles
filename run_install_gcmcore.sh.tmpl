@@ -2,8 +2,8 @@
 # code: language=bash
 
 function __install_linux() {
-  GCM_CORE_VERSION "2.0.877"
-  SOURCE_URL "https://github.com/GitCredentialManager/git-credential-manager/releases/download/v$GCM_CORE_VERSION/gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz"
+  GCM_CORE_VERSION="2.0.877"
+  SOURCE_URL="https://github.com/GitCredentialManager/git-credential-manager/releases/download/v$GCM_CORE_VERSION/gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz"
 
   dpkg -l|grep gcm | string match -qr "^ii\s+gcm\s+(?<gcm_installed_version>\d+\.\d+\.\d+)"
 
