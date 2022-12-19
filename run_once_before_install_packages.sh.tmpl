@@ -173,6 +173,8 @@ if [[ ! -f /usr/bin/op ]]; then
   sudo apt update && sudo apt install 1password-cli
 fi
 
+# Setup GPG
+
 gpgconf --kill all
 
 eval $(op signin --account fzymgc.1password.com)
