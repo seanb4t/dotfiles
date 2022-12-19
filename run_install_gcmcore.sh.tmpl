@@ -10,7 +10,7 @@ function __install_linux() {
   if [ "$gcm_installed_version" != "$GCM_CORE_VERSION" ]; then
     cd /tmp
     wget $SOURCE_URL
-    sudo tar -xvzf gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz -C /usr/local/bin
+    sudo tar -xvzf gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz -C /usr/local/bin git-credential-manager
   fi
 
 }
