@@ -2,22 +2,22 @@
 # code: language=bash
 
 function __install_linux() {
-  GCM_CORE_VERSION "2.0.886"
-  SOURCE_URL "https://github.com/GitCredentialManager/git-credential-manager/releases/download/v$GCM_CORE_VERSION/gcm-linux_amd64.$GCM_CORE_VERSION.deb"
+  GCM_CORE_VERSION "2.0.877"
+  SOURCE_URL "https://github.com/GitCredentialManager/git-credential-manager/releases/download/v$GCM_CORE_VERSION/gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz"
 
   dpkg -l|grep gcm | string match -qr "^ii\s+gcm\s+(?<gcm_installed_version>\d+\.\d+\.\d+)"
 
   if [ "$gcm_installed_version" != "$GCM_CORE_VERSION" ]; then
     cd /tmp
-    wget SOURCE_URL
-    sudo dpkg -i gcm-linux_amd64.$GCM_CORE_VERSION.deb
+    wget $SOURCE_URL
+    sudo tar -xvzf gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz -C /usr/local/bin
   fi
 
 }
 
 function __install_mac() {
   HOMEBREW_NO_AUTO_UPDATE=1
-  brew list -q1 git-credential-manager-core > /dev/null || brew install git-credential-manager-core
+  brew list -q1 git-credential-manager > /dev/null || brew install git-credential-manager
 }
 
 {{ if eq .chezmoi.os "darwin" -}}
