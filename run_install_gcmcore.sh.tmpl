@@ -5,7 +5,7 @@ function __install_linux() {
   GCM_CORE_VERSION="2.0.877"
   SOURCE_URL="https://github.com/GitCredentialManager/git-credential-manager/releases/download/v$GCM_CORE_VERSION/gcm-linux_amd64.$GCM_CORE_VERSION.tar.gz"
 
-  dpkg -l|grep gcm | string match -qr "^ii\s+gcm\s+(?<gcm_installed_version>\d+\.\d+\.\d+)"
+  gcm_installed_version=$(git-credential-manager version 2>/dev/null | grep -oP '(\d+\.)+\d+')
 
   if [ "$gcm_installed_version" != "$GCM_CORE_VERSION" ]; then
     cd /tmp
