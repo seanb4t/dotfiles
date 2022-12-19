@@ -1,10 +1,10 @@
-#!/usr/bin/env fish
+#!/usr/bin/env bash
 
-if test -d ~/.tmux/.git 
-  and test -f ~/.tmux/.tmux.conf 
-
+# Install or update oh-my-tmux
+if [ -d ~/.tmux/.git ] && [ -f ~/.tmux/.tmux.conf ]; then
   cd ~/.tmux && git pull -q
 else
-  cd ~ && git clone https://github.com/gpakosz/.tmux.git 
-  cd ~ && ln -s -f .tmux/.tmux.conf . 
-end
+  cd ~ && git clone https://github.com/gpakosz/.tmux.git
+  cd ~ && ln -s -f .tmux/.tmux.conf .
+fi
+
