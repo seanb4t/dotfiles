@@ -19,5 +19,14 @@ Host asgard.fzymgc.house asgard homeassistant hass
   User fzymgc
   HostName asgard.local
 
-Host ns ns1 ns2 ns3
+Host ns ns1 ns2 ns3 ns1.fzymgc.house ns2.fzymgc.house ns3.fzymgc.house
   User fzymgc
+
+Host ns1 ns1.fzymgc.house
+  HostName 192.168.20.6
+
+Host ns2 ns2.fzymgc.house
+  HostName 192.168.20.7
+
+Host ns2 ns3.fzymgc.house
+  HostName 192.168.20.8
