@@ -17,7 +17,7 @@ function __install_linux() {
 
 function __install_mac() {
   HOMEBREW_NO_AUTO_UPDATE=1
-  brew list -q1 git-credential-manager > /dev/null || brew install git-credential-manager
+  brew list -q1 git-credential-manager-core > /dev/null || brew install --cask microsoft/git/git-credential-manager-core
 }
 
 {{ if eq .chezmoi.os "darwin" -}}
