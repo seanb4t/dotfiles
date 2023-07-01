@@ -7,8 +7,8 @@
 export DONT_PRINT_SSH_KEY_LIST=1
 export QUICKSTART_KIT_REFRESH_IN_DAYS=7
 
-[[ -d /home/linuxbrew ]] && export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-[[ -d /opt/homebrew ]] && export PATH="/opt/homebrew/bin:$PATH"
+[[ -d /home/linuxbrew ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+[[ -d /opt/homebrew ]] && eval $(/opt/homebrew/bin/brew shellenv)
 
 #
 ## Update brew every day

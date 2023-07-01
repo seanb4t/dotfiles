@@ -14,15 +14,12 @@ zgenom ohmyzsh
 # If zsh-syntax-highlighting is bundled after zsh-history-substring-search,
 # they break, so get the order right.
 zgenom load zsh-users/zsh-syntax-highlighting
-zgenom load zsh-users/zsh-history-substring-search
+#zgenom load zsh-users/zsh-history-substring-search
 
 # Set keystrokes for substring searching
 zmodload zsh/terminfo
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-
-# Tab complete rakefile targets.
-zgenom load unixorn/rake-completion.zshplugin
+# bindkey "$terminfo[kcuu1]" history-substring-search-up
+# bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # Automatically run zgenom update and zgenom selfupdate every 7 days.
 zgenom load unixorn/autoupdate-zgenom
@@ -133,7 +130,7 @@ zgenom load zsh-users/zsh-autosuggestions
 # directories.
 #zgenom load supercrabtree/k
 
-zgenom load romkatv/powerlevel10k powerlevel10k
+# zgenom load romkatv/powerlevel10k powerlevel10k
 
 # Save it all to init script
 zgenom save
