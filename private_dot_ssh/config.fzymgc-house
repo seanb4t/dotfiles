@@ -1,16 +1,3 @@
-Host *
-  {{- with .ssh_agent }}
-  {{- if default false .onepassword_enabled }}
-  IdentityAgent ~/.1password/agent.sock
-  {{- end }}
-  {{- end }}
-  ForwardAgent yes
-
-Host github.com
-  ControlMaster auto
-  ControlPath ~/.ssh/connections/%r_%h_%p
-  ControlPersist 1h
-
 Host 192.168.20.1 router firewalla
   HostName 192.168.20.1
   User pi

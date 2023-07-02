@@ -1,3 +1,4 @@
+
 format = """\
 [](bg:#030B16 fg:#7DF9AA)\
 [󰀵 ](bg:#7DF9AA fg:#090c0c)\
@@ -9,9 +10,20 @@ $directory\
 $git_branch\
 $git_status\
 $git_metrics\
+$terraform\
 [](fg:#FCF392 bg:#030B16)\
 $character\
 """
+
+right_format = """\
+$kubernetes\
+[](bg:#030B16 fg:#7DF9AA)\
+[󰀵 ](bg:#7DF9AA fg:#090c0c)\
+[](fg:#7DF9AA bg:#1C3A5E)\
+"""
+
+# Don't print a newline at the start of the prompt
+add_newline = false
 
 [directory]
 format = "[ ﱮ $path ]($style)"
@@ -36,8 +48,9 @@ disabled = false
 format = "[  $duration ]($style)"
 style = "fg:bright-white bg:18"
 
-[character]
-success_symbol = '[ ➜](bold green) '
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 error_symbol = '[ ✗](#E84D44) '
 
 [time]
@@ -48,3 +61,84 @@ format = '[[ 󱑍 $time ](bg:#1C3A5E fg:#8DFBD2)]($style)'
 
 [docker_context]
 format = 'via [🐋 $context](blue bold)'
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+[sudo]
+style = 'bold green'
+symbol = '👩‍💻 '
+disabled = false
+
+[kubernetes]
+disabled = false
+format = '⛵[$cluster(\($namespace\))](dimmed green)'
+
+
+#### Disabled modules ####
+
+# add these back to format if you want them:
+# $time\
+# $hg_branch\
+# $dart\
+# $dotnet\
+# $elixir\
+# $elm\
+# $erlang\
+# $golang\
+# $helm\
+# $java\
+# $julia\
+# $kotlin\
+# $nim\
+# $ocaml\
+# $php\
+# $purescript\
+# $swift\
+# $zig\
+# $memory_usage\
+# $gcloud\
+# $openstack\
+# $crystal\
+# $lua\
+# $jobs\
+# $battery\
+[hg_branch]
+disabled = true
+[dart]
+disabled = true
+[dotnet]
+disabled = true
+[elixir]
+disabled = true
+[elm]
+disabled = true
+[erlang]
+disabled = true
+[julia]
+disabled = true
+[nim]
+disabled = true
+[ocaml]
+disabled = true
+[php]
+disabled = true
+[purescript]
+disabled = true
+[swift]
+disabled = true
+[zig]
+disabled = true
+[memory_usage]
+disabled = true
+[openstack]
+disabled = true
+[crystal]
+disabled = true
+[lua]
+disabled = true
+[jobs]
+disabled = true
+[battery]
+disabled = true
