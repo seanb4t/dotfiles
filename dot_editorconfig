@@ -13,9 +13,10 @@ insert_final_newline = true
 max_line_length = 120
 trim_trailing_whitespace = true
 
-[*.sh]
+[*.{sh,zsh,bash,fish}]
 # like -i=4
 indent_size = 2
+end_of_line = lf
 
 shell_variant      = posix # like -ln=posix
 binary_next_line   = true  # like -bn
