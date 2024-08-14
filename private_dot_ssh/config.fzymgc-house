@@ -25,3 +25,16 @@ Host ns2 ns3.fzymgc.house
 
 Host tp* tp*.fzymgc.house
   User ubuntu
+  TCPKeepAlive yes
+  ControlMaster auto
+  ControlPath ~/.ssh/connections/%r_%h_%p
+  ControlPersist 1h
+  TCPKeepAlive yes
+
+Host ares-sandbox
+  HostName ares-sandbox
+  User ares
+
+Host nas-apps
+  User fzymgc
+
