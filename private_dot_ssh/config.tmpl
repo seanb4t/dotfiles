@@ -1,3 +1,7 @@
+{{ if stat (joinPath .chezmoi.homeDir ".orbstack/ssh/config") }}
+Include ~/.orbstack/ssh/config
+{{ end }}
+
 Host *
   ServerAliveInterval 60
   HashKnownHosts yes

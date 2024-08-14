@@ -1,4 +1,8 @@
 Host 192.168.20.1 router firewalla
+  ControlMaster auto
+  ControlPath ~/.ssh/connections/%r_%h_%p
+  ControlPersist 1h
+  TCPKeepAlive yes
   HostName 192.168.20.1
   User pi
 
@@ -17,3 +21,7 @@ Host ns2 ns2.fzymgc.house
 
 Host ns2 ns3.fzymgc.house
   HostName 192.168.20.8
+
+
+Host tp* tp*.fzymgc.house
+  User ubuntu

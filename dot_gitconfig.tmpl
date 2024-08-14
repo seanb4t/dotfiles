@@ -3,6 +3,7 @@
 [user]
   name = {{ .git.username | quote }}
   email = {{ .git.email | quote }}
+  signingKey = {{ .chezmoi.homeDir }}/.ssh/seanb4t_ed25519.pub
 
 [init]
   defaultBranch = main
@@ -112,6 +113,7 @@
 
 [commit]
   template = ~/.dotfiles/git/template.txt
+  gpgSign = true
 
 [log]
   showSignature = false
