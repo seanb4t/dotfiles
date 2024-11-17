@@ -71,6 +71,7 @@ packages:
   - backblaze
   - balenaetcher
   - bambu-studio
+  - bartender
   - battle-net
   - betterdisplay
   - brave-browser
@@ -120,6 +121,7 @@ packages:
   - soundsource
   - spotify
   - syncthing
+  - teamviewer
   - telegram
   - visual-studio-code
   - wezterm
@@ -127,8 +129,6 @@ packages:
   mas:
   - name: 1Blocker
     id: 1365531024
-  - name: 1Password for Safari
-    id: 1569813296
   - name: Calca
     id: 635758264
   - name: Calcbot
@@ -143,8 +143,6 @@ packages:
     id: 1090488118
   - name: Grammarly for Safari
     id: 1462114288
-  - name: Hidden Bar
-    id: 1452453066
   - name: Hush
     id: 1544743900
   - name: Mapper
