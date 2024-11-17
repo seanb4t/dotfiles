@@ -1,0 +1,13 @@
+{{ if stat (joinPath .chezmoi.homeDir ".orbstack/ssh/config") }}
+Include ~/.orbstack/ssh/config
+{{ end }}
+
+Host *
+  ServerAliveInterval 60
+  HashKnownHosts yes
+  StrictHostKeyChecking no
+  IPQoS throughput
+  TCPKeepAlive no
+
+
+{{ includeTemplate (printf "private_dot_ssh/config.%s.tmpl" .chezmoi.hostname) . }}

@@ -1,0 +1,198 @@
+packages:
+ darwin:
+  taps:
+  - homebrew/bundle
+  brews:
+  - age
+  - age-plugin-yubikey
+  - aspell
+  - atuin
+  - bash 
+  - bash-completion
+  - bat
+  - bottom
+  - btop
+  - chezmoi
+  - coreutils
+  - delta
+  - direnv
+  - dockutil
+  - eza
+  - fd
+  - ffmpeg
+  - fish
+  - fzf
+  - gh
+  - git 
+  - git-lfs
+  - git-extras
+  - gnupg
+  - golang
+  - grc
+  - helm
+  - htop
+  - httpie
+  - hunspell
+  - iftop
+  - jq
+  - k9s
+  - krew
+  - kubectl
+  - lazygit
+  - libfido2
+  - markdown-oxide
+  - mas
+  - neofetch
+  - neovim
+  - node
+  - npm
+  - nvm
+  - ollama
+  - openssh
+  - pipx
+  - pyenv
+  - python3
+  - restic
+  - ripgrep
+  - rustup
+  - sqlite
+  - starship
+  - stern
+  - tmux
+  - tree
+  - unzip
+  - wget
+  - zip
+  - zsh
+  # TODO: - nerdfonts  
+  casks:
+  - 1password
+  - 1password-cli
+  - backblaze
+  - balenaetcher
+  - bambu-studio
+  - battle-net
+  - betterdisplay
+  - brave-browser
+  - cardhop
+  - chatgpt
+  - chronosync
+  - cleanmymac
+  - curseforge
+  - discord
+  - disk-drill
+  - drivethrurpg
+  - fantastical
+  - font-fontawesome
+  - font-awesome-terminal-fonts
+  - font-dejavu
+  - font-dejavu-sans-mono-for-powerline
+  - font-dejavu-sans-mono-nerd-font
+  - font-hack
+  - font-hack-nerd-font
+  - font-jetbrains-mono
+  - font-jetbrains-mono-nerd-font
+  - font-meslo-for-powerline
+  - font-meslo-lg
+  - font-meslo-lg-nerd-font
+  - font-noto-color-emoji
+  - font-noto-emoji
+  - font-noto-mono
+  - font-noto-mono-for-powerline
+  - font-noto-sans
+  - font-noto-sans-mono
+  - github
+  - google-drive
+  - hammerspoon
+  - httpie
+  - jetbrains-toolbox
+  - karabiner-elements
+  - keybase
+  - keycastr
+  - notion
+  - obsidian
+  - orbstack
+  - parallels
+  - pdf-expert
+  - raycast
+  - rectangle-pro
+  - slack
+  - soundsource
+  - spotify
+  - syncthing
+  - telegram
+  - visual-studio-code
+  - wezterm
+  - zoom
+  mas:
+  - name: 1Blocker
+    id: 1365531024
+  - name: 1Password for Safari
+    id: 1569813296
+  - name: Calca
+    id: 635758264
+  - name: Calcbot
+    id: 931657367
+  - name: Copilot
+    id: 1447330651
+  - name: DaisyDisk
+    id: 411643860
+  - name: DuckDuckGo Privacy for Safari
+    id: 1482920575
+  - name: Gemini 2
+    id: 1090488118
+  - name: Grammarly for Safari
+    id: 1462114288
+  - name: Hidden Bar
+    id: 1452453066
+  - name: Hush
+    id: 1544743900
+  - name: Mapper
+    id: 1589391989
+  - name: Name Mangler
+    id: 603637384
+  - name: Paprika Recipe Manager 3
+    id: 1303222628
+  - name: Pixelmator Pro
+    id: 1289583905
+  - name: Prime Video
+    id: 545519333
+  - name: reMarkable
+    id: 1276493162
+  - name: Save to Matter
+    id: 1548677272
+  - name: Save to Reader
+    id: 1640236961
+  - name: Shapr3D
+    id: 1091675654
+  - name: Spark Desktop
+    id: 6445813049
+  - name: Speedtest
+    id: 1153157709
+  - name: StopTheMadness Pro
+    id: 6471380298
+  - name: Tailscale
+    id: 1475387142
+  - name: Windows App
+    id: 1295203466
+  - name: Xcode
+    id: 497799835
+  vscode:
+  - 1password.op-vscode
+  - bbenoist.nix
+  - bmalehorn.vscode-fish
+  - eamodio.gitlens
+  - esbenp.prettier-vscode
+  - foxundermoon.shell-format
+  - github.copilot-chat
+  - github.copilot
+  - github.vscode-pull-request-github
+  - golang.Go
+  - ms-azuretools.vscode-docker
+  - ms-kubernetes-tools.vscode-kubernetes-tools
+  - redhat.java
+  - redhat.vscode-yaml
+  - tamasfe.even-better-toml
+  - timonwong.shellcheck
+  - vscjava.vscode-gradle
+  - vscjava.vscode-spring-initializr  

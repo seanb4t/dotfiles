@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+#exec op item get --format json --vault=fzymgc-house "ansible-vault-password" | jq -r '.details.password'
+exec op item get --fields label=password --vault=fzymgc-house "ansible-vault-password"

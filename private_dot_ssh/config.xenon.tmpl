@@ -1,0 +1,16 @@
+Host *
+  {{- with .ssh_agent }}
+  {{- if default false .onepassword_enabled }}
+  IdentityAgent ~/.1password/agent.sock
+  {{- end }}
+  {{- end }}
+  ForwardAgent yes
+
+Host github.com
+  ControlMaster auto
+  ControlPath ~/.ssh/connections/%r_%h_%p
+  ControlPersist 1h
+  User seanb4t
+
+{{ include "private_dot_ssh/config.fzymgc-house" }}
+

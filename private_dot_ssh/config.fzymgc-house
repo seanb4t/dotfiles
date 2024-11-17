@@ -1,0 +1,40 @@
+Host 192.168.20.1 router firewalla
+  ControlMaster auto
+  ControlPath ~/.ssh/connections/%r_%h_%p
+  ControlPersist 1h
+  TCPKeepAlive yes
+  HostName 192.168.20.1
+  User pi
+
+Host asgard.fzymgc.house asgard homeassistant hass
+  User fzymgc
+  HostName asgard.local
+
+Host ns ns1 ns2 ns3 ns1.fzymgc.house ns2.fzymgc.house ns3.fzymgc.house
+  User fzymgc
+
+Host ns1 ns1.fzymgc.house
+  HostName 192.168.20.6
+
+Host ns2 ns2.fzymgc.house
+  HostName 192.168.20.7
+
+Host ns2 ns3.fzymgc.house
+  HostName 192.168.20.8
+
+
+Host tp* tp*.fzymgc.house
+  User ubuntu
+  TCPKeepAlive yes
+  ControlMaster auto
+  ControlPath ~/.ssh/connections/%r_%h_%p
+  ControlPersist 1h
+  TCPKeepAlive yes
+
+Host ares-sandbox
+  HostName ares-sandbox
+  User ares
+
+Host nas-apps
+  User fzymgc
+

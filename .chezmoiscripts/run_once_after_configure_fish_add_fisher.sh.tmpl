@@ -1,0 +1,20 @@
+#!{{ lookPath "fish" }}
+
+{{ if eq .chezmoi.os "darwin" -}}
+
+if ! type -q fisher &>/dev/null
+    if command -v curl &>/dev/null
+        curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher update
+    else if command -v wget &>/dev/null
+        wget -qO- https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher update
+    end
+    fish_update_completions
+    touch {{ .chezmoi.sourceDir }}/dot_config/fish/functions/.chezmoiignore
+    for f in ( string split " " $__FISH_EZA_ALIASES )
+        if not grep -Fxq "$f.fish" {{ .chezmoi.sourceDir }}/dot_config/fish/functions/.chezmoiignore
+            echo "$f.fish" >> {{ .chezmoi.sourceDir }}/dot_config/fish/functions/.chezmoiignore
+        end
+    end
+end
+
+{{ end -}}

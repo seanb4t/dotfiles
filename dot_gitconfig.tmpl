@@ -1,0 +1,160 @@
+# code: language=toml
+
+[user]
+  name = {{ .git.username | quote }}
+  email = {{ .git.email | quote }}
+  signingKey = {{ .chezmoi.homeDir }}/.ssh/seanb4t_ed25519.pub
+
+[init]
+  defaultBranch = main
+
+[filter "lfs"]
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+
+
+[credential]
+  helper =
+{{ if (eq .chezmoi.os "darwin") -}}
+  helper = /usr/local/share/gcm-core/git-credential-manager
+{{ else if (eq .chezmoi.os "linux") -}}
+  helper = /usr/local/bin/git-credential-manager
+{{ end -}}
+
+[credential "https://dev.azure.com"]
+  useHttpPath = true
+
+[alias]
+  br = branch
+  changed = show --pretty=\"format:\" --name-only
+  ci = commit
+  co = checkout
+  commend = commit --amend --no-edit
+  fa = fetch --all -p --tags
+  fm = fetch-merge
+  g = grep --break --heading --line-number
+  gi = grep --break --heading --line-number -i
+  ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+  ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+  lt = log --tags --decorate --simplify-by-decoration --oneline
+  please = push --force-with-lease
+  st = status -sb
+  whatadded = log --diff-filter=A
+  ahead-of-master = log --oneline origin/master..HEAD # Show commits that haven't made it to master yet.
+  fetch-pull-requests = fetch origin '+refs/pull/*/head:refs/remotes/origin/pull/*' # Fetch pull requests from github so you can git checkout pull/123 and test them locally.
+  roots = log --all --oneline --decorate --max-parents=0 # Show the root commits.
+  unpushed = log @{u}.. # Show which commits have not been pushed to the tracking branch and are safe to amend/rebase.
+  work-in-progress = rebase -i @{u} # Starts an interactive rebase of all the commits you haven't pushed yet. Handy for collapsing a bunch of work-in-progress snapshots into logical commits before pushing, without having to worry about accidentally squashing a commit someone else has already referred to.
+
+
+[apply]
+  whitespace = nowarn
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = true
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
+[core]
+  excludesfile = ~/.gitignore
+  compression = -1
+  autocrlf = input
+  whitespace = trailing-space,space-before-tab
+  precomposeunicode = true
+  pager = delta
+
+[branch]
+  autosetupmerge = true
+  autosetuprebase = always
+
+[difftool "diffmerge"]
+  cmd = diffmerge $LOCAL $REMOTE
+
+[help]
+  autocorrect = 1
+
+[interactive]
+  diffFilter = delta --color-only
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  colorMoved = default
+
+[grep]
+  extendRegexp = true
+  lineNumber = true
+
+[push]
+  default = simple
+
+[submodule]
+  fetchJobs = 4
+
+[commit]
+  template = ~/.dotfiles/git/template.txt
+  gpgSign = true
+
+[log]
+  showSignature = false
+  decorate = true
+
+[status]
+  submoduleSummary = true
+
+
+[diff "ansible-vault"]
+  textconv = ansible-vault view
+  # Do not cache the vault contents
+  cachetextconv = false
+
+[delta]
+  navigate = true
+  light = false
+  #side-by-side = true
+  line-numbers = true
+  features = line-numbers decorations
+  syntax-theme = Dracula
+  plus-style = syntax "#003800"
+  minus-style = syntax "#3f0001"
+  hyperlinks = true
+
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  file-decoration-style = none
+  hunk-header-decoration-style = cyan box ul
+
+[delta "line-numbers"]
+  line-numbers-left-style = magenta
+  line-numbers-right-style = cyan
+  line-numbers-minus-style = 124
+  line-numbers-plus-style = 28
+
+{{ if (eq .chezmoi.os "darwin") -}}
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+{{ end -}}

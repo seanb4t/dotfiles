@@ -1,0 +1,5 @@
+#["~/.config/kitty/current-theme.conf"]
+#  type = "file"
+#  url = "https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/Dracula.conf"
+#  refreshPeriod = "168h"
+
