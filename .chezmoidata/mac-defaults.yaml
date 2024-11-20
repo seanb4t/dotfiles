@@ -1,0 +1,98 @@
+mac_defaults:
+  "com.apple.finder":
+  - name: FXPreferredViewStyle
+    type: string
+    value: Nlsv
+  - name: ShowPathBar
+    type: bool
+    value: true
+  - name: ShowStatusBar
+    type: bool
+    value: true
+  - name: FXDefaultSearchScope
+    type: string
+    value: SCcf
+  - name: ShowExternalHardDrivesOnDesktop
+    type: bool
+    value: true
+  - name: ShowHardDrivesOnDesktop
+    type: bool
+    value: true
+  - name: ShowRemovableMediaOnDesktop
+    type: bool
+    value: true
+  - name: ShowMountedServersOnDesktop
+    type: bool
+    value: true
+  - name: _FXShowPosixPathInTitle
+    type: bool
+    value: true
+  - name: _FxSortFoldersFirst
+    type: bool
+    value: true
+  - name: FXEnableExtensionChangeWarning
+    type: bool
+    value: false      
+  "com.apple.dock":
+  - name: mouse-over-hilite-stack
+    type: bool
+    value: true
+  - name: tilesize
+    type: int
+    value: 32
+  - name: largesize
+    type: int
+    value: 96
+  - name: autohide
+    type: bool
+    value: true
+  - name: minimize-to-application
+    type: bool
+    value: true
+  - name: enable-spring-load-actions-on-all-items
+    type: bool
+    value: true
+  - name: show-process-indicators
+    type: bool
+    value: true
+  - name: mru-spaces
+    type: bool
+    value: false
+  - name: show-hidden
+    type: bool
+    value: true
+  "com.apple.dashboard":
+  - name: mcx-disabled
+    type: bool
+    value: true
+  - name: dashboard-in-overlay
+    type: bool
+    value: true
+  "com.apple.print.PrintingPrefs":
+  - name: Quit When Finished
+    type: bool
+    value: true
+  "NSGlobalDomain":
+  - name: AppleShowAllExtensions
+    type: bool
+    value: true
+  - name: NSAutomaticCapitalizationEnabled
+    type: bool
+    value: false
+  - name: NSAutomaticDashSubstitutionEnabled
+    type: bool
+    value: false
+  - name: NSAutomaticPeriodSubstitutionEnabled
+    type: bool
+    value: false
+  - name: NSAutomaticQuoteSubstitutionEnabled
+    type: bool
+    value: false
+  # Disable automatic spelling correction
+  - name: NSAutomaticSpellingCorrectionEnabled
+    type: bool
+    value: false
+  # Enable full keyboard access for all controls
+  - name: AppleKeyboardUIMode
+    type: int
+    value: 3
