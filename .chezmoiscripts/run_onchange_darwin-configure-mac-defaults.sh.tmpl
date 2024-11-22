@@ -1,8 +1,6 @@
 #!/bin/bash
 {{- if eq .chezmoi.os "darwin" }}
 
-set -vx 
-
 {{- range $domain, $settings := .mac_defaults }}
 {{- range $settings }}
 defaults write {{ $domain }} {{ .name | quote }} -{{ .type }} {{ .value | quote }}

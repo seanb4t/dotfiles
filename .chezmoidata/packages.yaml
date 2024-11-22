@@ -145,6 +145,8 @@ packages:
     id: 1462114288
   - name: Hush
     id: 1544743900
+  - name: Keymapp
+    id: 6472865291
   - name: Mapper
     id: 1589391989
   - name: Name Mangler
