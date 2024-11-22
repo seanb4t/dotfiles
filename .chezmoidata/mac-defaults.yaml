@@ -72,6 +72,66 @@ mac_defaults:
   - name: Quit When Finished
     type: bool
     value: true
+  "com.apple.screensaver":
+  - name: askForPassword
+    type: int
+    value: 1
+  "com.apple.screencapture":
+  - name: location
+    type: string
+    value: "${HOME}/Desktop"
+  - name: disable-shadow
+    type: bool
+    value: true
+  "com.apple.desktopservices":
+  - name: DSDontWriteNetworkStores
+    type: bool
+    value: true
+  - name: DSDontWriteUSBStores
+    type: bool
+    value: true
+  "com.apple.Safari":
+  - name: AutoOpenSafeDownloads
+    type: bool
+    value: false
+  - name: ProxiesInBookmarksBar
+    type: bool
+    value: false
+  - name: IncludeDevelopMenu
+    type: bool
+    value: true
+  - name: WebKitDeveloperExtrasEnabledPreferenceKey
+    type: bool
+    value: true
+  - name: WebContinuousSpellCheckingEnabled
+    type: bool
+    value: true
+  - name: WebAutomaticSpellingCorrectionEnabled
+    type: bool
+    value: false
+  - name: WarnAboutFraudulentWebsites
+    type: bool
+    value: true
+  "com.apple.SoftwareUpdate":
+  - name: AutomaticCheckEnabled
+    type: bool
+    value: true
+  - name: AutomaticDownload
+    type: int
+    value: 1
+  - name: ScheduleFrequency
+    type: int
+    value: 1
+  - name: CriticalUpdateInstall
+    type: int
+    value: 1
+  "com.apple.commerce":
+  - name: AutoUpdate
+    type: bool
+    value: true
+  - name: AutoUpdateRestartRequired
+    type: bool
+    value: true
   "NSGlobalDomain":
   - name: AppleShowAllExtensions
     type: bool
