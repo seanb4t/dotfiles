@@ -1,0 +1,32 @@
+#!/bin/bash
+{{- if eq .chezmoi.os "darwin" }}
+
+checksum_mac_defaults=$(shasum -a 256 {{ .chezmoi.sourceDir }}/.chezmoidata/mac-defaults.yaml | awk '{print $1}')
+# check if the stored checksum is different from the current checksum in ~/.local/share/state/chezmoi/mac-defaults.yaml.sha256
+# otherwise store the current checksum in ~/.local/share/state/chezmoi/mac-defaults.yaml.sha256
+if [ -f ~/.local/share/state/chezmoi/mac-defaults.yaml.sha256 ]; then
+    stored_checksum_mac_defaults=$(cat ~/.local/share/state/chezmoi/mac-defaults.yaml.sha256)
+    if [ "$checksum_mac_defaults" == "$stored_checksum_mac_defaults" ]; then
+        exit 0
+    fi
+else
+    mkdir -p ~/.local/share/state/chezmoi
+    echo "$checksum_mac_defaults" > ~/.local/share/state/chezmoi/mac-defaults.yaml.sha256
+fi
+
+{{- range $domain, $settings := .mac_defaults }}
+{{- range $settings }}
+defaults write {{ $domain }} {{ .name | quote }} -{{ .type }} {{ .value | quote }}
+{{- end }}
+{{- end }}
+
+killall Finder
+killall Dock
+killall Safari
+killall SystemUIServer
+
+# Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+
+
+{{- end }}
