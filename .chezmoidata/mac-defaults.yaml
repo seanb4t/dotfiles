@@ -90,28 +90,28 @@ mac_defaults:
   - name: DSDontWriteUSBStores
     type: bool
     value: true
-  "com.apple.Safari":
-  - name: AutoOpenSafeDownloads
-    type: bool
-    value: false
-  - name: ProxiesInBookmarksBar
-    type: bool
-    value: false
-  - name: IncludeDevelopMenu
-    type: bool
-    value: true
-  - name: WebKitDeveloperExtrasEnabledPreferenceKey
-    type: bool
-    value: true
-  - name: WebContinuousSpellCheckingEnabled
-    type: bool
-    value: true
-  - name: WebAutomaticSpellingCorrectionEnabled
-    type: bool
-    value: false
-  - name: WarnAboutFraudulentWebsites
-    type: bool
-    value: true
+  # "com.apple.Safari":
+  # - name: AutoOpenSafeDownloads
+  #   type: bool
+  #   value: false
+  # - name: ProxiesInBookmarksBar
+  #   type: bool
+  #   value: false
+  # - name: IncludeDevelopMenu
+  #   type: bool
+  #   value: true
+  # - name: WebKitDeveloperExtrasEnabledPreferenceKey
+  #   type: bool
+  #   value: true
+  # - name: WebContinuousSpellCheckingEnabled
+  #   type: bool
+  #   value: true
+  # - name: WebAutomaticSpellingCorrectionEnabled
+  #   type: bool
+  #   value: false
+  # - name: WarnAboutFraudulentWebsites
+  #   type: bool
+  #   value: true
   "com.apple.SoftwareUpdate":
   - name: AutomaticCheckEnabled
     type: bool

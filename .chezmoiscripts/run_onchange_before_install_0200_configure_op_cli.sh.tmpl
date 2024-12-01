@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -v -x
+
+# if op cli is installed then configure it
+if command -v op > /dev/null; then
+    # if op account list contains {{ .op.address }} then we are already configured and can exit
+    if op account list | grep -q {{ .op.address }}; then
+        exit 0
+    fi
+
+    # add op account
+    op account add --address {{ .op.address }} --email {{ .op.email }}
+fi

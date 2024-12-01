@@ -1,6 +1,8 @@
 {{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
+# packages.yaml hash: {{ include ".chezmoidata/packages.yaml" | sha256sum }}
+
 brew bundle --no-lock --file=/dev/stdin <<EOF
 {{ range .packages.darwin.taps -}}
 tap {{ . | quote }}

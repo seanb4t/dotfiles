@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -v -x
+
+# fzymgc-root-ca.crt hash: {{ onepasswordRead "op://fzymgc-house/fzymgc-root-ca/cert" | sha256sum }}
+# fzymgc-ica1-ca.crt hash: {{ onepasswordRead "op://fzymgc-house/fzymgc-ica1-ca/cert" | sha256sum }}
+
+{{- if eq .chezmoi.os "darwin" }}
+
+cat <<EOF > /tmp/fzymgc-root-ca.crt
+{{ onepasswordRead "op://fzymgc-house/fzymgc-root-ca/cert" }}
+EOF
+trap 'rm -f /tmp/fzymgc-root-ca.crt' EXIT
+cat <<EOF > /tmp/fzymgc-ica1-ca.crt
+{{ onepasswordRead "op://fzymgc-house/fzymgc-ica1-ca/cert" }}
+EOF
+trap 'rm -f /tmp/fzymgc-ica1-ca.crt' EXIT
+
+# Add the fzymgc root CA to the system keychain
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \
+    /tmp/fzymgc-root-ca.crt
+
+# Add the fzymgc ICA1 CA to the system keychain
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain \
+    /tmp/fzymgc-ica1-ca.crt
+    
+{{- end }}
+    
+{{- if eq .chezmoi.os "linux" }}
+
+# Add the fzymgc root CA to the system keychain
+sudo cp {{ .chezmoi.sourceDir }}/dot_config/certs/fzymgc-root-ca.crt /usr/local/share/ca-certificates/fzymgc-root-ca.crt
+
+# Add the fzymgc ICA1 CA to the system keychain
+sudo cp {{ .chezmoi.sourceDir }}/dot_config/certs/fzymgc-ica1-ca.crt /usr/local/share/ca-certificates/fzymgc-ica1-ca.crt
+
+# Update the system certificates
+sudo update-ca-certificates
+{{- end }}

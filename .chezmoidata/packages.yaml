@@ -2,6 +2,7 @@ packages:
  darwin:
   taps:
   - homebrew/bundle
+  - hashicorp/tap
   brews:
   - age
   - age-plugin-yubikey
@@ -29,6 +30,7 @@ packages:
   - gnupg
   - golang
   - grc
+  - hashicorp/tap/vault
   - helm
   - htop
   - httpie
@@ -50,11 +52,13 @@ packages:
   - ollama
   - openssh
   - pipx
+  - pre-commit
   - pyenv
   - python3
   - restic
   - ripgrep
   - rustup
+  - siderolabs/tap/talosctl
   - sqlite
   - starship
   - stern
@@ -62,6 +66,7 @@ packages:
   - tree
   - unzip
   - wget
+  - yq
   - zip
   - zsh
   # TODO: - nerdfonts  

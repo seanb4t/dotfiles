@@ -1,0 +1,3 @@
+{{- if .vault.address -}}
+set -gx VAULT_ADDR {{.vault.address}}
+{{- end -}}
