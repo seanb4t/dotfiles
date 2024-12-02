@@ -44,6 +44,7 @@ packages:
   - libfido2
   - markdown-oxide
   - mas
+  - minio-mc
   - neofetch
   - neovim
   - node
