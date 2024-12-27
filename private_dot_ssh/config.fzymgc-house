@@ -23,7 +23,14 @@ Host ns2 ns3.fzymgc.house
   HostName 192.168.20.8
 
 
-Host tp* tp*.fzymgc.house
+Host ares-sandbox
+  HostName ares-sandbox
+  User ares
+
+Host nas-apps
+  User fzymgc
+
+Host tpi-alpha-k8s-*.fzymgc.house 192.168.20.141 192.168.20.142 192.168.20.143 192.168.20.144
   User ubuntu
   TCPKeepAlive yes
   ControlMaster auto
@@ -31,10 +38,11 @@ Host tp* tp*.fzymgc.house
   ControlPersist 1h
   TCPKeepAlive yes
 
-Host ares-sandbox
-  HostName ares-sandbox
-  User ares
-
-Host nas-apps
-  User fzymgc
+Host tpi-beta-*.fzymgc.house 192.168.20.151 192.168.20.152 192.168.20.153 192.168.20.154
+  User ubuntu
+  TCPKeepAlive yes
+  #ControlMaster auto
+  #ControlPath ~/.ssh/connections/%r_%h_%p
+  #ControlPersist 1h
+  #TCPKeepAlive yes
 

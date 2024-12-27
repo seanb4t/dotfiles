@@ -33,7 +33,7 @@ config = {
       hsb = {
         hue = 1.0,
         saturation = 1.02,
-        brightness = 0.25,
+        brightness = 0.45,
       },
     --   attachment = { Parallax = 0.3 },
       width = "100%",
@@ -45,7 +45,7 @@ config = {
       },
       width = "100%",
       height = "100%",
-      opacity = 0.35,
+      opacity = 0.55,
     },
   },
   -- from: https://akos.ma/blog/adopting-wezterm/

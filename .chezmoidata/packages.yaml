@@ -3,6 +3,7 @@ packages:
   taps:
   - homebrew/bundle
   - hashicorp/tap
+  - k0sproject/tap
   brews:
   - age
   - age-plugin-yubikey
@@ -14,6 +15,7 @@ packages:
   - bottom
   - btop
   - chezmoi
+  - cockroachdb/tap/cockroach
   - coreutils
   - delta
   - direnv
@@ -37,9 +39,11 @@ packages:
   - hunspell
   - iftop
   - jq
+  - k0sproject/tap/k0sctl
   - k9s
   - krew
   - kubectl
+  - kubectx
   - lazygit
   - libfido2
   - markdown-oxide
@@ -60,6 +64,7 @@ packages:
   - ripgrep
   - rustup
   - siderolabs/tap/talosctl
+  - speedtest-cli
   - sqlite
   - starship
   - stern
@@ -74,6 +79,7 @@ packages:
   casks:
   - 1password
   - 1password-cli
+  - alfred
   - backblaze
   - balenaetcher
   - bambu-studio
@@ -84,6 +90,7 @@ packages:
   - cardhop
   - chatgpt
   - chronosync
+  - claude
   - cleanmymac
   - curseforge
   - discord
@@ -112,16 +119,17 @@ packages:
   - google-drive
   - hammerspoon
   - httpie
+  - insomnia
   - jetbrains-toolbox
   - karabiner-elements
   - keybase
   - keycastr
+  - kitty
   - notion
   - obsidian
   - orbstack
   - parallels
   - pdf-expert
-  - raycast
   - rectangle-pro
   - slack
   - soundsource
@@ -130,7 +138,6 @@ packages:
   - teamviewer
   - telegram
   - visual-studio-code
-  - wezterm
   - zoom
   mas:
   - name: 1Blocker
