@@ -1,0 +1,30 @@
+
+copy-on-select = true
+
+font-thicken = true
+
+# Unbind CMD+... keys so they will be forwarded to Zellij
+keybind = cmd+t=unbind
+keybind = cmd+n=unbind
+keybind = cmd+c=unbind
+keybind = cmd+w=unbind
+# keybind = cmd+opt+left=unbind
+# keybind = cmd+opt+right=unbind
+
+# mac Terminal compat removal
+keybind = alt+left=unbind 
+keybind = alt+right=unbind
+
+macos-option-as-alt = true
+macos-titlebar-style = transparent
+
+mouse-scroll-multiplier = 0.5
+
+# theme = GitHub Dark
+theme = Espresso
+
+window-decoration = true
+window-padding-x = 8
+window-padding-y = 8
+window-save-state = always
+

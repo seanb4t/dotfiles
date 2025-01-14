@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+[[ -d ~/.local/bin ]] || mkdir -p ~/.local/bin
+gh release download -R danielfoehrKn/kubeswitch --pattern '*_{{ .chezmoi.os }}_{{ .chezmoi.arch }}' -O ~/.local/bin/switcher
+chmod +x ~/.local/bin/switcher
+

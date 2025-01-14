@@ -3,3 +3,7 @@
 #  url = "https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/Dracula.conf"
 #  refreshPeriod = "168h"
 
+[".config/fish/completions/kubie.fish"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/sbstp/kubie/refs/heads/master/completion/kubie.fish"
+  refreshPeriod = "168h"

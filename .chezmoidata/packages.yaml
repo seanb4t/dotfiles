@@ -4,12 +4,13 @@ packages:
   - homebrew/bundle
   - hashicorp/tap
   - k0sproject/tap
+  - cockroachdb/tap
   brews:
   - age
   - age-plugin-yubikey
   - aspell
   - atuin
-  - bash 
+  - bash
   - bash-completion
   - bat
   - bottom
@@ -26,13 +27,14 @@ packages:
   - fish
   - fzf
   - gh
-  - git 
+  - git
   - git-lfs
   - git-extras
   - gnupg
   - golang
   - grc
   - hashicorp/tap/vault
+  - hashicorp/tap/terraform
   - helm
   - htop
   - httpie
@@ -43,7 +45,7 @@ packages:
   - k9s
   - krew
   - kubectl
-  - kubectx
+  - kubie
   - lazygit
   - libfido2
   - markdown-oxide
@@ -75,7 +77,7 @@ packages:
   - yq
   - zip
   - zsh
-  # TODO: - nerdfonts  
+  # TODO: - nerdfonts
   casks:
   - 1password
   - 1password-cli
@@ -115,6 +117,7 @@ packages:
   - font-noto-mono-for-powerline
   - font-noto-sans
   - font-noto-sans-mono
+  - ghostty
   - github
   - google-drive
   - hammerspoon
@@ -130,6 +133,8 @@ packages:
   - orbstack
   - parallels
   - pdf-expert
+  - proton-mail
+  - proton-drive
   - rectangle-pro
   - slack
   - soundsource
@@ -208,4 +213,4 @@ packages:
   - tamasfe.even-better-toml
   - timonwong.shellcheck
   - vscjava.vscode-gradle
-  - vscjava.vscode-spring-initializr  
+  - vscjava.vscode-spring-initializr
