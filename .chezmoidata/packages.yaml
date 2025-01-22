@@ -56,7 +56,6 @@ packages:
   - node
   - npm
   - nvm
-  - ollama
   - openssh
   - pipx
   - pre-commit
@@ -92,7 +91,6 @@ packages:
   - cardhop
   - chatgpt
   - chronosync
-  - claude
   - cleanmymac
   - curseforge
   - discord
@@ -121,20 +119,17 @@ packages:
   - github
   - google-drive
   - hammerspoon
-  - httpie
   - insomnia
   - jetbrains-toolbox
   - karabiner-elements
   - keybase
   - keycastr
-  - kitty
+  - miniconda
   - notion
   - obsidian
   - orbstack
   - parallels
   - pdf-expert
-  - proton-mail
-  - proton-drive
   - rectangle-pro
   - slack
   - soundsource
@@ -195,6 +190,8 @@ packages:
     id: 1295203466
   - name: Xcode
     id: 497799835
+  - name: Yubico Authenticator
+    id: 1497506650
   vscode:
   - 1password.op-vscode
   - bbenoist.nix
