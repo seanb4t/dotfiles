@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
+export VERSION=0.9.2
+
 [[ -d ~/.local/bin ]] || mkdir -p ~/.local/bin
-gh release download -R danielfoehrKn/kubeswitch --pattern '*_{{ .chezmoi.os }}_{{ .chezmoi.arch }}' -O ~/.local/bin/switcher
+
+# if the file for the current version already exists, don't download again
+if [[ -f ~/.local/bin/.switcher.$VERSION ]]; then
+  exit 0
+fi
+
+gh release download -R danielfoehrKn/kubeswitch $VERSION --clobber --pattern '*_{{ .chezmoi.os }}_{{ .chezmoi.arch }}' -O ~/.local/bin/switcher
 chmod +x ~/.local/bin/switcher
 
+# remove all older versions
+rm -f ~/.local/bin/.switcher.*
+
+# create a file to mark the current version
+touch ~/.local/bin/.switcher.$VERSION

@@ -8,7 +8,6 @@ oh-my-fish/plugin-grc
 laughedelic/brew-completions
 sadanand-singh/fish-sodope
 franciscolourenco/done
-jorgebucaran/fish-bax
 jorgebucaran/autopair.fish
 patrickf3139/colored-man-pages
 oh-my-fish/plugin-bang-bang
@@ -17,3 +16,5 @@ oh-my-fish/plugin-direnv
 edc/bass
 nakulj/auto-venv
 plttn/fish-eza
+reitzig/sdkman-for-fish@v2.1.0
+jorgebucaran/replay.fish
