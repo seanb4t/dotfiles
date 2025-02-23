@@ -1,12 +1,11 @@
-{{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
+{{ if eq .chezmoi.os "darwin" -}}
 
 # packages.yaml hash: {{ include "dot_Brewfile" | sha256sum }}
 
 brew bundle install --cleanup --file={{ .chezmoi.sourceDir }}/dot_Brewfile
 {{- end }}
 {{ if eq .chezmoi.os "linux" -}}
-#!/bin/bash
 
 # packages.yaml hash: {{ include "dot_Brewfile-linux" | sha256sum }}
 
