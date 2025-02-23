@@ -1,5 +1,6 @@
 #!/usr/bin/env fish
 
-
-tpi -g fish | source
+if type -q tpi
+  tpi -g fish | source
+end
 
