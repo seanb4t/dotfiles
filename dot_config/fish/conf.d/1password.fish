@@ -18,7 +18,10 @@ switch (uname)
 case Darwin
   mac_link_1password
 case Linux
-  op signin | source
+  # if interactive shell, sign in
+  if status is-interactive
+    op signin | source
+  end
 case '*'
   # Nothing
 end
