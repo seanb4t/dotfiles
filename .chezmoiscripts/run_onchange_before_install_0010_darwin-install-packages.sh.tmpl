@@ -3,5 +3,5 @@
 
 # packages.yaml hash: {{ include "dot_Brewfile" | sha256sum }}
 
-brew bundle install --file={{ .chezmoi.sourceDir }}/dot_Brewfile
+brew bundle install --cleanup --file={{ .chezmoi.sourceDir }}/dot_Brewfile
 {{- end }}

@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+# packages.yaml hash: {{ include "dot_Brewfile-mas" | sha256sum }}
+
+brew bundle install --file={{ .chezmoi.sourceDir }}/dot_Brewfile-mas
+{{- end }}

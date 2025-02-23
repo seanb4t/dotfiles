@@ -2,8 +2,8 @@ tap "cockroachdb/tap"
 tap "hashicorp/tap"
 tap "homebrew/bundle"
 tap "jbangdev/tap"
-tap "k0sproject/tap"
 tap "siderolabs/tap"
+tap "buo/cask-upgrade"
 brew "age"
 brew "age-plugin-yubikey"
 brew "aspell"
@@ -13,6 +13,7 @@ brew "bash-completion"
 brew "bat"
 brew "bottom"
 brew "btop"
+brew "entr"
 brew "sqlite"
 brew "python@3.13"
 brew "chezmoi"
@@ -79,7 +80,6 @@ brew "cockroachdb/tap/cockroach"
 brew "hashicorp/tap/terraform"
 brew "hashicorp/tap/vault"
 brew "jbangdev/tap/jbang"
-brew "k0sproject/tap/k0sctl"
 brew "siderolabs/tap/talosctl"
 cask "1password"
 cask "1password-cli"
@@ -97,6 +97,7 @@ cask "chronosync"
 cask "claude"
 cask "cleanmymac"
 cask "curseforge"
+cask "docker"
 cask "discord"
 cask "disk-drill"
 cask "drivethrurpg"
@@ -131,55 +132,16 @@ cask "keycastr"
 cask "miniconda"
 cask "notion"
 cask "obsidian"
-cask "orbstack"
 cask "parallels"
 cask "pdf-expert"
-cask "proton-drive"
-cask "proton-mail"
 cask "rectangle-pro"
 cask "slack"
 cask "soundsource"
 cask "spotify"
-cask "syncthing"
 cask "teamviewer"
 cask "telegram"
 cask "visual-studio-code"
-cask "warp"
-cask "wezterm"
 cask "zoom"
-mas "1Blocker", id: 1365531024
-mas "Affinity Designer 2", id: 1616831348
-mas "Affinity Photo 2", id: 1616822987
-mas "Affinity Publisher 2", id: 1606941598
-mas "Calca", id: 635758264
-mas "Calcbot", id: 931657367
-mas "Copilot", id: 1447330651
-mas "DaisyDisk", id: 411643860
-mas "DuckDuckGo Privacy for Safari", id: 1482920575
-mas "Gemini 2", id: 1090488118
-mas "Grammarly for Safari", id: 1462114288
-mas "Hush", id: 1544743900
-mas "Keymapp", id: 6472865291
-mas "Mapper", id: 1589391989
-mas "Name Mangler", id: 603637384
-mas "Notion Web Clipper", id: 1559269364
-mas "Paprika Recipe Manager 3", id: 1303222628
-mas "PhotoSweeper", id: 463362050
-mas "Pixelmator Pro", id: 1289583905
-mas "Prime Video", id: 545519333
-mas "reMarkable", id: 1276493162
-mas "Save to Matter", id: 1548677272
-mas "Save to Reader", id: 1640236961
-mas "Shapr3D", id: 1091675654
-mas "Spark Desktop", id: 6445813049
-mas "Speedtest", id: 1153157709
-mas "StopTheMadness Pro", id: 6471380298
-mas "Tailscale", id: 1475387142
-mas "TestFlight", id: 899247664
-mas "Windows App", id: 1295203466
-mas "WireGuard", id: 1451685025
-mas "Xcode", id: 497799835
-mas "Yubico Authenticator", id: 1497506650
 vscode "1password.op-vscode"
 vscode "bbenoist.nix"
 vscode "bmalehorn.vscode-fish"
@@ -188,13 +150,12 @@ vscode "eamodio.gitlens"
 vscode "editorconfig.editorconfig"
 vscode "esbenp.prettier-vscode"
 vscode "foxundermoon.shell-format"
-vscode "github.copilot"
-vscode "github.copilot-chat"
 vscode "github.vscode-pull-request-github"
 vscode "golang.go"
 vscode "hashicorp.hcl"
 vscode "hashicorp.terraform"
 vscode "kdl-org.kdl"
+vscode "malmaud.tmux"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
 vscode "ms-python.debugpy"
@@ -205,6 +166,7 @@ vscode "openai.openai-chatgpt-adhoc"
 vscode "redhat.java"
 vscode "redhat.vscode-yaml"
 vscode "samuelcolvin.jinjahtml"
+vscode "sourcegraph.cody-ai"
 vscode "tamasfe.even-better-toml"
 vscode "timonwong.shellcheck"
 vscode "vscjava.vscode-gradle"

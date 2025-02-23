@@ -3,16 +3,18 @@ if status is-interactive
 
   set -gx ZELLIJ_CONFIG_DIR ~/.config/zellij
 
-  if [ "$TERM" = "xterm-ghostty" ]
-    # launch zellij
-    eval (zellij setup --generate-auto-start fish | string collect )
-  end
+  #if [ "$TERM" = "xterm-ghostty" ]
+  #  # launch zellij
+  #  eval (zellij setup --generate-auto-start fish | string collect )
+  #end
 
   # Configure kubernetes completions
   kubectl completion fish | source
 
   # Configure Orb
-  orbctl completion fish | source
+  if type -q orbctl
+    orbctl completion fish | source
+  end
 
   # Configure Starship Prompt
   starship init fish | source
