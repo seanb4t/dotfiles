@@ -1,7 +1,5 @@
 #!{{ lookPath "fish" }}
 
-{{ if eq .chezmoi.os "darwin" -}}
-
 if ! type -q fisher &>/dev/null
     if command -v curl &>/dev/null
         curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher update
@@ -16,5 +14,3 @@ if ! type -q fisher &>/dev/null
         end
     end
 end
-
-{{ end -}}
