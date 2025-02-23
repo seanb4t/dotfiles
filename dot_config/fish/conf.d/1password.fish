@@ -12,13 +12,13 @@ function mac_link_1password
 end
 
 
-# setup SSH_AUTH_SOCK
+# setup SSH_AUTH_SOCK and sign in if not on a Mac
 
 switch (uname)
 case Darwin
   mac_link_1password
 case Linux
-  # Nothing
+  op signin | source
 case '*'
   # Nothing
 end
