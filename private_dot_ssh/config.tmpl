@@ -9,5 +9,6 @@ Host *
   IPQoS throughput
   TCPKeepAlive no
 
-
+{{ if stat (printf "private_dot_ssh/config.%s.tmpl" .chezmoi.hostname) }}
 {{ includeTemplate (printf "private_dot_ssh/config.%s.tmpl" .chezmoi.hostname) . }}
+{{ end }}
