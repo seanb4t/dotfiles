@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# sign in to op
+eval $(op signin)
+
 # if 'atuin status' returns a string starting with "You are not logged in to a sync server"
 # then login
 
