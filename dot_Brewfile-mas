@@ -1,3 +1,4 @@
+# vim: set ft=ruby
 mas "1Blocker", id: 1365531024
 mas "Affinity Designer 2", id: 1616831348
 mas "Affinity Photo 2", id: 1616822987
@@ -20,7 +21,6 @@ mas "Pixelmator Pro", id: 1289583905
 mas "Prime Video", id: 545519333
 mas "reMarkable", id: 1276493162
 mas "Save to Reader", id: 1640236961
-mas "Shapr3D", id: 1091675654
 mas "Spark Desktop", id: 6445813049
 mas "Speedtest", id: 1153157709
 mas "StopTheMadness Pro", id: 6471380298
