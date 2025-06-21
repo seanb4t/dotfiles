@@ -14,7 +14,7 @@ Host nas-apps
   User fzymgc
 
 Host tpi-alpha-*.fzymgc.house 192.168.20.141 192.168.20.142 192.168.20.143 192.168.20.144
-  User ubuntu
+  User fzymgc
   TCPKeepAlive yes
   ControlMaster auto
   ControlPath ~/.ssh/connections/%r_%h_%p
@@ -22,10 +22,23 @@ Host tpi-alpha-*.fzymgc.house 192.168.20.141 192.168.20.142 192.168.20.143 192.1
   TCPKeepAlive yes
 
 Host tpi-beta-*.fzymgc.house 192.168.20.151 192.168.20.152 192.168.20.153 192.168.20.154
-  User ubuntu
+  User fzymgc
   TCPKeepAlive yes
   ControlMaster auto
   ControlPath ~/.ssh/connections/%r_%h_%p
   ControlPersist 1h
   TCPKeepAlive yes
 
+Host nas-support-vscode
+  HostName 192.168.22.111
+  AddressFamily inet
+  TCPKeepAlive yes
+  RemoteCommand /bin/bash --login
+  RequestTTY yes
+
+Host nas-app-proxy
+  User fzymgc
+
+Host tpi-alpha-bmc.fzymgc.house tpi-beta-bmc.fzymgc.house tpi-alpha-bmc tpi-beta-bmc
+  User root
+  TCPKeepAlive yes

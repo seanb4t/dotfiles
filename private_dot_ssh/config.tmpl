@@ -7,7 +7,7 @@ Host *
   HashKnownHosts yes
   StrictHostKeyChecking no
   IPQoS throughput
-  TCPKeepAlive no
+  TCPKeepAlive yes
 
 {{ if stat (printf "private_dot_ssh/config.%s.tmpl" .chezmoi.hostname) }}
 {{ includeTemplate (printf "private_dot_ssh/config.%s.tmpl" .chezmoi.hostname) . }}
