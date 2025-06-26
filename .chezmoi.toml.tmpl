@@ -1,0 +1,42 @@
+# {{- $hostname := promptStringOnce . "hostname" "Hostname" -}}
+# code: language=toml
+
+encryption = "age"
+
+[gpg]
+recipient = "{{ onepasswordRead "op://Private/local chezmoi config/gpgRecipient" }}"
+
+[age]
+identity = "~/.config/age-keys.txt"
+recipient = "age1ceu30hc9e92ytskzfv2hzw7d2wpvw9h4zdxznjst4540n8na537q8tj6lw"
+
+[git]
+autoAdd = true
+
+[onepassword]
+cache = true
+
+[diff]
+pager = "delta"
+
+[data]
+hostname = "{{ $hostname }}"
+
+[data.personal]
+email = "{{ onepasswordRead "op://Private/local chezmoi config/emailAddress" }}"
+name = "{{ onepasswordRead "op://Private/local chezmoi config/fullName" }}"
+username = "{{ onepasswordRead "op://Private/local chezmoi config/username" }}"
+
+[data.op]
+address = "fzymgc.1password.com"
+email = "{{ onepasswordRead "op://Private/local chezmoi config/emailAddress" }}"
+
+[data.git]
+email = "{{ onepasswordRead "op://Private/local chezmoi config/githubEmailAddress" }}"
+username = "{{ onepasswordRead "op://Private/local chezmoi config/githubUsername" }}"
+
+[data.ssh_agent]
+onepassword_enabled = true
+
+[data.vault]
+address = "https://vault.fzymgc.house"
