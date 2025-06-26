@@ -14,18 +14,6 @@
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
 
-
-[credential]
-  helper =
-{{ if (eq .chezmoi.os "darwin") -}}
-  helper = /usr/local/share/gcm-core/git-credential-manager
-{{ else if (eq .chezmoi.os "linux") -}}
-  helper = /usr/local/bin/git-credential-manager
-{{ end -}}
-
-[credential "https://dev.azure.com"]
-  useHttpPath = true
-
 [alias]
   br = branch
   changed = show --pretty=\"format:\" --name-only
