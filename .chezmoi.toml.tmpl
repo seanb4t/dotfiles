@@ -22,6 +22,22 @@ pager = "delta"
 [data]
 hostname = "{{ $hostname }}"
 
+[data.mac_power]
+{{- if eq $hostname "magellan"}}
+power_mode = "0"
+sleep = "0"
+disksleep = "0"
+displaysleep = "30"
+low_power_mode = "0"
+{{ end -}}
+{{ if eq $hostname "denver"}}
+power_mode = "0"
+sleep = "0"
+disksleep = "0"
+displaysleep = "30"
+low_power_mode = "0"
+{{ end -}}
+
 [data.personal]
 email = "{{ onepasswordRead "op://Private/local chezmoi config/emailAddress" }}"
 name = "{{ onepasswordRead "op://Private/local chezmoi config/fullName" }}"

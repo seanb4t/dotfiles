@@ -1,0 +1,5 @@
+#!{{ lookPath "zsh" }}
+
+sudo scutil --set ComputerName "{{ .hostname }}"
+sudo scutil --set LocalHostName "{{ .hostname }}"
+sudo scutil --set HostName "{{ .hostname }}"
