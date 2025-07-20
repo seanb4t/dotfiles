@@ -1,6 +1,5 @@
-# vim: set ft=ruby
 mas "1Blocker", id: 1365531024
-mas "1Password for Safari", id: 0
+mas "1Password for Safari", id: 1569813296
 mas "Affinity Designer 2", id: 1616831348
 mas "Affinity Photo 2", id: 1616822987
 mas "Affinity Publisher 2", id: 1606941598
@@ -16,6 +15,7 @@ mas "Mapper", id: 1589391989
 mas "Name Mangler 3", id: 603637384
 mas "Notion Web Clipper", id: 1559269364
 mas "Paprika Recipe Manager 3", id: 1303222628
+mas "Perplexity", id: 6714467650
 mas "PhotoSweeper", id: 463362050
 mas "Pixelmator Pro", id: 1289583905
 mas "Prime Video", id: 545519333
