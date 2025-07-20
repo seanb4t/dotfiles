@@ -17,3 +17,4 @@ window-padding-y = 8
 window-save-state = always
 
 keybind = global:cmd+shift+grave_accent=toggle_quick_terminal
+keybind = shift+enter=text:\n
