@@ -30,7 +30,7 @@ set --global fish_greeting ""
 set -gx TERM xterm-256color
 
 # Set paths
-fish_add_path $HOME/.local/bin
+fish_add_path -p -m $HOME/.local/bin
 
 
 # Set up editor and related vars
