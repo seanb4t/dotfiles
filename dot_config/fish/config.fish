@@ -16,8 +16,10 @@ if status is-interactive
     orbctl completion fish | source
   end
 
-  # Configure Starship Prompt
-  starship init fish | source
+  # Configure Starship Prompt, do not run if cursor agent is active or unset or TERM_PROGRAM is either cursor or vscode
+  if [ "$CURSOR_AGENT" = 0 -o -z "$CURSOR_AGENT" -o "$TERM_PROGRAM" = "cursor" -o "$TERM_PROGRAM" = "vscode" ]
+    starship init fish | source
+  end
 
   # Aliases
 
@@ -68,3 +70,7 @@ if test -f $LOCAL_CONFIG
 end
 
 set -gx WEZTERM_THEME tokyonightstorm
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
