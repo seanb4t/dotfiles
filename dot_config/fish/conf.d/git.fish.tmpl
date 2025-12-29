@@ -1,6 +1,6 @@
 # Git config
 
 # Author name and email
-set -gx GIT_AUTHOR_NAME {{ .git.username | quote }}
-set -gx GIT_AUTHOR_EMAIL {{ .git.email | quote }}
+set -Ux GIT_AUTHOR_NAME {{ .git.username | quote }}
+set -Ux GIT_AUTHOR_EMAIL {{ .git.email | quote }}
 
