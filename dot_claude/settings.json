@@ -1,0 +1,278 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(~/.claude/plugins/cache/fzymgc-house-skills/fzymgc-house/acf60b4ccbed/skills/respond-to-pr-comments/scripts/fetch_pr_comments.py:*)",
+      "Bash(~/.claude/plugins/cache/fzymgc-house-skills/fzymgc-house/acf60b4ccbed/skills/respond-to-pr-comments/scripts/parse_action_items.py:*)",
+      "Bash(astgrep:*)",
+      "Bash(awk:*)",
+      "Bash(dig:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      "Bash(gh:*)",
+      "Bash(git:*)",
+      "Bash(if:*)",
+      "Bash(jq:*)",
+      "Bash(kubectl:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(pre-commit:*)",
+      "Bash(rg:*)",
+      "Bash(sed:*)",
+      "Bash(terraform plan:*)",
+      "Bash(test:*)",
+      "Bash(vault kv list:*)",
+      "Bash(vault list:*)",
+      "Bash(vault policy:*)",
+      "Bash(wc:*)",
+      "Bash(yamllint:*)",
+      "Bash(yq:*)",
+      "Edit(//private/tmp/**)",
+      "Edit(//tmp/**)",
+      "Edit(//var/folders/*/*/T/**)",
+      "Edit(~/.cache/**)",
+      "Edit(~/.cargo/registry/**)",
+      "Edit(~/.terraform.d/*cache*)",
+      "Edit(~/.terraform.d/plugin-cache/**)",
+      "Edit(~/conductor/workspaces/**)",
+      "Edit(~/Library/Caches/pre-commit/**)",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id",
+      "mcp__exa__get_code_context_exa",
+      "mcp__exa__get_code_context_exa",
+      "mcp__exa__web_search_exa",
+      "mcp__filesystem__*",
+      "mcp__filesystem__read_multiple_files",
+      "mcp__filesystem__search_files",
+      "mcp__filesystem__write_file",
+      "mcp__firecrawl-mcp__*",
+      "mcp__grafana__generate_*",
+      "mcp__grafana__get_*",
+      "mcp__grafana__list_*",
+      "mcp__grafana__query_*",
+      "mcp__grafana__search_dashboards",
+      "mcp__kubernetes-mcp-server__*",
+      "mcp__notion__API-delete-a-block",
+      "mcp__notion__API-get-block-children",
+      "mcp__notion__API-get-self",
+      "mcp__notion__API-get-self",
+      "mcp__notion__API-patch-block-children",
+      "mcp__notion__API-post-page",
+      "mcp__notion__API-post-search",
+      "mcp__notion__API-query-data-source",
+      "mcp__notion__API-query-data-source",
+      "mcp__notion__API-retrieve-a-data-source",
+      "mcp__notion__API-retrieve-a-data-source",
+      "mcp__notion__API-update-a-block",
+      "mcp__notion__notion-create-database",
+      "mcp__notion__notion-create-pages",
+      "mcp__notion__notion-fetch",
+      "mcp__notion__notion-search",
+      "mcp__notion__notion-update-database",
+      "mcp__notion__notion-update-page",
+      "mcp__plugin_serena_serena__activate_project",
+      "mcp__plugin_serena_serena__list_dir",
+      "mcp__plugin_serena_serena__read_file",
+      "mcp__plugin_serena_serena__replace_content",
+      "mcp__terraform__get__*",
+      "mcp__terraform__get_provider_details",
+      "mcp__terraform__get_run_details",
+      "mcp__terraform__list__*",
+      "mcp__terraform__list_runs",
+      "mcp__terraform__list_workspaces",
+      "mcp__terraform__search_providers",
+      "Read(~/.claude/plugins/cache/**)",
+      "Read(~/.ssh/*.pub)",
+      "Read(~/.ssh/known_hosts)",
+      "Read(~/.terraform.d/**)",
+      "Skill(commit-commands:clean_gone)",
+      "Skill(commit-commands:commit-push-pr)",
+      "Skill(commit-commands:commit)",
+      "Skill(elements-of-style:improve-writing)",
+      "Skill(elements-of-style:writing-clearly-and-concisely)",
+      "Skill(fzymgc-house:grafana)",
+      "Skill(fzymgc-house:respond-to-pr-comments)",
+      "Skill(pr-review-toolkit:review-pr)",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:finishing-a-development-branch)",
+      "Skill(superpowers:requesting-code-review)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:systematic-debugging)",
+      "Skill(superpowers:using-git-worktrees)",
+      "Skill(superpowers:writing-plans)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:api.notion.com)",
+      "WebFetch(domain:api.notion.com)",
+      "WebFetch(domain:app.terraform.io)",
+      "WebFetch(domain:charts.helm.sh)",
+      "WebFetch(domain:checkpoint-api.hashicorp.com)",
+      "WebFetch(domain:cloud.google.com)",
+      "WebFetch(domain:crates.io)",
+      "WebFetch(domain:developer.hashicorp.com)",
+      "WebFetch(domain:developers.cloudflare.com)",
+      "WebFetch(domain:docs.aws.amazon.com)",
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:docs.rs)",
+      "WebFetch(domain:ghcr.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:hub.docker.com)",
+      "WebFetch(domain:k8s-cluster.fzymgc.house)",
+      "WebFetch(domain:k8s.io)",
+      "WebFetch(domain:kubernetes.io)",
+      "WebFetch(domain:learn.microsoft.com)",
+      "WebFetch(domain:objects.githubusercontent.com)",
+      "WebFetch(domain:pkg.go.dev)",
+      "WebFetch(domain:quay.io)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:registry.terraform.io)",
+      "WebFetch(domain:releases.hashicorp.com)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:tailscale.com)",
+      "Bash(bd:*)"
+    ],
+    "deny": [
+      "WebFetch(domain:pastebin.com)",
+      "Read(~/.ssh/id_*)",
+      "Read(~/.ssh/*.pem)",
+      "Read(~/.ssh/*.key)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(~/.aws/credentials)",
+      "Read(~/.vault-token)",
+      "Read(~/.netrc)",
+      "Edit(~/.ssh/**)",
+      "Edit(~/.gnupg/**)",
+      "Bash(gh pr merge:*)",
+      "Bash(git merge:*)",
+      "Read(~/.kube/config)",
+      "Read(~/.kube/configs/**)"
+    ],
+    "ask": [
+      "Bash(terraform destroy:*)",
+      "Bash(terraform apply:*)",
+      "Bash(kubectl delete:*)",
+      "Bash(rm -rf:*)"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/gremlin-heredoc-containment.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/bash_command_validator.py"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "elements-of-style@superpowers-marketplace": true,
+    "commit-commands@claude-code-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "plugin-dev@claude-code-plugins": true,
+    "pr-review-toolkit@claude-code-plugins": true,
+    "security-guidance@claude-code-plugins": true,
+    "code-review@claude-code-plugins": true,
+    "explanatory-output-style@claude-code-plugins": true,
+    "cicd-automation@claude-code-workflows": true,
+    "agent-orchestration@claude-code-workflows": true,
+    "code-documentation@claude-code-workflows": true,
+    "code-refactoring@claude-code-workflows": true,
+    "code-review-ai@claude-code-workflows": true,
+    "codebase-cleanup@claude-code-workflows": true,
+    "comprehensive-review@claude-code-workflows": true,
+    "context-management@claude-code-workflows": true,
+    "debugging-toolkit@claude-code-workflows": true,
+    "documentation-generation@claude-code-workflows": true,
+    "error-debugging@claude-code-workflows": true,
+    "error-diagnostics@claude-code-workflows": true,
+    "git-pr-workflows@claude-code-workflows": true,
+    "jvm-languages@claude-code-workflows": true,
+    "kubernetes-operations@claude-code-workflows": true,
+    "observability-monitoring@claude-code-workflows": true,
+    "python-development@claude-code-workflows": true,
+    "shell-scripting@claude-code-workflows": true,
+    "systems-programming@claude-code-workflows": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": true,
+    "document-skills@anthropic-agent-skills": true,
+    "example-skills@anthropic-agent-skills": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "fzymgc-house@fzymgc-house-skills": true,
+    "beads@beads-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "fzymgc-house-skills": {
+      "source": {
+        "source": "github",
+        "repo": "fzymgc-house/fzymgc-house-skills"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": true,
+    "network": {
+      "allowUnixSockets": [
+        "//run/user/*/gnupg/S.gpg-agent",
+        "//run/user/*/gnupg/S.gpg-agent.ssh",
+        "//tmp/com.apple.launchd.*/Listeners",
+        "//private/tmp/com.apple.launchd.*/Listeners",
+        "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock",
+        "~/.1password/agent.sock"
+      ],
+      "allowLocalBinding": true
+    },
+    "excludedCommands": [
+      "docker",
+      "kubectl",
+      "terraform",
+      "helm",
+      "tf",
+      "ssh",
+      "scp",
+      "rsync",
+      "git"
+    ]
+  },
+  "alwaysThinkingEnabled": true
+}
