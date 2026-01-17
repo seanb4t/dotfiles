@@ -32,5 +32,5 @@ keybind = cmd+enter=unbind
 focus-follows-mouse = true
 
 # Start new tmux session for each window
-command = /opt/homebrew/bin/tmux new-session
+#command = /opt/homebrew/bin/tmux new-session
 
