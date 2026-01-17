@@ -5,10 +5,6 @@ font-thicken = true
 
 macos-option-as-alt = left
 
-# Forward Cmd keybinds to zellij
-keybind = cmd+t=text:\x1b[116;9u
-keybind = cmd+w=text:\x1b[119;9u
-keybind = cmd+n=text:\x1b[110;9u
 macos-titlebar-style = transparent
 
 mouse-scroll-multiplier = 0.5
@@ -28,6 +24,6 @@ keybind = cmd+shift+n=new_window
 
 focus-follows-mouse = true
 
-# Auto-start zellij (close window when zellij exits)
-command = /opt/homebrew/bin/zellij attach --create
+# Auto-start tmux (close window when tmux exits)
+command = /opt/homebrew/bin/tmux new-session -A -s main
 wait-after-command = false
