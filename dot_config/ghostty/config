@@ -26,6 +26,3 @@ keybind = cmd+shift+n=new_window
 
 focus-follows-mouse = true
 
-# Auto-start tmux (close window when tmux exits)
-command = /opt/homebrew/bin/tmux new-session -A -s main
-wait-after-command = false
