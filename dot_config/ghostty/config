@@ -21,8 +21,16 @@ window-save-state = always
 
 keybind = global:cmd+shift+grave_accent=toggle_quick_terminal
 keybind = shift+enter=text:\n
-keybind = cmd+shift+t=new_tab
-keybind = cmd+shift+n=new_window
+
+# Disable ghostty tabs/panes - let tmux handle these
+keybind = cmd+shift+t=unbind
+keybind = cmd+t=unbind
+keybind = cmd+d=unbind
+keybind = cmd+shift+d=unbind
+keybind = cmd+enter=unbind
 
 focus-follows-mouse = true
+
+# Start new tmux session for each window
+command = /opt/homebrew/bin/tmux new-session
 
