@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Edit(~/.config/zellij/**)",
-      "Edit(~/.config/tmux/**)"
+      "Edit(~/.config/tmux/**)",
+      "Edit(//tmp/tmux-*/**)"
     ],
     "additionalDirectories": [
       "~/.local/share/chezmoi-beads",

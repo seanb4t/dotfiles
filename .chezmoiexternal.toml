@@ -7,10 +7,3 @@
   type = "file"
   url = "https://raw.githubusercontent.com/sbstp/kubie/refs/heads/master/completion/kubie.fish"
   refreshPeriod = "168h"
-
-# TPM (Tmux Plugin Manager)
-[".tmux/plugins/tpm"]
-  type = "archive"
-  url = "https://github.com/tmux-plugins/tpm/archive/refs/heads/master.tar.gz"
-  stripComponents = 1
-  refreshPeriod = "168h"
