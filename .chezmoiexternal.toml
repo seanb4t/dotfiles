@@ -8,28 +8,9 @@
   url = "https://raw.githubusercontent.com/sbstp/kubie/refs/heads/master/completion/kubie.fish"
   refreshPeriod = "168h"
 
-# Zellij plugins
-[".config/zellij/plugins/zjstatus.wasm"]
-  type = "file"
-  url = "https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm"
-  refreshPeriod = "168h"
-
-[".config/zellij/plugins/harpoon.wasm"]
-  type = "file"
-  url = "https://github.com/Nacho114/harpoon/releases/latest/download/harpoon.wasm"
-  refreshPeriod = "168h"
-
-[".config/zellij/plugins/zellij_forgot.wasm"]
-  type = "file"
-  url = "https://github.com/karimould/zellij-forgot/releases/latest/download/zellij_forgot.wasm"
-  refreshPeriod = "168h"
-
-[".config/zellij/plugins/jbz.wasm"]
-  type = "file"
-  url = "https://github.com/nim65s/jbz/releases/latest/download/jbz.wasm"
-  refreshPeriod = "168h"
-
-[".config/zellij/plugins/ghost.wasm"]
-  type = "file"
-  url = "https://github.com/vdbulcke/ghost/releases/latest/download/ghost.wasm"
+# TPM (Tmux Plugin Manager)
+[".tmux/plugins/tpm"]
+  type = "archive"
+  url = "https://github.com/tmux-plugins/tpm/archive/refs/heads/master.tar.gz"
+  stripComponents = 1
   refreshPeriod = "168h"
