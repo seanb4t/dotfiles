@@ -1,3 +1,9 @@
 iterm/
 **/fish_variables
 **/*.bak
+
+# Repo documentation (not dotfiles)
+README.md
+AGENTS.md
+CLAUDE.md
+.claude/

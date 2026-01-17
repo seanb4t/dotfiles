@@ -1,12 +1,17 @@
 #!/bin/bash
 
+# Login to atuin sync server if not already logged in
+# Non-fatal: sync is nice-to-have, don't block apply if service is down
 
-# if 'atuin status' returns a string starting with "You are not logged in to a sync server"
-# then login
+if ! command -v atuin &>/dev/null; then
+  exit 0
+fi
 
-if [[ "$(atuin status)" == *"You are not logged in to a sync server"* ]]; then
+if [[ "$(atuin status 2>/dev/null)" == *"You are not logged in to a sync server"* ]]; then
   echo "Logging in to atuin..."
-  atuin login -u "{{ onepasswordRead "op://Private/atuin/username" }}" \
+  if ! atuin login -u "{{ onepasswordRead "op://Private/atuin/username" }}" \
     -p "{{ onepasswordRead "op://Private/atuin/password" }}" \
-    -k "{{ onepasswordRead "op://Private/atuin/key_base64" }}"
+    -k "{{ onepasswordRead "op://Private/atuin/key_base64" }}" 2>&1; then
+    echo "WARNING: atuin login failed (sync service may be down). Continuing..."
+  fi
 fi
