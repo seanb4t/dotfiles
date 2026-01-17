@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(~/.config/zellij/**)",
+      "Edit(~/.config/tmux/**)"
+    ],
+    "additionalDirectories": [
+      "~/.local/share/chezmoi-beads",
+      "~/.local/share",
+      "~/.config/zellij",
+      "~/.config/tmux"
+    ]
+  },
+  "sandbox": {
+    "network": {
+      "allowUnixSockets": [
+        "~/.local/share/chezmoi-beads/.beads/bd.sock"
+      ]
+    }
+  }
+}
