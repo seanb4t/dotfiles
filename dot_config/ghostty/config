@@ -1,6 +1,8 @@
 
 copy-on-select = true
 
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14
 font-thicken = true
 
 macos-option-as-alt = left
