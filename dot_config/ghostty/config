@@ -28,5 +28,6 @@ keybind = cmd+shift+n=new_window
 
 focus-follows-mouse = true
 
-# Auto-start zellij
+# Auto-start zellij (close window when zellij exits)
 command = /opt/homebrew/bin/zellij attach --create
+wait-after-command = false
