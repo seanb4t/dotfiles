@@ -3,7 +3,12 @@ copy-on-select = true
 
 font-thicken = true
 
-macos-option-as-alt = true
+macos-option-as-alt = left
+
+# Forward Cmd keybinds to zellij
+keybind = cmd+t=text:\x1b[116;9u
+keybind = cmd+w=text:\x1b[119;9u
+keybind = cmd+n=text:\x1b[110;9u
 macos-titlebar-style = transparent
 
 mouse-scroll-multiplier = 0.5
@@ -18,5 +23,10 @@ window-save-state = always
 
 keybind = global:cmd+shift+grave_accent=toggle_quick_terminal
 keybind = shift+enter=text:\n
+keybind = cmd+shift+t=new_tab
+keybind = cmd+shift+n=new_window
 
 focus-follows-mouse = true
+
+# Auto-start zellij
+command = /opt/homebrew/bin/zellij attach --create

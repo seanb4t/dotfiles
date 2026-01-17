@@ -6,6 +6,8 @@ keybinds clear-defaults=true {
     locked {
         bind "Ctrl g" { SwitchToMode "normal"; }
         bind "Super t" { NewTab; }
+        bind "Super w" { CloseFocus; }
+        bind "Super n" { NewPane; }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -155,6 +157,31 @@ keybinds clear-defaults=true {
     shared_except "locked" "renametab" "renamepane" {
         bind "Ctrl g" { SwitchToMode "locked"; }
         bind "Ctrl q" { Quit; }
+        // Plugin keybindings (unlock first, then press key)
+        bind "Ctrl y" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/harpoon.wasm" {
+                floating true
+                move_to_focused_tab true
+            }
+        }
+        bind "Ctrl /" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij_forgot.wasm" {
+                floating true
+                "LOAD_ZELLIJ_BINDINGS" "true"
+            }
+        }
+        bind "Ctrl b" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/jbz.wasm" {
+                floating true
+            }
+        }
+        bind "Ctrl `" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/ghost.wasm" {
+                floating true
+                shell "zsh"
+                shell_flag "-ic"
+            }
+        }
     }
     shared_except "locked" "entersearch" {
         bind "enter" { SwitchToMode "locked"; }
@@ -413,3 +440,7 @@ styled_underlines true
 // Default: true (if the host terminal supports it)
 //
 support_kitty_keyboard_protocol true
+
+// Cleaner UI - ghostty supports fancy glyphs
+pane_frames false
+simplified_ui false
