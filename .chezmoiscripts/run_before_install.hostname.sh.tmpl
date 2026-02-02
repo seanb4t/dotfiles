@@ -1,5 +1,5 @@
 #!{{ lookPath "zsh" }}
 
-sudo scutil --set ComputerName "{{ .hostname }}"
-sudo scutil --set LocalHostName "{{ .hostname }}"
-sudo scutil --set HostName "{{ .hostname }}"
+sudo /usr/sbin/scutil --set ComputerName "{{ .hostname }}"
+sudo /usr/sbin/scutil --set LocalHostName "{{ .hostname }}"
+sudo /usr/sbin/scutil --set HostName "{{ .hostname }}"

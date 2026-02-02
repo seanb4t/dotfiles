@@ -2,13 +2,15 @@
 # A fish shell script to integrate 1Password CLI with fish shell
 
 function mac_link_1password
-  set -l 1password_socket ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-  if test ! -L $1password_socket
+  set -l source_socket ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+  set -l dest_socket ~/.1password/agent.sock
+
+  if test ! -e $dest_socket
     mkdir -p ~/.1password
-    ln -sf $1password_socket ~/.1password/agent.sock
+    ln -sf $source_socket $dest_socket
   end
 
-  set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
+  set -gx SSH_AUTH_SOCK $dest_socket
 end
 
 

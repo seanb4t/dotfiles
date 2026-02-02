@@ -1,6 +1,13 @@
 if status is-interactive
   # Interactive config here
 
+  set -gx ZELLIJ_CONFIG_DIR ~/.config/zellij
+
+  #if [ "$TERM" = "xterm-ghostty" ]
+  #  # launch zellij
+  #  eval (zellij setup --generate-auto-start fish | string collect )
+  #end
+
   # Configure kubernetes completions
   kubectl completion fish | source
 

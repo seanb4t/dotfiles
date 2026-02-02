@@ -18,6 +18,9 @@ window-decoration = true
 window-padding-x = 8
 window-padding-y = 8
 window-save-state = always
+window-vsync = false
+
+custom-shader-animation = false
 
 keybind = global:cmd+shift+grave_accent=toggle_quick_terminal
 keybind = shift+enter=text:\n
@@ -32,5 +35,5 @@ keybind = cmd+enter=unbind
 focus-follows-mouse = true
 
 # Start new tmux session for each window
-command = /opt/homebrew/bin/tmux new-session
+command = ~/.local/bin/tmux-session-chooser.sh
 

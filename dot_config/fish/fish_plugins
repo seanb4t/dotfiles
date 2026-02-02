@@ -15,7 +15,7 @@ oh-my-fish/plugin-gi
 oh-my-fish/plugin-direnv
 edc/bass
 nakulj/auto-venv
-plttn/fish-eza
+givensuman/fish-eza
 reitzig/sdkman-for-fish@v2.1.0
 jorgebucaran/replay.fish
 budimanjojo/tmux.fish
