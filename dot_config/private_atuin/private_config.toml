@@ -64,7 +64,7 @@ filter_mode = "host"
 
 ## the maximum number of lines the interface should take up
 ## set it to 0 to always go full screen
-# inline_height = 0
+inline_height = 10
 
 ## Invert the UI - put the search bar at the top , Default to `false`
 # invert = false
@@ -213,7 +213,7 @@ records = true
 
 [daemon]
 ## Enables using the daemon to sync. Requires the daemon to be running in the background. Start it with `atuin daemon`
-# enabled = false
+enabled = false
 
 ## How often the daemon should sync in seconds
 # sync_frequency = 300
