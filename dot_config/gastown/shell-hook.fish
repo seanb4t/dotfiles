@@ -31,6 +31,15 @@ function _gastown_mark_asked
     echo "$repo_root" >> "$asked_file"
 end
 
+function _gastown_bash_to_fish
+    # Convert bash export/unset syntax to fish equivalents
+    # export VAR="value" → set -gx VAR "value"
+    # unset VAR → set -e VAR
+    string replace -r -a 'export (\w+)="([^"]*)"' 'set -gx $1 "$2"' $argv | \
+        string replace -r -a 'export (\w+)=(\S+)' 'set -gx $1 $2' | \
+        string replace -r -a 'unset (\w+)' 'set -e $1'
+end
+
 function _gastown_offer_add
     set -l repo_root $argv[1]
 
@@ -101,15 +110,15 @@ function _gastown_hook --on-variable PWD
         set -l cached (grep "^$repo_root:" "$cache_file" 2>/dev/null)
         if test -n "$cached"
             # cached line format: /path/to/repo:GT_TOWN_ROOT=x GT_RIG=y
-            set -l assignments (string replace "^$repo_root:" "" "$cached")
-            eval "$assignments"
+            set -l assignments (string replace "$repo_root:" "" "$cached")
+            eval (_gastown_bash_to_fish "$assignments")
             return $previous_exit_status
         end
     end
 
     if type -q gt
         set -l detect_output (gt rig detect "$repo_root" 2>/dev/null)
-        eval "$detect_output"
+        eval (_gastown_bash_to_fish "$detect_output")
 
         if test -n "$GT_TOWN_ROOT"
             gt rig detect --cache "$repo_root" &>/dev/null &
@@ -137,8 +146,8 @@ function _gastown_prompt_hook --on-event fish_prompt
                 if test -f "$cache_file"
                     set -l cached (grep "^$repo_root:" "$cache_file" 2>/dev/null)
                     if test -n "$cached"
-                        set -l assignments (string replace "^$repo_root:" "" "$cached")
-                        eval "$assignments"
+                        set -l assignments (string replace "$repo_root:" "" "$cached")
+                        eval (_gastown_bash_to_fish "$assignments")
                     end
                 end
             end

@@ -24,6 +24,12 @@ end
 switch (uname)
 case Darwin
   mac_link_1password
+  # Disable git commit signing when 1Password agent is unavailable
+  if not test -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+    set -gx GIT_CONFIG_COUNT 1
+    set -gx GIT_CONFIG_KEY_0 commit.gpgSign
+    set -gx GIT_CONFIG_VALUE_0 false
+  end
 case Linux
   # if interactive shell, sign in
   if status is-interactive
