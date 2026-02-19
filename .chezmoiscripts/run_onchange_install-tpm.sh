@@ -16,5 +16,5 @@ fi
 # Install/update TPM plugins headlessly
 if [ -x "$TPM_DIR/bin/install_plugins" ]; then
     echo "Installing TPM plugins..."
-    "$TPM_DIR/bin/install_plugins"
+    TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins" "$TPM_DIR/bin/install_plugins"
 fi
