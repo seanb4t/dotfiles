@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Wrapper around 1Password's op-ssh-sign that silently skips signing
+# when the 1Password app socket is unavailable (e.g. over SSH).
+
+OP_SSH_SIGN="/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+OP_SOCKET="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+if [ -S "$OP_SOCKET" ] && [ -x "$OP_SSH_SIGN" ]; then
+    exec "$OP_SSH_SIGN" "$@"
+fi
+
+# No 1Password app available — exit 0 so git commit succeeds unsigned
+exit 0

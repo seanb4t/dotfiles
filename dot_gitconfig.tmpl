@@ -145,7 +145,7 @@
 	format = ssh
 
 [gpg "ssh"]
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	program = {{ .chezmoi.homeDir }}/.local/bin/op-ssh-sign
 {{ end -}}
 
 [credential "https://github.com"]
