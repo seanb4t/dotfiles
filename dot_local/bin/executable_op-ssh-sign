@@ -9,5 +9,8 @@ if [ -S "$OP_SOCKET" ] && [ -x "$OP_SSH_SIGN" ]; then
     exec "$OP_SSH_SIGN" "$@"
 fi
 
-# No 1Password app available — exit 0 so git commit succeeds unsigned
-exit 0
+# No 1Password app available — exit 1 to signal signing failure.
+# Fish shell disables commit.gpgSign via GIT_CONFIG env vars when the
+# socket is missing, so this path only runs if signing was explicitly
+# requested in a context where 1Password is unavailable.
+exit 1

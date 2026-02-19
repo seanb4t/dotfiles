@@ -102,7 +102,9 @@
 
 [commit]
   template = ~/.dotfiles/git/template.txt
+{{- if ne .hostname "seattle" }}
   gpgSign = true
+{{- end }}
 
 [log]
   showSignature = false
@@ -140,7 +142,7 @@
   line-numbers-minus-style = 124
   line-numbers-plus-style = 28
 
-{{ if (eq .chezmoi.os "darwin") -}}
+{{ if and (eq .chezmoi.os "darwin") (ne .hostname "seattle") -}}
 [gpg]
 	format = ssh
 
