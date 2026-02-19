@@ -12,3 +12,9 @@ else
     echo "Updating TPM..."
     cd "$TPM_DIR" && git pull
 fi
+
+# Install/update TPM plugins headlessly
+if [ -x "$TPM_DIR/bin/install_plugins" ]; then
+    echo "Installing TPM plugins..."
+    "$TPM_DIR/bin/install_plugins"
+fi
