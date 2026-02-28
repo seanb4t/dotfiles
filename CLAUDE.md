@@ -66,7 +66,8 @@ Most scripts and templates use `{{ if eq .chezmoi.os "darwin" }}` / `"linux"`. P
 | Path | Content |
 |------|---------|
 | `dot_config/fish/` | Fish shell config, 20+ fisher plugins |
-| `dot_config/tmux/` | tmux config (Catppuccin Macchiato, 8 plugins) |
+| `dot_config/tmux/` | tmux config (Catppuccin Macchiato, 7 TPM plugins, sesh session manager) |
+| `dot_config/ghostty/` | Ghostty terminal config, auto-attaches to tmux |
 | `private_dot_ssh/` | SSH configs with per-host includes (`config.<hostname>.tmpl`) |
 | `dot_kube/` | Kubernetes configs, mostly age-encrypted |
 | `.chezmoiscripts/` | All lifecycle scripts |
