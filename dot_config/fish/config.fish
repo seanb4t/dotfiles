@@ -21,6 +21,9 @@ if status is-interactive
     starship init fish | source
   end
 
+  # Zoxide (smart cd)
+  zoxide init fish | source
+
   # Aliases
 
 end
