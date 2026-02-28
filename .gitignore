@@ -1,2 +1,3 @@
 # Local settings (machine-specific, not shared)
 .claude/settings.local.json
+.serena/
