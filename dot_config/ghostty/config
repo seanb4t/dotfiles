@@ -23,7 +23,8 @@ window-vsync = false
 custom-shader-animation = false
 
 keybind = global:cmd+shift+grave_accent=toggle_quick_terminal
-keybind = shift+enter=text:\n
+
+
 
 # Disable ghostty tabs/panes - let tmux handle these
 keybind = cmd+shift+t=unbind
