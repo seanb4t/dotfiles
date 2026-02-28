@@ -34,6 +34,6 @@ keybind = cmd+enter=unbind
 
 focus-follows-mouse = true
 
-# Start new tmux session for each window
-command = ~/.local/bin/tmux-session-chooser.sh
+# Auto-attach to tmux (creates "main" session if none exists)
+command = /opt/homebrew/bin/tmux new-session -A -s main
 
