@@ -65,7 +65,7 @@ Most scripts and templates use `{{ if eq .chezmoi.os "darwin" }}` / `"linux"`. P
 
 | Path | Content |
 |------|---------|
-| `dot_config/fish/` | Fish shell config, 20+ fisher plugins |
+| `dot_config/fish/` | Fish shell config (fisher plugins, conf.d for grc/direnv/atuin/op-cli) |
 | `dot_config/tmux/` | tmux config (Catppuccin Macchiato, 7 TPM plugins, sesh session manager) |
 | `dot_config/ghostty/` | Ghostty terminal config, auto-attaches to tmux |
 | `private_dot_ssh/` | SSH configs with per-host includes (`config.<hostname>.tmpl`) |
@@ -93,3 +93,11 @@ Defined in `.chezmoiexternal.toml`:
 1. 1Password CLI (`op`) installed and authenticated — `run_before_validate_1password.sh.tmpl` blocks on this.
 2. Age encryption key at `~/.config/age-keys.txt`.
 3. Homebrew installed.
+
+## Gotchas
+
+- `chezmoi apply` stops on script failure — use `chezmoi apply ~/.config/fish/` to apply specific paths without triggering unrelated `run_onchange_` scripts (e.g., brew bundle).
+- `fisher update` updates all *installed* plugins, not just `fish_plugins`. To remove old plugins: update `fish_plugins` → `chezmoi apply ~/.config/fish/` → `fisher remove <old>` → `fisher install <new>`.
+- Fish `conf.d/` loads alphabetically — `00_` prefix ensures pre-configuration runs first.
+- tmux `extended-keys` sends xterm-style encoding; apps expecting CSI u (e.g., Claude Code for Shift+Enter) need explicit keybind translation in tmux.conf.
+- sesh picker: use `run-shell` + `fzf-tmux -p`, never `display-popup` wrapping `fzf-tmux -p` (double popup).
