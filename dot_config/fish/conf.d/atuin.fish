@@ -1,5 +1,6 @@
-if type -q atuin and is-interactive
-  #TODO: bug, review later
-  set -gx ATUIN_TMUX_POPUP false
+if type -q atuin; and status is-interactive
   atuin init fish | source
+
+  # Disable fzf.fish history search (Ctrl+R) — atuin owns it
+  fzf_configure_bindings --history=
 end
