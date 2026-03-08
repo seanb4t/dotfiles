@@ -25,6 +25,19 @@ Before ANY development task:
 4. Verify work before claiming completion
 5. If ALL tools in priority chain fail → ask user for guidance
 
+**Common command patterns:**
+```bash
+# Search codebase
+rg "pattern" --type py -C 3
+
+# GitHub PR workflow
+gh pr list --limit 10 --json number,title,state
+gh pr view 123 --json reviews,reviewDecision
+
+# Git worktree verification
+git worktree list && git branch --show-current
+```
+
 ## RFC2119 Keywords
 
 | Keyword | Meaning |
@@ -35,15 +48,14 @@ Before ANY development task:
 
 **Precedence:** MUST/MUST NOT requirements always override efficiency or convenience preferences.
 
-**Clarification:** "MUST act immediately" (line 33) means skip preamble in responses, NOT skip internal planning. Always plan first internally, then act without announcing.
+**Clarification:** "MUST act immediately" (line 12) means skip preamble in responses, NOT skip internal planning. Always plan first internally, then act without announcing.
 
 ## Communication Style
 
+*See General Scope table above for core rules (be direct, act immediately, minimize questions).*
+
 | Requirement | Description |
 |-------------|-------------|
-| MUST be direct | Skip preamble, unnecessary caveats, and explanations of intent |
-| MUST act immediately | Don't announce what you're about to do - just do it (but plan internally first) |
-| SHOULD minimize questions | Ask only when essential, not for edge cases |
 | SHOULD show diffs | Show only relevant changes unless full context requested |
 
 ## Context Management
@@ -55,6 +67,10 @@ Before ANY development task:
 | MUST filter output | Show only what's needed from command results | Use `--limit 10`, `head -20`, etc. |
 | SHOULD summarize | Don't echo large outputs verbatim | Summarize key points instead |
 | SHOULD edit sections | Prefer targeted edits over rewriting whole files | Edit 10 lines, not rewrite 200 |
+
+## Git Operations
+
+When working with Git worktrees or sparse checkouts, MUST verify the current working directory and branch before reading or writing files. Use `git worktree list` and `pwd` to confirm context before any file operations.
 
 ## Tool Precedence & Fallbacks
 
@@ -77,7 +93,7 @@ Before ANY development task:
 
 **Model selection order (for commits/PRs):**
 
-Opus 4.5 → Sonnet 4.5 → Haiku 4 (use highest available)
+Opus 4.6 → Sonnet 4+ → Haiku  (use highest available)
 
 ## Tool Usage
 
@@ -86,7 +102,7 @@ Opus 4.5 → Sonnet 4.5 → Haiku 4 (use highest available)
 | Priority | Tool | Use Case | Requirement |
 |----------|------|----------|-------------|
 | 1 | Read/Write/Edit | File read/write operations | MUST use with offset/limit to read only needed portions |
-| 2 | `rg` CLI | File content search | MUST use (never `grep`) |
+| 2 | Grep tool / `rg` | File content search | MUST use (never raw `grep`) |
 
 **File creation/modification:**
 
@@ -101,9 +117,19 @@ Opus 4.5 → Sonnet 4.5 → Haiku 4 (use highest available)
 | Tool | Use Case | Requirement |
 |------|----------|-------------|
 | `mcp__exa__*` | Intelligent web search | MUST use for search |
-| `mcp__firecrawl-mcp__*` | Web scraping, content extraction, crawling | MUST use for data extraction |
+| `firecrawl` skill | Web scraping, content extraction, crawling | MUST use for data extraction |
 
-**Workflow:** Use Exa to find pages → Use Firecrawl to extract content
+**Workflow:** Use Exa to find pages → Use `firecrawl` skill to extract content
+
+### Browser Automation
+
+Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
+
+Core workflow:
+1. `agent-browser open <url>` - Navigate to page
+2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
+3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
+4. Re-snapshot after page changes
 
 ## Critical Skills
 
@@ -146,15 +172,26 @@ A skill is relevant when:
 | Server | Use Case | Requirement |
 |--------|----------|-------------|
 | `mcp__exa__*` | Intelligent web search | MUST use for search |
-| `mcp__firecrawl-mcp__*` | Web scraping/extraction | MUST use for extraction |
-| `mcp__context7__*` | Library documentation | SHOULD use |
+| `mcp__context7__*` | Library/framework documentation | SHOULD use for up-to-date docs |
+| `mcp__deepwiki__*` | GitHub repo documentation | SHOULD use for understanding unfamiliar repos |
+| `mcp__claude_ai_Hugging_Face__*` | HF models, datasets, papers | MAY use for ML/AI tasks |
 | `mcp__kubernetes-mcp-server__*` | K8s cluster ops | MAY use |
 | `mcp__terraform__*` | Terraform state/workspace | MAY use |
+
+**MCP usage guidance:**
+
+| Server | When to Use | Workflow |
+|--------|-------------|---------|
+| **context7** | Need current API docs for a library/framework | `resolve-library-id` first → then `query-docs` with the resolved ID and a focused topic |
+| **deepwiki** | Understanding an unfamiliar GitHub repo's architecture | `read_wiki_structure` for topic list → `read_wiki_contents` for details, or `ask_question` for targeted answers |
+| **Hugging Face** | Searching models/datasets/papers, checking repo details | `hub_repo_search` to find → `hub_repo_details` for info; `paper_search` for research |
+| **Exa** | Web search, company research, code context | `web_search_exa` for general search; `get_code_context_exa` for code-specific results |
 
 **Overrides (Skills take precedence over MCP):**
 
 | Task | Use Skill (NOT MCP) |
 |------|---------------------|
+| Web scraping/extraction | `firecrawl` |
 | Grafana operations | `fzymgc-house:grafana` |
 | Terraform operations | `fzymgc-house:terraform` |
 
@@ -168,7 +205,7 @@ A skill is relevant when:
 | MUST use format | Conventional commits: `type(scope): description` |
 | MUST commit atomically | One logical change per commit |
 | MUST NOT amend/rebase | Unless explicitly requested |
-| MUST use highest model | For PR/commit messages: Opus 4.5 → Sonnet 4.5 → Haiku 4 |
+| MUST use highest model | For PR/commit messages: Opus 4.6 → Sonnet 4+ → Haiku (use highest available) |
 
 ### GitHub CLI
 
@@ -197,22 +234,36 @@ gh issue create --title "..." --body "..." --label "bug"
 | Respond to PR comments | MUST use `fzymgc-house:respond-to-pr-comments` skill |
 | Add comments/commits | MUST include AI authorship byline |
 
+### Code Review
+
+When reviewing PRs, MUST read files from the PR's feature branch or worktree diff — never from the main branch. Use `gh pr diff <number>` or check out the PR branch first.
+
+**Before making any file changes for a PR, MUST complete these verification steps (showing output of each):**
+
+1. `git worktree list` — identify which worktree has the PR branch
+2. `cd` into that worktree
+3. `git branch --show-current` — confirm correct branch
+4. Only then proceed with file reads and edits
+
 ### Security & Infrastructure
 
 | Area | Requirement | Details |
 |------|-------------|---------|
 | TLS/CA verification | MUST NOT skip | Without explicit approval |
 | Certificate issues | MUST ask first | Before skipping verification |
-| Web searches | MUST verify date | Check current year (2026 as of 2026-01-05) |
+| Web searches | MUST verify date | Run `date +%Y` before using year in searches |
 | GitHub Actions | MUST verify version | Check marketplace before use |
-| Pre-commit hooks | MUST install | When creating worktrees with `.pre-commit-config.yaml` |
+| Git hooks | MUST install | When creating worktrees with hook configs |
 
-**Pre-commit installation:**
+**Git hooks installation:**
 
 ```bash
 git worktree add ../feature-branch
 cd ../feature-branch
+# Install hooks based on what the repo uses
+[[ -f lefthook.yaml ]] && lefthook install
 [[ -f .pre-commit-config.yaml ]] && pre-commit install
+[[ -f .beads/config.yaml ]] && bd hooks install --chain
 ```
 
 **Date verification:**
@@ -223,7 +274,7 @@ cd ../feature-branch
 
 # Right - verify first
 date +%Y  # Returns: 2026
-# Search: cloudflared tunnel credentials 2026
+# Search: cloudflared tunnel credentials $(date +%Y)
 ```
 
 ## Code Editing
@@ -287,7 +338,29 @@ assistant: Done!
 | Tool unavailable | MAY use fallback per precedence rules above |
 | All fallbacks exhausted | MUST ask user: "X, Y, Z unavailable. Proceed anyway or abort?" |
 
+## Environment Notes
+
+When running on macOS, be aware of sandbox restrictions on SQLite writes and symlinks. If writes to beads directories or DB files fail, SHOULD check sandbox permissions before attempting complex debugging.
+
+## Bead / Task Management
+
+For bead CLI operations:
+
+| Requirement | Details |
+|-------------|---------|
+| MUST use `--parent` | Not `-p` for parent flags |
+| MUST include `--description` | Always provide description argument |
+| MUST trim whitespace | Be careful with trailing whitespace in batch ID lists |
+
+## CLAUDE.md Maintenance
+
+| Action | Command |
+|--------|---------|
+| Quick update during session | Press `#` key to auto-incorporate learnings |
+| Comprehensive audit | `/claude-md-improver` skill |
+| Manual edit | Edit this file directly at `~/.claude/CLAUDE.md` |
+
 ---
 
-*Last updated: 2026-01-16*
-*AI Assistant: Claude Opus 4.5*
+*Last updated: 2026-03-08*
+*AI Assistant: Claude Opus 4.6*
