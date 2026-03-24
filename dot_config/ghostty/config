@@ -35,6 +35,6 @@ keybind = cmd+enter=unbind
 
 focus-follows-mouse = true
 
-# Auto-attach to tmux (creates "main" session if none exists)
-command = /opt/homebrew/bin/tmux new-session -A -s main
+# tmux auto-attach removed — using cmux as multiplexer
+# command = /opt/homebrew/bin/tmux new-session -A -s main
 
