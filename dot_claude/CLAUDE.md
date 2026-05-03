@@ -141,59 +141,6 @@ Core workflow:
 | `verification-before-completion` | Before claiming work is complete/fixed/passing | MUST verify with actual commands |
 | `fzymgc-house:grafana` | ANY Grafana operation | MUST use (skill overrides MCP) |
 | `fzymgc-house:terraform` | ANY Terraform operation | MUST use (skill overrides MCP) |
-| `fzymgc-house:respond-to-pr-comments` | Responding to PR comments | MUST use |
-| `commit-commands:commit` | Creating git commits | MUST use |
-
-**Skill relevance heuristics:**
-
-A skill is relevant when:
-
-- Task keyword matches skill name (e.g., "debug" → `systematic-debugging`)
-- User explicitly requests workflow (e.g., "review this" → `requesting-code-review`)
-- Task type matches skill category (e.g., new feature → `brainstorming`)
-- Skill is in Critical Skills table above and trigger matches
-
-### Full Skills Catalog
-
-| Category | Skills |
-|----------|--------|
-| **Development** | `brainstorming`, `writing-plans`, `executing-plans`, `subagent-driven-development`, `systematic-debugging`, `test-driven-development`, `using-git-worktrees`, `verification-before-completion` |
-| **Code Review** | `requesting-code-review`, `receiving-code-review`, `finishing-a-development-branch` |
-| **Quality** | `pr-review-toolkit:review-pr`, `code-review:code-review`, `elements-of-style:writing-clearly-and-concisely` |
-| **Commits** | `commit-commands:commit`, `commit-commands:commit-push-pr`, `commit-commands:clean_gone` |
-| **Domain** | `fzymgc-house:grafana`, `fzymgc-house:terraform`, `fzymgc-house:respond-to-pr-comments` |
-| **Plugin Dev** | `plugin-dev:create-plugin`, `skill-development`, `command-development`, `agent-development`, `hook-development`, `plugin-structure`, `plugin-settings`, `mcp-integration` |
-| **Feature** | `feature-dev:feature-dev` |
-
-*All `superpowers:*` prefix omitted from Development/Code Review for brevity*
-
-### MCP Servers
-
-| Server | Use Case | Requirement |
-|--------|----------|-------------|
-| `mcp__exa__*` | Intelligent web search | MUST use for search |
-| `mcp__context7__*` | Library/framework documentation | SHOULD use for up-to-date docs |
-| `mcp__deepwiki__*` | GitHub repo documentation | SHOULD use for understanding unfamiliar repos |
-| `mcp__claude_ai_Hugging_Face__*` | HF models, datasets, papers | MAY use for ML/AI tasks |
-| `mcp__kubernetes-mcp-server__*` | K8s cluster ops | MAY use |
-| `mcp__terraform__*` | Terraform state/workspace | MAY use |
-
-**MCP usage guidance:**
-
-| Server | When to Use | Workflow |
-|--------|-------------|---------|
-| **context7** | Need current API docs for a library/framework | `resolve-library-id` first → then `query-docs` with the resolved ID and a focused topic |
-| **deepwiki** | Understanding an unfamiliar GitHub repo's architecture | `read_wiki_structure` for topic list → `read_wiki_contents` for details, or `ask_question` for targeted answers |
-| **Hugging Face** | Searching models/datasets/papers, checking repo details | `hub_repo_search` to find → `hub_repo_details` for info; `paper_search` for research |
-| **Exa** | Web search, company research, code context | `web_search_exa` for general search; `get_code_context_exa` for code-specific results |
-
-**Overrides (Skills take precedence over MCP):**
-
-| Task | Use Skill (NOT MCP) |
-|------|---------------------|
-| Web scraping/extraction | `firecrawl` |
-| Grafana operations | `fzymgc-house:grafana` |
-| Terraform operations | `fzymgc-house:terraform` |
 
 ## Development Workflows
 
@@ -201,7 +148,6 @@ A skill is relevant when:
 
 | Requirement | Details |
 |-------------|---------|
-| MUST use skill | `commit-commands:commit` for all commits |
 | MUST use format | Conventional commits: `type(scope): description` |
 | MUST commit atomically | One logical change per commit |
 | MUST NOT amend/rebase | Unless explicitly requested |

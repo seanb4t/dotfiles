@@ -61,10 +61,6 @@
       "mcp__notion__notion-search",
       "mcp__notion__notion-update-database",
       "mcp__notion__notion-update-page",
-      "mcp__plugin_serena_serena__activate_project",
-      "mcp__plugin_serena_serena__list_dir",
-      "mcp__plugin_serena_serena__read_file",
-      "mcp__plugin_serena_serena__replace_content",
       "mcp__terraform__get__*",
       "mcp__terraform__list__*",
       "mcp__terraform__search_providers",
@@ -154,38 +150,21 @@
           }
         ]
       }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bd prime"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
     "type": "command",
-    "command": "bun run /Volumes/Code/github.com/seanb4t/ccstatusline/src/ccstatusline.ts",
+    "command": "~/.claude/ccline/ccline",
     "padding": 0
   },
   "enabledPlugins": {
     "agent-orchestration@claude-code-workflows": true,
-    "agent-sdk-dev@claude-plugins-official": true,
     "beads@beads-marketplace": true,
     "c4-architecture@claude-code-workflows": true,
     "cicd-automation@claude-code-workflows": true,
-    "claude-code-setup@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
     "code-documentation@claude-code-workflows": true,
     "code-refactoring@claude-code-workflows": true,
-    "code-review@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
     "codebase-cleanup@claude-code-workflows": true,
-    "commit-commands@claude-plugins-official": true,
     "comprehensive-review@claude-code-workflows": true,
     "context-management@claude-code-workflows": true,
     "debugging-toolkit@claude-code-workflows": true,
@@ -193,44 +172,38 @@
     "documentation-generation@claude-code-workflows": true,
     "double-shot-latte@superpowers-marketplace": false,
     "elements-of-style@superpowers-marketplace": true,
-    "episodic-memory@superpowers-marketplace": true,
     "error-debugging@claude-code-workflows": true,
     "error-diagnostics@claude-code-workflows": true,
-    "explanatory-output-style@claude-plugins-official": true,
-    "firecrawl@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true,
     "jvm-languages@claude-code-workflows": true,
     "kubernetes-operations@claude-code-workflows": true,
-    "learning-output-style@claude-plugins-official": true,
     "observability-monitoring@claude-code-workflows": true,
-    "plugin-dev@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "prompt-improver@severity1-marketplace": true,
     "python-development@claude-code-workflows": true,
-    "ralph-loop@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
     "shell-scripting@claude-code-workflows": true,
-    "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "superpowers@superpowers-marketplace": true,
     "systems-programming@claude-code-workflows": true,
-    "typescript-lsp@claude-plugins-official": true,
     "homelab@fzymgc-house-skills": true,
     "pr-review@fzymgc-house-skills": true,
+    "jj@fzymgc-house-skills": true,
+    "superpowers@fzymgc-house-skills": true,
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "jdtls-lsp@claude-plugins-official": true,
-    "kotlin-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "jjagent@jjagent": true
+    "pr-review-toolkit@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "explanatory-output-style@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "learning-output-style@claude-plugins-official": true,
+    "firecrawl@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": false,
+    "obsidian@obsidian-skills": true
   },
   "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-plugins-official"
-      }
-    },
     "fzymgc-house-skills": {
       "source": {
         "source": "github",
@@ -243,10 +216,16 @@
         "repo": "obra/superpowers-marketplace"
       }
     },
-    "jjagent": {
+    "claude-plugins-official": {
       "source": {
         "source": "github",
-        "repo": "schpet/jjagent"
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
       }
     }
   },
@@ -279,5 +258,7 @@
       "bd"
     ]
   },
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
+  "agentPushNotifEnabled": true
 }
