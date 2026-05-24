@@ -99,10 +99,17 @@ Opus 4.6 → Sonnet 4+ → Haiku  (use highest available)
 
 ### File Operations
 
+**Code search precedence (semantic-first, then raw):**
+
 | Priority | Tool | Use Case | Requirement |
 |----------|------|----------|-------------|
-| 1 | Read/Write/Edit | File read/write operations | MUST use with offset/limit to read only needed portions |
-| 2 | Grep tool / `rg` | File content search | MUST use (never raw `grep`) |
+| 1 | `mcp__probe__search_code` | Find a function/struct/handler by description or symbol — returns whole AST blocks, not line snippets | SHOULD use for "where is X / how does Y work" questions before Read |
+| 2 | `mcp__probe__extract_code` | Pull a specific symbol or `path:line` range without manual offset math | SHOULD use when you know the symbol but not exact line bounds |
+| 3 | `mcp__probe__grep` | Structured ripgrep with file/line metadata | MAY use for raw text matches when probe's index is fresh |
+| 4 | Grep tool / `rg` | Raw file content search | MUST use (never raw shell `grep`); fallback when probe is stale or you need flags it doesn't expose |
+| 5 | Read/Write/Edit | File read/write operations on known paths | MUST use with offset/limit to read only needed portions |
+
+**Rule of thumb:** for "where is X defined" or "how does Y work", probe before Read — probe returns the full enclosing function in one call, eliminating the grep→Read two-step. For "show me lines 200-250 of file Z", Read directly.
 
 **File creation/modification:**
 

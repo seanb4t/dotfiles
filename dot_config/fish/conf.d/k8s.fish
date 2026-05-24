@@ -29,3 +29,17 @@ if test -d ~/.kube/configs
       end
   end
 end
+
+function tpi-drain
+    set node $argv[1]
+    command kubectl -n longhorn-system patch nodes.longhorn.io $node \
+        --type=merge -p '{"spec":{"allowScheduling":false,"evictionRequested":true}}'
+    kubectl drain $node --ignore-daemonsets --delete-emptydir-data
+end
+
+function tpi-undrain
+    set node $argv[1]
+    command kubectl -n longhorn-system patch nodes.longhorn.io $node \
+        --type=merge -p '{"spec":{"evictionRequested":false,"allowScheduling":true}}'
+    kubectl uncordon $node
+end
