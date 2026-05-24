@@ -66,4 +66,14 @@ for plugin in $plugins
     echo "install: $plugin"; claude plugin install $plugin --scope user 2>/dev/null; or echo "  (failed/already): $plugin"
 end
 
+# `claude plugin install` enables every plugin; re-assert the curated disable-state
+# from settings.json (which chezmoi applies BEFORE this run_onchange script).
+set -l settings ~/.claude/settings.json
+if test -f $settings
+    for p in (python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(chr(10).join(k for k,v in d.get("enabledPlugins",{}).items() if v is False))' $settings)
+        echo "disable (curated): $p"
+        claude plugin disable $p --scope user 2>/dev/null; or true
+    end
+end
+
 echo "Plugin restore complete: 5 marketplaces, 35 plugins."
