@@ -1,0 +1,621 @@
+{
+  "version": 3,
+  "skills": {
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "121eecacd86c0aab06aef5cd4663e80c5397cd41",
+      "installedAt": "2026-02-04T15:21:27.969Z",
+      "updatedAt": "2026-05-02T18:13:37.446Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "3013fdeb8a11b10b1eb795ec3ae8bfca38f7c26d",
+      "installedAt": "2026-02-04T15:21:31.741Z",
+      "updatedAt": "2026-05-02T18:13:37.998Z"
+    },
+    "permissions-manager": {
+      "source": "SpillwaveSolutions/claude_permissions_skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/SpillwaveSolutions/claude_permissions_skill.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "da74f448c0ce69eddd5047c5f94f08c10ab8a49d",
+      "installedAt": "2026-02-04T23:09:06.734Z",
+      "updatedAt": "2026-02-04T23:10:42.738Z"
+    },
+    "code-review-excellence": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/developer-essentials/skills/code-review-excellence/SKILL.md",
+      "skillFolderHash": "01df909b77da6e637490582b2899447eed1786bd",
+      "installedAt": "2026-02-04T23:42:06.030Z",
+      "updatedAt": "2026-03-08T13:07:56.123Z"
+    },
+    "create-agent": {
+      "source": "OpenRouterTeam/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/OpenRouterTeam/agent-skills.git",
+      "skillPath": "skills/create-agent/SKILL.md",
+      "skillFolderHash": "8f6dc056bb940d6931e18892b4f36d2922a0edd4",
+      "installedAt": "2026-02-04T23:43:32.560Z",
+      "updatedAt": "2026-02-04T23:43:32.560Z"
+    },
+    "firecrawl": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-cli/SKILL.md",
+      "skillFolderHash": "d607e3dd104234f487b3da7725b5404bbf339e19",
+      "pluginName": "firecrawl",
+      "installedAt": "2026-02-05T01:07:37.560Z",
+      "updatedAt": "2026-05-07T16:51:47.873Z"
+    },
+    "remembering-conversations": {
+      "source": "obra/episodic-memory",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/episodic-memory.git",
+      "skillPath": "skills/remembering-conversations/SKILL.md",
+      "skillFolderHash": "c39796fe24cf728f7c26687a68aecf1f611144f8",
+      "installedAt": "2026-02-08T13:44:28.955Z",
+      "updatedAt": "2026-02-08T13:44:28.955Z"
+    },
+    "writing-clearly-and-concisely": {
+      "source": "obra/the-elements-of-style",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/the-elements-of-style.git",
+      "skillPath": "skills/writing-clearly-and-concisely/SKILL.md",
+      "skillFolderHash": "9f8fda5492c471811dedcdecda6701ef63f6df9b",
+      "installedAt": "2026-02-08T13:49:13.635Z",
+      "updatedAt": "2026-02-08T13:49:13.635Z"
+    },
+    "pdf": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/pdf/SKILL.md",
+      "skillFolderHash": "6369f4649de69bd6857c9bc3b058a77206009238",
+      "pluginName": "document-skills",
+      "installedAt": "2026-02-08T13:50:54.669Z",
+      "updatedAt": "2026-05-24T15:33:06.268Z"
+    },
+    "doc-coauthoring": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/doc-coauthoring/SKILL.md",
+      "skillFolderHash": "d9df960e61fe2bafe9183e37de6f9f6b73b74087",
+      "pluginName": "example-skills",
+      "installedAt": "2026-02-08T13:51:37.887Z",
+      "updatedAt": "2026-05-24T15:33:06.266Z"
+    },
+    "docx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/docx/SKILL.md",
+      "skillFolderHash": "a0d216202f9793a78da44cf96aabe48f42e627ac",
+      "pluginName": "document-skills",
+      "installedAt": "2026-02-08T13:51:37.897Z",
+      "updatedAt": "2026-05-24T15:33:06.266Z"
+    },
+    "pptx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/pptx/SKILL.md",
+      "skillFolderHash": "10b3d70962e489867ddfee7da92f7da6b0eccc4f",
+      "pluginName": "document-skills",
+      "installedAt": "2026-02-08T13:51:37.921Z",
+      "updatedAt": "2026-05-24T15:33:06.268Z"
+    },
+    "mcp-builder": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/mcp-builder/SKILL.md",
+      "skillFolderHash": "b866bcfb57b780c10b587c7b543e871a91661ce0",
+      "pluginName": "example-skills",
+      "installedAt": "2026-02-08T13:51:37.934Z",
+      "updatedAt": "2026-05-24T15:33:06.267Z"
+    },
+    "xlsx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/xlsx/SKILL.md",
+      "skillFolderHash": "f5fb1cdb7993b2feee8367e983e9d4d58d2eedd4",
+      "pluginName": "document-skills",
+      "installedAt": "2026-02-08T13:51:37.948Z",
+      "updatedAt": "2026-05-24T15:33:06.270Z"
+    },
+    "Writing Hookify Rules": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/hookify/skills/writing-rules/SKILL.md",
+      "skillFolderHash": "7617490248ddc6fe04a7cc7513c6a33fa482e854",
+      "installedAt": "2026-02-08T13:52:22.219Z",
+      "updatedAt": "2026-02-08T13:52:22.219Z"
+    },
+    "Agent Development": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/plugin-dev/skills/agent-development/SKILL.md",
+      "skillFolderHash": "55323e4656435c2c3d829630c472639e6b600f34",
+      "installedAt": "2026-02-08T13:52:22.231Z",
+      "updatedAt": "2026-02-08T13:52:22.231Z"
+    },
+    "Command Development": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/plugin-dev/skills/command-development/SKILL.md",
+      "skillFolderHash": "07e593d490ae22688926ffae79f15d85bb961825",
+      "installedAt": "2026-02-08T13:52:22.241Z",
+      "updatedAt": "2026-02-08T13:52:22.241Z"
+    },
+    "Hook Development": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/plugin-dev/skills/hook-development/SKILL.md",
+      "skillFolderHash": "9d89f677df7c43ead68cc64e8b9aa2b5bfb2cd0a",
+      "installedAt": "2026-02-08T13:52:22.253Z",
+      "updatedAt": "2026-02-08T13:52:22.253Z"
+    },
+    "Plugin Settings": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/plugin-dev/skills/plugin-settings/SKILL.md",
+      "skillFolderHash": "b92c10c82b18cb18733c151d927c3e41aa8c4c1f",
+      "installedAt": "2026-02-08T13:52:22.265Z",
+      "updatedAt": "2026-02-08T13:52:22.265Z"
+    },
+    "Plugin Structure": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/plugin-dev/skills/plugin-structure/SKILL.md",
+      "skillFolderHash": "34659f25e4e519dc5c3a6d5361cc69f6688d8eac",
+      "installedAt": "2026-02-08T13:52:22.277Z",
+      "updatedAt": "2026-02-08T13:52:22.277Z"
+    },
+    "Skill Development": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-code.git",
+      "skillPath": "plugins/plugin-dev/skills/skill-development/SKILL.md",
+      "skillFolderHash": "3dd57083301fd1ba1a4e04967c6fc055c6d740eb",
+      "installedAt": "2026-02-08T13:52:22.288Z",
+      "updatedAt": "2026-02-08T13:52:22.288Z"
+    },
+    "claude-automation-recommender": {
+      "source": "anthropics/claude-plugins-official",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official.git",
+      "skillPath": "plugins/claude-code-setup/skills/claude-automation-recommender/SKILL.md",
+      "skillFolderHash": "b43f4a9072318526305d3ddf2d6bedfbf860ae93",
+      "installedAt": "2026-02-08T13:54:27.232Z",
+      "updatedAt": "2026-02-11T01:28:37.658Z"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "skillFolderHash": "928950704df8a8b885c03de5da626331e6f29cf8",
+      "pluginName": "example-skills",
+      "installedAt": "2026-02-11T01:28:37.521Z",
+      "updatedAt": "2026-05-24T15:33:06.267Z"
+    },
+    "writing-hookify-rules": {
+      "source": "anthropics/claude-plugins-official",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official.git",
+      "skillPath": "plugins/hookify/skills/writing-rules/SKILL.md",
+      "skillFolderHash": "419cd37ff832b1ba46b956b173d1278315b9619f",
+      "installedAt": "2026-02-11T01:28:37.536Z",
+      "updatedAt": "2026-02-11T01:28:37.536Z"
+    },
+    "autofix": {
+      "source": "coderabbitai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/coderabbitai/skills.git",
+      "skillPath": "skills/autofix/SKILL.md",
+      "skillFolderHash": "6bf6634dc86f933da9a9ade797c2d9cc8d49a886",
+      "installedAt": "2026-03-08T13:07:31.870Z",
+      "updatedAt": "2026-05-02T18:13:43.280Z"
+    },
+    "code-review": {
+      "source": "coderabbitai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/coderabbitai/skills.git",
+      "skillPath": "skills/code-review/SKILL.md",
+      "skillFolderHash": "5ac6274b6524cf12acb259595b57a42e9024f6bb",
+      "installedAt": "2026-03-08T13:07:32.063Z",
+      "updatedAt": "2026-05-02T18:13:44.109Z"
+    },
+    "grafana": {
+      "source": "fzymgc-house/fzymgc-house-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fzymgc-house/fzymgc-house-skills.git",
+      "skillPath": "homelab/skills/grafana/SKILL.md",
+      "skillFolderHash": "530cb16cb3ed644b182697c0a5e0db4609b104b4",
+      "installedAt": "2026-04-09T23:15:15.914Z",
+      "updatedAt": "2026-05-24T15:36:04.078Z"
+    },
+    "skill-qa": {
+      "source": "fzymgc-house/fzymgc-house-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fzymgc-house/fzymgc-house-skills.git",
+      "skillPath": "homelab/skills/skill-qa/SKILL.md",
+      "skillFolderHash": "1f919feaecfbfe8edb116f4022296168d72fe8a7",
+      "installedAt": "2026-04-09T23:15:16.728Z",
+      "updatedAt": "2026-05-02T18:15:08.823Z"
+    },
+    "terraform": {
+      "source": "fzymgc-house/fzymgc-house-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fzymgc-house/fzymgc-house-skills.git",
+      "skillPath": "homelab/skills/terraform/SKILL.md",
+      "skillFolderHash": "b9afc18f0aa21d68a296043e7df93c0b64789288",
+      "installedAt": "2026-04-09T23:15:17.213Z",
+      "updatedAt": "2026-05-02T18:15:08.831Z"
+    },
+    "firecrawl-agent": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-agent/SKILL.md",
+      "skillFolderHash": "48a24186890757f344f16bf4056703559e6e58ec",
+      "installedAt": "2026-05-07T16:51:47.872Z",
+      "updatedAt": "2026-05-07T16:51:47.872Z"
+    },
+    "firecrawl-crawl": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-crawl/SKILL.md",
+      "skillFolderHash": "38776bb4cebf0d0c0609d263a83a074e21d3eddf",
+      "installedAt": "2026-05-07T16:51:47.873Z",
+      "updatedAt": "2026-05-07T16:51:47.873Z"
+    },
+    "firecrawl-download": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-download/SKILL.md",
+      "skillFolderHash": "97201334b570f50b420d3f2ef394f60e1138694d",
+      "installedAt": "2026-05-07T16:51:47.874Z",
+      "updatedAt": "2026-05-07T16:51:47.874Z"
+    },
+    "firecrawl-interact": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-interact/SKILL.md",
+      "skillFolderHash": "494507283bf0b840223a83e77938994287464b26",
+      "installedAt": "2026-05-07T16:51:47.874Z",
+      "updatedAt": "2026-05-07T16:51:47.874Z"
+    },
+    "firecrawl-map": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-map/SKILL.md",
+      "skillFolderHash": "4165557b7602a86934e9fdd071483fdb46606f8b",
+      "installedAt": "2026-05-07T16:51:47.874Z",
+      "updatedAt": "2026-05-07T16:51:47.874Z"
+    },
+    "firecrawl-parse": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-parse/SKILL.md",
+      "skillFolderHash": "47dc5a97e63ef95e094ab78f4d2db1d3375f9286",
+      "installedAt": "2026-05-07T16:51:47.874Z",
+      "updatedAt": "2026-05-07T16:51:47.874Z"
+    },
+    "firecrawl-scrape": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-scrape/SKILL.md",
+      "skillFolderHash": "1784b33814a99a615d765ad16aaa069a1ae79577",
+      "installedAt": "2026-05-07T16:51:47.875Z",
+      "updatedAt": "2026-05-07T16:51:47.875Z"
+    },
+    "firecrawl-search": {
+      "source": "firecrawl/cli",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/cli.git",
+      "skillPath": "skills/firecrawl-search/SKILL.md",
+      "skillFolderHash": "7f2e5e7697caf18b66ea2e4b29417c4f7d027375",
+      "installedAt": "2026-05-07T16:51:47.875Z",
+      "updatedAt": "2026-05-07T16:51:47.875Z"
+    },
+    "firecrawl-build-interact": {
+      "source": "firecrawl/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/skills.git",
+      "skillPath": "skills/firecrawl-build-interact/SKILL.md",
+      "skillFolderHash": "0d20c209c066119f411542753fbc172a94bbbc41",
+      "pluginName": "firecrawl",
+      "installedAt": "2026-05-07T16:51:49.082Z",
+      "updatedAt": "2026-05-07T16:51:49.082Z"
+    },
+    "firecrawl-build-onboarding": {
+      "source": "firecrawl/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/skills.git",
+      "skillPath": "skills/firecrawl-build-onboarding/SKILL.md",
+      "skillFolderHash": "0d0c900a55648beb776ed60f8019ec0a043e0d4c",
+      "pluginName": "firecrawl",
+      "installedAt": "2026-05-07T16:51:49.083Z",
+      "updatedAt": "2026-05-07T16:51:49.083Z"
+    },
+    "firecrawl-build-scrape": {
+      "source": "firecrawl/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/skills.git",
+      "skillPath": "skills/firecrawl-build-scrape/SKILL.md",
+      "skillFolderHash": "f9bf4790303a08d9a3db3b78c40c872300274d2c",
+      "pluginName": "firecrawl",
+      "installedAt": "2026-05-07T16:51:49.083Z",
+      "updatedAt": "2026-05-07T16:51:49.083Z"
+    },
+    "firecrawl-build-search": {
+      "source": "firecrawl/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/firecrawl/skills.git",
+      "skillPath": "skills/firecrawl-build-search/SKILL.md",
+      "skillFolderHash": "2514028b999259b8215f6609f55a151634e96789",
+      "pluginName": "firecrawl",
+      "installedAt": "2026-05-07T16:51:49.083Z",
+      "updatedAt": "2026-05-07T16:51:49.083Z"
+    },
+    "cmux": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux/SKILL.md",
+      "skillFolderHash": "d7b4a428df22553048a6830f4b5f3733fe1f9393",
+      "installedAt": "2026-05-24T14:43:29.985Z",
+      "updatedAt": "2026-05-24T14:43:29.985Z"
+    },
+    "cmux-browser": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-browser/SKILL.md",
+      "skillFolderHash": "6d5dfc4de15faae37f932fa71f2bc9943bd2dafe",
+      "installedAt": "2026-05-24T14:43:29.986Z",
+      "updatedAt": "2026-05-24T14:43:29.986Z"
+    },
+    "cmux-customization": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-customization/SKILL.md",
+      "skillFolderHash": "47bb4ea3d247fe634734674ec3d39e1224aed0e1",
+      "installedAt": "2026-05-24T14:43:29.986Z",
+      "updatedAt": "2026-05-24T14:43:29.986Z"
+    },
+    "cmux-diagnostics": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-diagnostics/SKILL.md",
+      "skillFolderHash": "bbcedcd6e38891c7a2c0493e397d2c3ddf3d8633",
+      "installedAt": "2026-05-24T14:43:29.986Z",
+      "updatedAt": "2026-05-24T14:43:29.986Z"
+    },
+    "cmux-keyboard-shortcuts": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-keyboard-shortcuts/SKILL.md",
+      "skillFolderHash": "2e647bed07b05ac0245997f89e4dfe4d2d8aff99",
+      "installedAt": "2026-05-24T14:43:29.987Z",
+      "updatedAt": "2026-05-24T14:43:29.987Z"
+    },
+    "cmux-markdown": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-markdown/SKILL.md",
+      "skillFolderHash": "c6cf70a1ad9f98867a652dc03ded80905c2706c8",
+      "installedAt": "2026-05-24T14:43:29.987Z",
+      "updatedAt": "2026-05-24T14:43:29.987Z"
+    },
+    "cmux-settings": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-settings/SKILL.md",
+      "skillFolderHash": "7c3ee4ce0e05ea8178dadc28c25b16938f8be3f1",
+      "installedAt": "2026-05-24T14:43:29.987Z",
+      "updatedAt": "2026-05-24T14:43:29.987Z"
+    },
+    "cmux-workspace": {
+      "source": "manaflow-ai/cmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/manaflow-ai/cmux.git",
+      "skillPath": "skills/cmux-workspace/SKILL.md",
+      "skillFolderHash": "b8a24863c44d8233c1c9ed760fe91876c8265321",
+      "installedAt": "2026-05-24T14:43:29.987Z",
+      "updatedAt": "2026-05-24T14:43:29.987Z"
+    },
+    "algorithmic-art": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/algorithmic-art/SKILL.md",
+      "skillFolderHash": "4aef6bcad51d058ec32b1acb9da436851863e56e",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.264Z",
+      "updatedAt": "2026-05-24T15:33:06.264Z"
+    },
+    "brand-guidelines": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/brand-guidelines/SKILL.md",
+      "skillFolderHash": "1dc8bd3584b80568edae7da16382363e24ecf0f0",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.265Z",
+      "updatedAt": "2026-05-24T15:33:06.265Z"
+    },
+    "canvas-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/canvas-design/SKILL.md",
+      "skillFolderHash": "95095faaee2ea943e85a5d1d562fde06841e835e",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.265Z",
+      "updatedAt": "2026-05-24T15:33:06.265Z"
+    },
+    "claude-api": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/claude-api/SKILL.md",
+      "skillFolderHash": "e0365048d0fb24b0e7e89feccdc2e6afc96ccecb",
+      "pluginName": "claude-api",
+      "installedAt": "2026-05-24T15:33:06.266Z",
+      "updatedAt": "2026-05-24T15:33:06.266Z"
+    },
+    "internal-comms": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/internal-comms/SKILL.md",
+      "skillFolderHash": "9869687dcf6deb6802ca88ac11e67b6f7278017a",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.267Z",
+      "updatedAt": "2026-05-24T15:33:06.267Z"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "skillFolderHash": "3cf9a8db32597ba3e24b584a3d696f4e11c7d7b6",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.269Z",
+      "updatedAt": "2026-05-24T15:33:06.269Z"
+    },
+    "slack-gif-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/slack-gif-creator/SKILL.md",
+      "skillFolderHash": "c61d2f7bb6334b68a6936ad3f41ebfc7cb76fe2a",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.269Z",
+      "updatedAt": "2026-05-24T15:33:06.269Z"
+    },
+    "theme-factory": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/theme-factory/SKILL.md",
+      "skillFolderHash": "e05534d132fb1b21f9917840874758e30f0a9b1a",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.269Z",
+      "updatedAt": "2026-05-24T15:33:06.269Z"
+    },
+    "web-artifacts-builder": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/web-artifacts-builder/SKILL.md",
+      "skillFolderHash": "821b94f16c123d5f12e4e72eda9f7a162e2698f6",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.270Z",
+      "updatedAt": "2026-05-24T15:33:06.270Z"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "skillFolderHash": "5ffb7dc66b9fd4c25c3e400a4c00da99a349b714",
+      "pluginName": "example-skills",
+      "installedAt": "2026-05-24T15:33:06.270Z",
+      "updatedAt": "2026-05-24T15:33:06.270Z"
+    },
+    "defuddle": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/defuddle/SKILL.md",
+      "skillFolderHash": "db0b775af7e7d603f59fa2b67bdef615baf1a48f",
+      "installedAt": "2026-05-24T15:33:21.382Z",
+      "updatedAt": "2026-05-24T15:33:21.382Z"
+    },
+    "json-canvas": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/json-canvas/SKILL.md",
+      "skillFolderHash": "9df7971db7ffebf96f2a207840b9f4765aa11b04",
+      "installedAt": "2026-05-24T15:33:21.383Z",
+      "updatedAt": "2026-05-24T15:33:21.383Z"
+    },
+    "obsidian-bases": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/obsidian-bases/SKILL.md",
+      "skillFolderHash": "4bef60bb848bfb02b4172b552626d5741b0d4057",
+      "installedAt": "2026-05-24T15:33:21.384Z",
+      "updatedAt": "2026-05-24T15:33:21.384Z"
+    },
+    "obsidian-cli": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/obsidian-cli/SKILL.md",
+      "skillFolderHash": "96254a554e480359de7b685571876f2e7f9ba57d",
+      "installedAt": "2026-05-24T15:33:21.384Z",
+      "updatedAt": "2026-05-24T15:33:21.384Z"
+    },
+    "obsidian-markdown": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/obsidian-markdown/SKILL.md",
+      "skillFolderHash": "5caf5d9e7de204f3904216857545f2aa36bcfcac",
+      "installedAt": "2026-05-24T15:33:21.385Z",
+      "updatedAt": "2026-05-24T15:33:21.385Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "dexto",
+    "firebender",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode",
+    "warp"
+  ]
+}

@@ -1,83 +1,4 @@
 {
-  "agentPushNotifEnabled": true,
-  "effortLevel": "high",
-  "enabledPlugins": {
-    "beads@beads-marketplace": true,
-    "c4-architecture@claude-code-workflows": true,
-    "chrome-devtools-mcp@claude-plugins-official": false,
-    "claude-code-setup@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "dev-flow@fzymgc-house-skills": true,
-    "document-skills@anthropic-agent-skills": false,
-    "documentation-generation@claude-code-workflows": true,
-    "double-shot-latte@superpowers-marketplace": false,
-    "elements-of-style@superpowers-marketplace": true,
-    "explanatory-output-style@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": false,
-    "homelab@fzymgc-house-skills": true,
-    "jj@fzymgc-house-skills": true,
-    "obsidian@obsidian-skills": false,
-    "playwright@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": false,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "pr-review@fzymgc-house-skills": true,
-    "ralph-loop@claude-plugins-official": false,
-    "security-guidance@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "claude-plugins-official": {
-      "source": {
-        "repo": "anthropics/claude-plugins-official",
-        "source": "github"
-      }
-    },
-    "fzymgc-house-skills": {
-      "source": {
-        "repo": "fzymgc-house/fzymgc-house-skills",
-        "source": "github"
-      }
-    },
-    "obsidian-skills": {
-      "source": {
-        "repo": "kepano/obsidian-skills",
-        "source": "github"
-      }
-    },
-    "superpowers-marketplace": {
-      "source": {
-        "repo": "obra/superpowers-marketplace",
-        "source": "github"
-      }
-    }
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [],
-        "matcher": "*"
-      }
-    ],
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "command": "bd prime",
-            "type": "command"
-          }
-        ],
-        "matcher": ""
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [],
-        "matcher": "*"
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Bash(~/.claude/plugins/cache/fzymgc-house-skills/fzymgc-house/acf60b4ccbed/skills/respond-to-pr-comments/scripts/fetch_pr_comments.py:*)",
@@ -192,12 +113,6 @@
       "WebFetch(domain:tailscale.com)",
       "Bash(bd *)"
     ],
-    "ask": [
-      "Bash(terraform destroy *)",
-      "Bash(terraform apply *)",
-      "Bash(kubectl delete *)",
-      "Bash(rm -rf *)"
-    ],
     "deny": [
       "WebFetch(domain:pastebin.com)",
       "Read(~/.ssh/id_*)",
@@ -216,12 +131,104 @@
       "Read(~/.kube/configs/**)",
       "Read(~/.config/age-keys.txt)",
       "Read(~/.gnupg/**)"
+    ],
+    "ask": [
+      "Bash(terraform destroy *)",
+      "Bash(terraform apply *)",
+      "Bash(kubectl delete *)",
+      "Bash(rm -rf *)"
     ]
   },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": []
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bd prime"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": []
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/ccline/ccline",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "beads@beads-marketplace": true,
+    "c4-architecture@claude-code-workflows": true,
+    "chrome-devtools-mcp@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "dev-flow@fzymgc-house-skills": true,
+    "documentation-generation@claude-code-workflows": true,
+    "double-shot-latte@superpowers-marketplace": false,
+    "explanatory-output-style@claude-plugins-official": true,
+    "jj@fzymgc-house-skills": true,
+    "playwright@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": false,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "pr-review@fzymgc-house-skills": true,
+    "ralph-loop@claude-plugins-official": false,
+    "security-guidance@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "fzymgc-house-skills": {
+      "source": {
+        "source": "github",
+        "repo": "fzymgc-house/fzymgc-house-skills"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
+      }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    }
+  },
   "sandbox": {
-    "allowUnsandboxedCommands": true,
-    "autoAllowBashIfSandboxed": true,
     "enabled": false,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": true,
+    "network": {
+      "allowUnixSockets": [
+        "//run/user/*/gnupg/S.gpg-agent",
+        "//run/user/*/gnupg/S.gpg-agent.ssh",
+        "//tmp/com.apple.launchd.*/Listeners",
+        "//private/tmp/com.apple.launchd.*/Listeners",
+        "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock",
+        "~/.1password/agent.sock"
+      ],
+      "allowLocalBinding": true
+    },
     "excludedCommands": [
       "docker",
       "kubectl",
@@ -234,24 +241,10 @@
       "git",
       "uv",
       "bd"
-    ],
-    "network": {
-      "allowLocalBinding": true,
-      "allowUnixSockets": [
-        "//run/user/*/gnupg/S.gpg-agent",
-        "//run/user/*/gnupg/S.gpg-agent.ssh",
-        "//tmp/com.apple.launchd.*/Listeners",
-        "//private/tmp/com.apple.launchd.*/Listeners",
-        "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock",
-        "~/.1password/agent.sock"
-      ]
-    }
+    ]
   },
+  "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
-  "statusLine": {
-    "command": "~/.claude/ccline/ccline",
-    "padding": 0,
-    "type": "command"
-  },
-  "theme": "dark"
+  "theme": "dark",
+  "agentPushNotifEnabled": true
 }

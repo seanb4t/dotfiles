@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext:*)",
+      "WebFetch(domain:2e.aonprd.com)",
+      "Bash(agent-browser open:*)",
+      "Bash(agent-browser snapshot:*)",
+      "Bash(agent-browser js:*)",
+      "Bash(agent-browser exec:*)",
+      "Bash(agent-browser:*)",
+      "WebSearch"
+    ]
+  }
+}

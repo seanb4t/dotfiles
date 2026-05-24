@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Available Documentation (top matches) for resources in Terraform provider hashicorp/aws version: 6.27.0\n\nEach result includes:\n- providerDocID: tfprovider-compatible identifier\n- Title: Service or resource name\n- Category: Type of document\n- Description: Brief summary of the document\nFor best results, select libraries based on the service_slug match and category of information requested.\n\n---\n\n- providerDocID: 10930629\n- Title: connect_lambda_function_association\n- Category: resources\n- Description: Provides details about a specific Connect Lambda Function Association.\n---\n- providerDocID: 10931109\n- Title: lambda_function\n- Category: resources\n- Description: Manages an AWS Lambda Function.\n---\n- providerDocID: 10931110\n- Title: lambda_function_event_invoke_config\n- Category: resources\n- Description: Manages an AWS Lambda Function Event Invoke Config.\n---\n- providerDocID: 10931111\n- Title: lambda_function_recursion_config\n- Category: resources\n- Description: Manages an AWS Lambda Function Recursion Config.\n---\n- providerDocID: 10931112\n- Title: lambda_function_url\n- Category: resources\n- Description: \n---\n"
+      }
+    ]
+  }
+}
