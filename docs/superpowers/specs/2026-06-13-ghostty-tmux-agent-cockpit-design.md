@@ -59,8 +59,8 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
 | tmux **3.6b** | repo pushed 2026-06-13; installed == latest release (2026-05-20) | CURRENT | Base; build to 3.6 |
 | **catppuccin/tmux** | latest tag **v2.3.0** (2026-04-08); user on v2.1.3 | CURRENT | Adopt v2.3.0 |
 | **sesh** | brew formula stable **2.26.2** (bottled); very active | CURRENT | Core switcher (Brewfile) |
-| **tmux-fingers** (Morantron) | pushed 2026-06-09; latest tag **2.7.1**; *not* on crates.io; no brew formula | CURRENT | Hint-copy; vendor + cargo build |
-| **extrakto** (laktak) | pushed 2026-03-02; **no release tags**; no brew formula | CURRENT | Fuzzy extract/insert/url; vendor pinned to a commit SHA |
+| **tmux-fingers** (Morantron) | **Crystal** (gh-api `language=Crystal`; `shard.yml`); pushed 2026-06-09; tag 2.7.1 live; **Homebrew tap `morantron/tmux-fingers`** ships a bottle | CURRENT | Hint-copy; install via Brewfile tap (no source build) |
+| **extrakto** (laktak) | pushed 2026-03-02; **no release tags**; no brew formula | CURRENT | Fuzzy extract/insert/url; vendor pinned to a commit SHA via archive |
 | **Ghostty** | pushed 2026-06-10; native OSC 9 + OSC 777 → Notification Center (`desktop-notifications=true` default) | CURRENT | Notification sink |
 | tmux-resurrect + continuum | ~22 mo idle; 287/92 open issues | STALE | **Drop** → sesh-first |
 | fcsonline/tmux-thumbs | release 2023; 2 yr idle | STALE | **Replace** → tmux-fingers |
@@ -80,12 +80,14 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
    only "on todo" (tmux/tmux#5136, 2026-06-07). Passthrough is the generic answer:
    `allow-passthrough on` (value `all` also fires from *inactive* panes) +
    DCS-wrap to the pane TTY.
-3. **Claude Code v2.1.139+ `terminalSequence` hook field (supersedes the TTY hack).**
+3. **Claude Code `terminalSequence` hook field (supersedes the TTY hack).**
    Hooks now run with **no controlling terminal**; a hook returns
    `{"terminalSequence":"<OSC>"}` and Claude Code emits it through its own write
    path — allowlisted to OSC 0/1/2/9/99/777 + BEL, **race-free, and it performs the
-   tmux passthrough wrapping itself.** Source: code.claude.com/docs/en/hooks. This
-   is the official, current mechanism and is what the attention loop uses.
+   tmux passthrough wrapping itself.** Source: code.claude.com/docs/en/hooks. The
+   feature landed in the 2.1.14x series; the **installed Claude Code is 2.1.177**,
+   which supports it — so this is validated against the live binary, not a guessed
+   floor. This is the official, current mechanism and is what the attention loop uses.
 4. **Clipboard (tmux Clipboard wiki + 2026 OSC-52 guidance).** Current best practice
    on macOS+Ghostty is native OSC-52: `set -s set-clipboard on` **plus**
    `set -g allow-passthrough on` (so DCS-wrapped OSC-52 from nvim/Claude is honoured).
@@ -95,9 +97,14 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
    `directory`/`application` modules **freeze** if defined with `-gF`/`E:`
    expansion at definition time — set their `_text` plainly, expand only in
    `status-right` (issues #407/#527).
-6. **sesh native picker.** `sesh picker` replaces the external fzf dependency:
-   `display-popup -E "sesh picker -idH"` is a single popup — sidesteps the prior
-   "fzf-tmux double-popup" gotcha entirely.
+6. **sesh picker.** Verified live: `sesh 2.26.2` **does** expose a `picker`
+   subcommand (`sesh picker [--flags] Interactive session picker`). However, the
+   *proven* path is the operator's existing `~/.local/bin/sesh-picker.sh` — a rich
+   `sesh list --icons | fzf-tmux -p` picker (all/tmux/config/zoxide/find/kill modes
+   + preview) bound via **`run-shell`**, which respects the repo's documented
+   "double-popup" gotcha (`run-shell` + `fzf-tmux -p`, never `display-popup`
+   wrapping `fzf-tmux -p`). The native `sesh picker` in a `display-popup` is a noted
+   simplification to evaluate, **not** adopted in v1.
 
 ## 3. Design principles
 
@@ -141,7 +148,9 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
   the occasional side-by-side drag-copy.
 
 ### 4.3 Clipboard (native OSC-52)
-- `set -s set-clipboard on` + `set -g allow-passthrough on`.
+- `set -s set-clipboard on` + `set -g allow-passthrough on` (tmux 3.5+ takes
+  explicit `on`/`off`/`all`; `all` additionally fires from *inactive* panes —
+  relevant if a detached worker window ever needs passthrough).
 - Copy-mode-vi: `v` begin-selection, `y` `copy-selection-and-cancel` (honours
   `set-clipboard` → OSC-52 → Ghostty → system clipboard, SSH-portable).
 - *Local-only alternative noted:* `copy-pipe-and-cancel "pbcopy"` if OSC-52 ever
@@ -163,7 +172,7 @@ Sessions = projects (one per repo/worktree, matching the jj-worktree-per-drain h
 
 | Bind | Action | Notes |
 |---|---|---|
-| `prefix-o` / `M-s` | `display-popup -E "sesh picker -idH"` | sesh native picker; single popup |
+| `prefix-o` / `M-s` | `run-shell '~/.local/bin/sesh-picker.sh'` | existing rich sesh+fzf picker (run-shell + fzf-tmux -p; respects double-popup gotcha) |
 | `prefix-w` | `choose-tree -Zw` | zoomed session→window tree (cmux `goToWorkspace` analog) |
 | `M-1`…`M-9` | `select-window -t N` | direct window jump |
 | `M-Tab` | `last-window` | alt-tab between two tasks |
@@ -204,6 +213,25 @@ a script `~/.local/bin/claude-tmux-notify`
 
 `set -g monitor-bell on`, `set -g visual-bell off`, `set -g bell-action other`.
 
+**Hook wiring (`dot_claude/settings.json`).** Both events use the standard hook
+schema; the event payload arrives on the script's **stdin** as JSON, and the
+script's **stdout** JSON is read back by Claude Code to emit the `terminalSequence`:
+```json
+"Notification": [
+  { "matcher": "", "hooks": [
+    { "type": "command", "command": "~/.local/bin/claude-tmux-notify notification" } ] }
+],
+"Stop": [
+  { "matcher": "", "hooks": [
+    { "type": "command", "command": "~/.local/bin/claude-tmux-notify stop" } ] }
+]
+```
+`claude-tmux-notify` reads the event JSON on stdin, optionally marks the calling
+window via the tmux socket (`tmux set-option -w -t "$TMUX_PANE" @needs_attention 1`),
+then prints `{"terminalSequence":"<OSC-777 notify><BEL>"}` on stdout. The existing
+`PreCompact`/`PreToolUse`/`PostToolUse` blocks are preserved; only `Notification`
+and `Stop` are added.
+
 **Jump-to-needy:** `prefix-Tab` is taken by extrakto and `M-Tab` by last-window, so
 bind `prefix-b` → helper that selects the next window with a bell flag:
 ```
@@ -235,17 +263,20 @@ epic drains. No change to `_muxdriver.py` / `drain-worker-launch`.
 
 | Plugin | Pin | Mechanism | Load line |
 |---|---|---|---|
-| catppuccin/tmux | tag **v2.3.0** | `.chezmoiexternal.toml` `type="git-repo"` | `run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux` |
-| extrakto | **commit SHA** (no tags exist) | `.chezmoiexternal.toml` archive at SHA | `run-shell ~/.config/tmux/plugins/extrakto/extrakto.tmux` |
-| tmux-fingers | tag **2.7.1** | git-repo clone **+ cargo build** (not on crates.io / no brew) | `run-shell ~/.config/tmux/plugins/tmux-fingers/tmux-fingers.tmux` |
+| catppuccin/tmux | tag **v2.3.0** | `.chezmoiexternal.toml` `type="archive"` (tag tarball, **immutable pin**) | `run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux` |
+| extrakto | **commit SHA** (no tags exist) | `.chezmoiexternal.toml` `type="archive"` (SHA tarball, **immutable pin**) | `run-shell ~/.config/tmux/plugins/extrakto/extrakto.tmux` |
+| tmux-fingers | brew **tap** | `dot_Brewfile`: `tap "morantron/tmux-fingers"` + `brew "tmux-fingers"` (Crystal; tap ships a bottle — **no source build**) | `run-shell "$(brew --prefix)/opt/tmux-fingers/share/tmux-fingers/tmux-fingers.tmux"` (exact share path per formula — verify at impl) |
 | sesh | brew **2.26.2** | `dot_Brewfile` (formula, bottled) | n/a (CLI binary) |
 
-- **tmux-fingers build:** a `run_onchange_` script builds the Rust binary
-  (`cargo build --release` in the plugin dir), gated on `cargo` availability
-  (rustup is installed by an existing `run_after_` script). Content-hash trigger on
-  the pinned tag. If `cargo` is absent at apply time, the script warns and skips;
-  fingers degrades to "not loaded" without breaking tmux.
+- **tmux-fingers install:** Crystal project (corrected from design-review round 1,
+  which assumed Rust/`cargo`). Installed via its **Homebrew tap**
+  (`tap "morantron/tmux-fingers"` + `brew "tmux-fingers"` in `dot_Brewfile`), which
+  ships a bottle — no Crystal/`shards` toolchain and **no source build**. The
+  existing `brew bundle` `run_onchange_` picks it up; no bespoke build script.
 - **extrakto runtime deps:** `python3` + `fzf` (both present).
+- **archive pins:** `type="archive"` (not `git-repo`) is used for catppuccin and
+  extrakto so the vendored state is immutable — `git-repo` would `git pull` and
+  drift on each apply, violating the reproducibility principle.
 - **catppuccin v2.3.0** loaded with the v2 status-module shape (§2 gotcha #5).
 
 Theme config (v2.3.0 shape):
@@ -266,10 +297,8 @@ set -ag status-right "#{E:@catppuccin_status_session}"
 | `.chezmoiexternal.toml` | Add catppuccin (tag), extrakto (SHA), tmux-fingers (tag) |
 | `dot_local/bin/executable_claude-tmux-notify` | **New** — hook notify script |
 | `dot_claude/settings.json` | Add `Notification` + `Stop` hook entries calling the script |
-| `dot_Brewfile` | Ensure `sesh` present (likely already installed) |
+| `dot_Brewfile` | Add `tap "morantron/tmux-fingers"` + `brew "tmux-fingers"`; ensure `sesh` present |
 | `dot_config/ghostty/config` | Re-enable tmux auto-attach (`command = …tmux new-session -A -s main`); confirm `desktop-notifications` not disabled |
-| `.chezmoiscripts/run_onchange_*_tmux-fingers-build.sh.tmpl` | **New** — gated cargo build of fingers |
-| `dot_config/tmux/plugins/` | Add to `.chezmoiignore` (vendored externals, not source-managed) |
 
 The prior plugins (resurrect, continuum, thumbs, fzf-url, vim-tmux-navigator, TPM)
 are removed from config and external definitions.
@@ -306,11 +335,12 @@ Applied incrementally with `chezmoi apply ~/.config/tmux/` (scoped, avoids unrel
 - **extended-keys modernization** (§4.1) — try `extended-keys "always"` +
   `extended-keys-format csi-u`; fall back to the manual `S-Enter` bind if any key
   regresses.
-- **`terminalSequence` requires Claude Code ≥ v2.1.139** — confirm installed version;
-  if older, fall back to the `allow-passthrough` + DCS-wrap-to-`#{pane_tty}` script
-  path (documented, but second-choice).
-- **tmux-fingers build** depends on cargo/rustup ordering at first apply; the gated
-  `run_onchange_` build + graceful skip covers a cold machine.
+- **`terminalSequence`**: installed Claude Code is **2.1.177**, which supports it;
+  still verify empirically (emit a test sequence) rather than gating on a version
+  number. Fallback if ever run on an older binary: `allow-passthrough` +
+  DCS-wrap-to-`#{pane_tty}` script path (documented, second-choice).
+- **tmux-fingers** installs via Homebrew tap (bottle) — no source-build/toolchain
+  ordering risk; reduces to "tap reachable at `brew bundle` time."
 - **extrakto SHA pin** must be refreshed deliberately (no upstream tags to track).
 
 ## 12. Maximal appendix (additive, out of scope for v1)
