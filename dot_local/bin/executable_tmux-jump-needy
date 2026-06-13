@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# tmux-jump-needy — select the next window flagged for attention (bell flag set
+# by the Claude attention-loop BEL). Visiting it clears the flag natively.
+# Used by tmux.conf `prefix-b` and the prefix-Space action menu.
+tmux list-windows -F '#{window_bell_flag} #{window_index}' \
+  | awk '$1==1{print $2; exit}' \
+  | xargs -r -I{} tmux select-window -t {}

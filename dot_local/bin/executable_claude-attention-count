@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# claude-attention-count — status-bar segment: how many tmux windows (across all
+# sessions) currently await attention, i.e. have the bell flag set by the Claude
+# attention-loop. Self-clearing: visiting a window drops it from the count.
+# Prints "⚠ N " only when N>0 so the status bar stays clean when nothing waits.
+n=$(tmux list-windows -a -F '#{window_bell_flag}' 2>/dev/null | grep -cx 1)
+[ "${n:-0}" -gt 0 ] && printf '⚠ %s ' "$n"
+exit 0
