@@ -138,6 +138,28 @@
   },
   "model": "opus",
   "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-tmux-notify notification"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-tmux-notify stop"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "*",

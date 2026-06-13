@@ -365,11 +365,11 @@ In `dot_claude/settings.json`, replace the existing `hooks` object so it reads (
   "hooks": {
     "Notification": [
       { "matcher": "", "hooks": [
-        { "type": "command", "command": "~/.local/bin/claude-tmux-notify notification" } ] }
+        { "type": "command", "command": "claude-tmux-notify notification" } ] }
     ],
     "Stop": [
       { "matcher": "", "hooks": [
-        { "type": "command", "command": "~/.local/bin/claude-tmux-notify stop" } ] }
+        { "type": "command", "command": "claude-tmux-notify stop" } ] }
     ],
     "PostToolUse": [
       { "matcher": "*", "hooks": [] }
