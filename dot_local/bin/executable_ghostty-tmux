@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# ghostty-tmux — idiomatic multi-window tmux attach for Ghostty's `command`.
+#
+# First Ghostty window owns the persistent `main` session. Each LATER window
+# attaches an independent GROUPED session (shares main's window set — create a
+# window in one, it shows in both — but with its own current-window and size, so
+# the windows are NOT mirrored). Grouped throwaways (main-1, main-2, …) are
+# auto-destroyed when their Ghostty window closes; `main` persists (workers and
+# their windows survive a closed window).
+#
+# Full tmux path: Ghostty's GUI launch environment may not have /opt/homebrew/bin
+# on PATH.
+tmux=/opt/homebrew/bin/tmux
+
+if "$tmux" has-session -t main 2>/dev/null; then
+  exec "$tmux" new-session -t main \; set-option destroy-unattached on
+else
+  exec "$tmux" new-session -A -s main
+fi

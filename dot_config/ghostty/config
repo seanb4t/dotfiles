@@ -35,6 +35,7 @@ keybind = cmd+enter=unbind
 
 focus-follows-mouse = true
 
-# Ghostty.app auto-attaches tmux (coexist: cmux.app manages its own surfaces and ignores this)
-command = /opt/homebrew/bin/tmux new-session -A -s main
+# Ghostty.app auto-attaches tmux via a wrapper: first window owns `main`, later
+# windows get independent grouped views (shared window set). cmux.app ignores this.
+command = /Users/sean/.local/bin/ghostty-tmux
 
