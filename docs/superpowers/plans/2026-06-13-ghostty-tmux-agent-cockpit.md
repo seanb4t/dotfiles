@@ -217,7 +217,9 @@ set -g @catppuccin_window_current_text " #{b:pane_current_path}"
 set -g @catppuccin_window_flags "icon"
 run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
 set -g status-left ""
-set -ag status-right "#{E:@catppuccin_status_session}"
+# -g (replace), NOT -ag: a lone module must replace tmux's default status-right
+# and stay idempotent across reloads (-ag stacks + leaves the default in place).
+set -g status-right "#{E:@catppuccin_status_session}"
 
 # --- Plugins (load LAST) ----------------------------------------------------
 # extrakto: vendored repo (Python + fzf)

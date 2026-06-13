@@ -301,7 +301,9 @@ set -g @catppuccin_window_status_style "rounded"
 # below is the correct, safe expansion point — the E modifier forces evaluation there.
 run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
 set -g status-left ""
-set -ag status-right "#{E:@catppuccin_status_session}"
+# -g (replace), NOT -ag: a lone module must replace tmux's default status-right
+# and stay idempotent across reloads (-ag stacks + leaves the default in place).
+set -g status-right "#{E:@catppuccin_status_session}"
 ```
 
 ## 8. chezmoi file manifest
