@@ -365,11 +365,24 @@ Applied incrementally with `chezmoi apply ~/.config/tmux/` (scoped, avoids unrel
   ordering risk; reduces to "tap reachable at `brew bundle` time."
 - **extrakto SHA pin** must be refreshed deliberately (no upstream tags to track).
 
-## 12. Maximal appendix (additive, out of scope for v1)
+## 12. Maximal appendix
 
-- `tmux-which-key` (active 2026-05) — discoverability popup for the keymap.
-- `#(claude-attention-count)` status segment + dashboard window reading the
-  attention cache dir.
+**Implemented post-v1 (chezmoi-6an):**
+- **Discoverability menu** — shipped as a native tmux `display-menu` bound to
+  `prefix+Space`, **not** the `tmux-which-key` plugin. Rationale: which-key uses git
+  submodules (archive-vendoring misses them), its config dir collides with the
+  vendored plugin dir (chezmoi clobber), it rebuilds via python on each start, and
+  its default menu lists generic ops — tailoring it to the real binds needs a full
+  custom `config.yaml` anyway. The native menu gives the same learning-loop, zero deps.
+- **Worker-count status segment** — `#(~/.local/bin/claude-attention-count)` in
+  status-right, counting windows with the **self-clearing** `window_bell_flag`
+  (simpler + auto-clears vs a sticky cache dir). `status-interval` lowered to 5s.
+  `jump-needy` extracted to `~/.local/bin/tmux-jump-needy` (shared by `prefix-b` + menu).
+
+**Still parked:**
+- `extended-keys always` + `extended-keys-format csi-u` to retire the manual
+  Shift+Enter bind — riskiest item (global key-encoding change, terminal-dependent,
+  upstream had regressions); the manual `S-Enter` bind is kept as the safe default.
 - OSC-9;4 progress forwarding (tmux 3.6) → Ghostty progress indicator for Claude.
 - Click-to-teleport notifications via a modern UNUserNotificationCenter CLI.
 - Per-window git branch label (`#()` shell call) if the redraw cost is acceptable.
