@@ -7,3 +7,17 @@
   type = "file"
   url = "https://raw.githubusercontent.com/sbstp/kubie/refs/heads/master/completion/kubie.fish"
   refreshPeriod = "168h"
+
+# tmux plugins — vendored as immutable archive pins (no TPM). See
+# docs/superpowers/specs/2026-06-13-ghostty-tmux-agent-cockpit-design.md
+[".config/tmux/plugins/catppuccin/tmux"]
+  type = "archive"
+  url = "https://github.com/catppuccin/tmux/archive/refs/tags/v2.3.0.tar.gz"
+  stripComponents = 1
+  refreshPeriod = "8760h"
+
+[".config/tmux/plugins/extrakto"]
+  type = "archive"
+  url = "https://github.com/laktak/extrakto/archive/d1af77988081dae496fa4a1f5e5e6bc9ef66767f.tar.gz"
+  stripComponents = 1
+  refreshPeriod = "8760h"
