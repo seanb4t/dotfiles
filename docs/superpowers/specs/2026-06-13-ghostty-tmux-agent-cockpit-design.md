@@ -232,6 +232,12 @@ then prints `{"terminalSequence":"<OSC-777 notify><BEL>"}` on stdout. The existi
 `PreCompact`/`PreToolUse`/`PostToolUse` blocks are preserved; only `Notification`
 and `Stop` are added.
 
+**Coexist edge case:** the tmux side-effect must be guarded
+(`[[ -n "$TMUX_PANE" ]] && tmux …`) because in coexist mode Claude may run under
+**cmux.app**, where `$TMUX_PANE` is unset — the `tmux` call would error. The stdout
+`terminalSequence` path is unaffected (no TTY/tmux dependency), so the desktop
+notification still fires under cmux; only the tmux window-flag side-effect no-ops.
+
 **Jump-to-needy:** `prefix-Tab` is taken by extrakto and `M-Tab` by last-window, so
 bind `prefix-b` → helper that selects the next window with a bell flag:
 ```
@@ -283,7 +289,9 @@ Theme config (v2.3.0 shape):
 ```
 set -g @catppuccin_flavor "macchiato"
 set -g @catppuccin_window_status_style "rounded"
-# directory/application: set _text plainly, expand only in status-right (no -gF/E:)
+# NB: the -gF/E: freeze gotcha (§2 #5) applies to *_text module DEFINITIONS only
+# (e.g. @catppuccin_directory_text). Appending modules in status-right via #{E:...}
+# below is the correct, safe expansion point — the E modifier forces evaluation there.
 run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
 set -g status-left ""
 set -ag status-right "#{E:@catppuccin_status_session}"
@@ -294,7 +302,7 @@ set -ag status-right "#{E:@catppuccin_status_session}"
 | Path (source) | Change |
 |---|---|
 | `dot_config/tmux/tmux.conf` | Rewrite from scratch per §4–7 |
-| `.chezmoiexternal.toml` | Add catppuccin (tag), extrakto (SHA), tmux-fingers (tag) |
+| `.chezmoiexternal.toml` | Add catppuccin (v2.3.0 archive) + extrakto (SHA archive) **only** — tmux-fingers is Brewfile-tap, not vendored |
 | `dot_local/bin/executable_claude-tmux-notify` | **New** — hook notify script |
 | `dot_claude/settings.json` | Add `Notification` + `Stop` hook entries calling the script |
 | `dot_Brewfile` | Add `tap "morantron/tmux-fingers"` + `brew "tmux-fingers"`; ensure `sesh` present |
@@ -324,10 +332,15 @@ Applied incrementally with `chezmoi apply ~/.config/tmux/` (scoped, avoids unrel
 3. **Plugins:** `prefix-F` (fingers hints appear → letter copies); `prefix-Tab`
    (extrakto popup; url filter opens a link); catppuccin renders with no frozen
    `directory` module.
-4. **Attention loop:** in a Claude window, trigger a `Notification` (permission
-   prompt) → Ghostty Notification Center alert appears **and** the window bell flag
-   lights in the status bar; `prefix-b` jumps to it; flag clears on visit. Verify a
-   detached worker window also flags without stealing focus.
+4. **Attention loop:** first confirm **OSC 777 specifically** is honored by the
+   `terminalSequence` allowlist — emit a test sequence
+   (`printf '\x1b]777;notify;test;hello\x07'` via a one-off hook or the doc's test
+   recipe) and confirm a Notification Center alert fires (fall back to OSC 9 if 777
+   is rejected). Then, in a Claude window, trigger a `Notification` (permission
+   prompt) → Ghostty alert appears **and** the window bell flag lights in the status
+   bar; `prefix-b` jumps to it; flag clears on visit. Verify a detached worker
+   window also flags without stealing focus, and that the script no-ops cleanly when
+   `$TMUX_PANE` is unset (cmux coexist).
 5. **Coexist:** launch cmux → still functional; launch Ghostty → auto-attaches tmux.
 
 ## 11. Open risks / validate empirically
