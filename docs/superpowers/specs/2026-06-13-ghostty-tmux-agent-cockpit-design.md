@@ -113,9 +113,13 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
 ## 4. Layer 1 — Base + mouse-off + clipboard + copy tiers
 
 ### 4.1 Base (native, tmux 3.6)
-- Prefix **`C-a`** with `bind C-a send-prefix` (double-tap sends literal `^A`,
-  preserving readline start-of-line). *Rationale:* muscle memory; `send-prefix`
-  mitigates the readline clobber. (`C-Space` is the noted alternative.)
+- Prefix **`C-Space`** (`unbind C-b`; `set -g prefix C-Space`; `bind C-Space
+  send-prefix`). *Rationale:* low-conflict — unlike `C-a` it does **not** clobber
+  readline beginning-of-line in fish or Claude Code's input box (both places the
+  operator lives), and it's ergonomic (thumb+pinky). Recent habit is prefix-free
+  (cmux), so there is no entrenched `C-a` memory to preserve. `C-Space`'s only
+  collision is CJK/IME toggles (N/A here). Alternatives: `C-a`+`send-prefix`
+  (double-tap for literal `^A`) or default `C-b`.
 - `set -g base-index 1`, `setw -g pane-base-index 1`, `set -g renumber-windows on`.
 - `set -g focus-events on`, `set -sg escape-time 0`, `set -g history-limit 50000`.
 - `set -g default-terminal "tmux-256color"`,
