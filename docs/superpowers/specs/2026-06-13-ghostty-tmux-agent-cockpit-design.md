@@ -130,7 +130,9 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
 - `set -g base-index 1`, `setw -g pane-base-index 1`, `set -g renumber-windows on`.
 - `set -g focus-events on`, `set -sg escape-time 0`, `set -g history-limit 50000`.
 - `set -g default-terminal "tmux-256color"`,
-  `set -as terminal-features ",xterm-256color:RGB"` (truecolor; `-as` append, no dup).
+  `set -s terminal-features[1] "xterm-256color:RGB"` (truecolor; **indexed** form,
+  not `-as` append — avoids stacking duplicate capability flags on `bind r
+  source-file` reload, per the repo's existing tmux.conf rationale).
 - **Shift+Enter for Claude Code:** retain the known-good
   `bind -n S-Enter send-keys Escape "[13;2u"` (CSI-u). *Empirical-validation note:*
   tmux 3.5 revamped extended-keys (mode 2, `extended-keys-format`,
