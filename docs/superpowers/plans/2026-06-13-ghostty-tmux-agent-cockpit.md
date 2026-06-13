@@ -41,10 +41,9 @@ Add `tap "morantron/tmux-fingers"` into the alphabetical tap block (between `tap
 tap "morantron/tmux-fingers"
 ```
 
-Add these two brews into the alphabetical `brew` block (placement is cosmetic; `sesh` near other `s*` brews, `tmux-fingers` near `t*`):
+Add `tmux-fingers` into the alphabetical `brew` block near other `t*` brews. (`brew "sesh"` is **already present** at `dot_Brewfile:166` — leave it as-is.)
 
 ```ruby
-brew "sesh"
 brew "tmux-fingers"
 ```
 
@@ -91,13 +90,13 @@ ls ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux \
 ```
 Expected: both paths printed (no "No such file").
 
-- [ ] **Step 6: Resolve the tmux-fingers loader path (used verbatim in Task 2)**
+- [ ] **Step 6: Confirm the tmux-fingers binary + integration command**
 
 Run:
 ```bash
-find "$(brew --prefix tmux-fingers)" -name 'tmux-fingers.tmux'
+command -v tmux-fingers && tmux-fingers version
 ```
-Expected: one path, e.g. `/opt/homebrew/opt/tmux-fingers/share/tmux-fingers/tmux-fingers.tmux`. Record it; Task 2 uses the robust `run-shell "$(brew --prefix tmux-fingers)/share/tmux-fingers/tmux-fingers.tmux"` form, so any prefix works as long as the `share/tmux-fingers/` subpath matches — confirm that subpath here.
+Expected: the binary resolves and prints `2.7.1`. NOTE: the Homebrew bottle ships **only the binary** (no `tmux-fingers.tmux` loader). The tmux integration is the binary's own `load-config` subcommand — Task 2's conf uses `run-shell "tmux-fingers load-config"` (binds `@fingers-key`, default `prefix-F`), which also skips the repo wrapper's self-update wizard.
 
 - [ ] **Step 7: Commit**
 
@@ -117,7 +116,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 - [ ] **Step 1: Replace the file with the complete config**
 
-Write `dot_config/tmux/tmux.conf` with exactly this content (if Step 6 of Task 1 showed a `share/` subpath other than `share/tmux-fingers/`, adjust the final `run-shell` line accordingly):
+Write `dot_config/tmux/tmux.conf` with exactly this content (the tmux-fingers line uses the binary's own `load-config` subcommand — the brew bottle ships no `.tmux` loader):
 
 ```tmux
 # =============================================================================
@@ -220,9 +219,12 @@ run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
 set -g status-left ""
 set -ag status-right "#{E:@catppuccin_status_session}"
 
-# --- Plugins (vendored; load LAST) ------------------------------------------
+# --- Plugins (load LAST) ----------------------------------------------------
+# extrakto: vendored repo (Python + fzf)
 run-shell ~/.config/tmux/plugins/extrakto/extrakto.tmux
-run-shell "$(brew --prefix tmux-fingers)/share/tmux-fingers/tmux-fingers.tmux"
+# tmux-fingers: brew ships ONLY the binary (no .tmux loader); `load-config` is
+# the integration (binds @fingers-key, default prefix-F).
+run-shell "tmux-fingers load-config"
 ```
 
 - [ ] **Step 2: Apply the config**

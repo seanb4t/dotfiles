@@ -59,7 +59,7 @@ Verified 2026-06-13 via GitHub API (`pushed_at`, latest release, archived), Deep
 | tmux **3.6b** | repo pushed 2026-06-13; installed == latest release (2026-05-20) | CURRENT | Base; build to 3.6 |
 | **catppuccin/tmux** | latest tag **v2.3.0** (2026-04-08); user on v2.1.3 | CURRENT | Adopt v2.3.0 |
 | **sesh** | brew formula stable **2.26.2** (bottled); very active | CURRENT | Core switcher (Brewfile) |
-| **tmux-fingers** (Morantron) | **Crystal** (gh-api `language=Crystal`; `shard.yml`); pushed 2026-06-09; tag 2.7.1 live; **Homebrew tap `morantron/tmux-fingers`** ships a bottle | CURRENT | Hint-copy; install via Brewfile tap (no source build) |
+| **tmux-fingers** (Morantron) | **Crystal** (gh-api `language=Crystal`; `shard.yml`); pushed 2026-06-09; tag 2.7.1 live; **Homebrew tap `morantron/tmux-fingers`** (formula builds via `shards`, installs binary only) | CURRENT | Hint-copy; Brewfile tap, integrate via `load-config` |
 | **extrakto** (laktak) | pushed 2026-03-02; **no release tags**; no brew formula | CURRENT | Fuzzy extract/insert/url; vendor pinned to a commit SHA via archive |
 | **Ghostty** | pushed 2026-06-10; native OSC 9 + OSC 777 → Notification Center (`desktop-notifications=true` default) | CURRENT | Notification sink |
 | tmux-resurrect + continuum | ~22 mo idle; 287/92 open issues | STALE | **Drop** → sesh-first |
@@ -273,14 +273,19 @@ epic drains. No change to `_muxdriver.py` / `drain-worker-launch`.
 |---|---|---|---|
 | catppuccin/tmux | tag **v2.3.0** | `.chezmoiexternal.toml` `type="archive"` (tag tarball, **immutable pin**) | `run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux` |
 | extrakto | **commit SHA** (no tags exist) | `.chezmoiexternal.toml` `type="archive"` (SHA tarball, **immutable pin**) | `run-shell ~/.config/tmux/plugins/extrakto/extrakto.tmux` |
-| tmux-fingers | brew **tap** | `dot_Brewfile`: `tap "morantron/tmux-fingers"` + `brew "tmux-fingers"` (Crystal; tap ships a bottle — **no source build**) | `run-shell "$(brew --prefix)/opt/tmux-fingers/share/tmux-fingers/tmux-fingers.tmux"` (exact share path per formula — verify at impl) |
+| tmux-fingers | brew **tap** | `dot_Brewfile`: `tap "morantron/tmux-fingers"` + `brew "tmux-fingers"` (Crystal; formula builds via `shards`, installs **only the binary**) | `run-shell "tmux-fingers load-config"` (binary's own integration subcommand — brew ships no `.tmux` loader) |
 | sesh | brew **2.26.2** | `dot_Brewfile` (formula, bottled) | n/a (CLI binary) |
 
 - **tmux-fingers install:** Crystal project (corrected from design-review round 1,
   which assumed Rust/`cargo`). Installed via its **Homebrew tap**
-  (`tap "morantron/tmux-fingers"` + `brew "tmux-fingers"` in `dot_Brewfile`), which
-  ships a bottle — no Crystal/`shards` toolchain and **no source build**. The
-  existing `brew bundle` `run_onchange_` picks it up; no bespoke build script.
+  (`tap "morantron/tmux-fingers"` + `brew "tmux-fingers"` in `dot_Brewfile`); the
+  formula compiles with `shards` (brew auto-installs the `crystal` dep) and installs
+  **only the `tmux-fingers` binary** — no `.tmux` loader. The tmux integration is the
+  binary's `load-config` subcommand, invoked from `tmux.conf` via
+  `run-shell "tmux-fingers load-config"`. The existing `brew bundle` `run_onchange_`
+  picks up the formula; no bespoke build script. **Gotcha:** newer Homebrew refuses
+  third-party taps until trusted once —
+  `brew trust --formula morantron/tmux-fingers/tmux-fingers`.
 - **extrakto runtime deps:** `python3` + `fzf` (both present).
 - **archive pins:** `type="archive"` (not `git-repo`) is used for catppuccin and
   extrakto so the vendored state is immutable — `git-repo` would `git pull` and
