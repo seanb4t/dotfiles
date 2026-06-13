@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# claude-tmux-notify — Claude Code Notification/Stop hook.
+# Emits a Ghostty OSC-777 desktop notification + a BEL (tmux window flag) via
+# the hook's {terminalSequence} field (Claude Code delivers it race-free through
+# tmux). Spec: docs/superpowers/specs/2026-06-13-ghostty-tmux-agent-cockpit-design.md
+set -uo pipefail
+
+event="${1:-notification}"
+payload="$(cat)"
+
+if [ "$event" = "stop" ]; then
+  body="Claude finished — your move"
+else
+  body="$(printf '%s' "$payload" | jq -r '.message // "Needs your attention"' 2>/dev/null || echo "Needs your attention")"
+fi
+
+# Optional tmux side-effect: flag the calling window. Guarded for the cmux
+# coexist case where Claude runs outside tmux ($TMUX_PANE unset).
+if [ -n "${TMUX_PANE:-}" ] && command -v tmux >/dev/null 2>&1; then
+  tmux set-option -w -t "$TMUX_PANE" @needs_attention 1 2>/dev/null || true
+fi
+
+# OSC-777 notify (BEL-terminated) + a standalone BEL so tmux monitor-bell flags
+# the window. jq encodes the control bytes (ESC, BEL) as JSON escapes.
+seq="$(printf '\033]777;notify;Claude Code;%s\007\007' "$body")"
+jq -nc --arg seq "$seq" '{terminalSequence: $seq}'
