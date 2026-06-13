@@ -1,8 +1,10 @@
 {
+  "skillListingBudgetFraction": 0.015,
+  "env": {
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
   "permissions": {
     "allow": [
-      "Bash(~/.claude/plugins/cache/fzymgc-house-skills/fzymgc-house/acf60b4ccbed/skills/respond-to-pr-comments/scripts/fetch_pr_comments.py:*)",
-      "Bash(~/.claude/plugins/cache/fzymgc-house-skills/fzymgc-house/acf60b4ccbed/skills/respond-to-pr-comments/scripts/parse_action_items.py:*)",
       "Bash(astgrep *)",
       "Bash(awk *)",
       "Bash(dig *)",
@@ -41,10 +43,7 @@
       "mcp__exa__web_search_exa",
       "mcp__filesystem__*",
       "mcp__firecrawl-mcp__*",
-      "mcp__grafana__generate_*",
-      "mcp__grafana__get_*",
-      "mcp__grafana__list_*",
-      "mcp__grafana__query_*",
+      "mcp__grafana__*",
       "mcp__kubernetes-mcp-server__*",
       "mcp__notion__API-delete-a-block",
       "mcp__notion__API-get-block-children",
@@ -61,9 +60,7 @@
       "mcp__notion__notion-search",
       "mcp__notion__notion-update-database",
       "mcp__notion__notion-update-page",
-      "mcp__terraform__get__*",
-      "mcp__terraform__list__*",
-      "mcp__terraform__search_providers",
+      "mcp__terraform__*",
       "Read(~/.claude/plugins/cache/**)",
       "Read(~/.ssh/*.pub)",
       "Read(~/.ssh/known_hosts)",
@@ -73,16 +70,15 @@
       "Skill(commit-commands:commit)",
       "Skill(elements-of-style:improve-writing)",
       "Skill(elements-of-style:writing-clearly-and-concisely)",
-      "Skill(fzymgc-house:grafana)",
-      "Skill(fzymgc-house:respond-to-pr-comments)",
+      "Skill(homelab:grafana)",
       "Skill(pr-review-toolkit:review-pr)",
-      "Skill(superpowers:brainstorming)",
-      "Skill(superpowers:finishing-a-development-branch)",
-      "Skill(superpowers:requesting-code-review)",
-      "Skill(superpowers:subagent-driven-development)",
-      "Skill(superpowers:systematic-debugging)",
-      "Skill(superpowers:using-git-worktrees)",
-      "Skill(superpowers:writing-plans)",
+      "Skill(dev-flow:brainstorming)",
+      "Skill(dev-flow:finishing-a-development-branch)",
+      "Skill(dev-flow:requesting-code-review)",
+      "Skill(dev-flow:subagent-driven-development)",
+      "Skill(dev-flow:systematic-debugging)",
+      "Skill(dev-flow:using-git-worktrees)",
+      "Skill(dev-flow:writing-plans)",
       "WebFetch(domain:api.github.com)",
       "WebFetch(domain:api.notion.com)",
       "WebFetch(domain:app.terraform.io)",
@@ -137,8 +133,10 @@
       "Bash(terraform apply *)",
       "Bash(kubectl delete *)",
       "Bash(rm -rf *)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
     "PostToolUse": [
       {
@@ -166,8 +164,9 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/ccline/ccline",
-    "padding": 0
+    "command": "ccstatusline",
+    "padding": 0,
+    "refreshInterval": 10
   },
   "enabledPlugins": {
     "beads@beads-marketplace": true,
@@ -184,9 +183,10 @@
     "playwright@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": false,
     "pr-review-toolkit@claude-plugins-official": true,
-    "pr-review@fzymgc-house-skills": true,
     "ralph-loop@claude-plugins-official": false,
-    "security-guidance@claude-plugins-official": true
+    "security-guidance@claude-plugins-official": true,
+    "engram@engram": true,
+    "warp@claude-code-warp": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -211,6 +211,25 @@
       "source": {
         "source": "github",
         "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "engram": {
+      "source": {
+        "source": "github",
+        "repo": "seanb4t/engram"
+      },
+      "autoUpdate": true
+    },
+    "weft": {
+      "source": {
+        "source": "directory",
+        "path": "/Volumes/Code/github.com/seanb4t/weft-dogfood"
+      }
+    },
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
       }
     }
   },
@@ -244,7 +263,9 @@
     ]
   },
   "effortLevel": "high",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true
 }

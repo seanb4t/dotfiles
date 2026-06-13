@@ -13,7 +13,7 @@ Search, scrape, and interact with the web. Returns clean markdown optimized for 
 
 Run `firecrawl --help` or `firecrawl <command> --help` for full option details.
 
-If the task is to integrate Firecrawl into an application, add `FIRECRAWL_API_KEY` to a project, or choose endpoint usage in product code, use the `firecrawl-build` skills. They are already installed alongside this CLI skill when you run `firecrawl init`.
+If the task is to integrate Firecrawl into an application, add `FIRECRAWL_API_KEY` to a project, or choose endpoint usage in product code, use the `firecrawl-build` skills. If the task is an outcome workflow such as deep research, SEO audit, QA, lead generation, knowledge-base creation, dashboard reporting, shopping research, or website design-system extraction, use the `firecrawl-workflows` skills. They are already installed alongside this CLI skill when you run `firecrawl init`.
 
 ## Prerequisites
 
@@ -51,7 +51,8 @@ Follow this escalation pattern:
 2. **Scrape** - Have a URL. Extract its content directly.
 3. **Map + Scrape** - Large site or need a specific subpage. Use `map --search` to find the right URL, then scrape it.
 4. **Crawl** - Need bulk content from an entire site section (e.g., all /docs/).
-5. **Interact** - Scrape first, then interact with the page (pagination, modals, form submissions, multi-step navigation).
+5. **Monitor** - Need recurring checks or ongoing alerts. Prefer setting a monitor with `--page` plus `--goal` instead of doing repeated one-off scrapes.
+6. **Interact** - Scrape first, then interact with the page (pagination, modals, form submissions, multi-step navigation).
 
 | Need                        | Command               | When                                                      |
 | --------------------------- | --------------------- | --------------------------------------------------------- |
@@ -63,6 +64,7 @@ Follow this escalation pattern:
 | Interact with a page        | `scrape` + `interact` | Content requires clicks, form fills, pagination, or login |
 | Download a site to files    | `download`            | Save an entire site as local files                        |
 | Parse a local file          | `parse`               | File on disk (PDF, DOCX, XLSX, etc.) — not a URL          |
+| Watch pages for changes     | `monitor`             | Schedule recurring scrapes/crawls, diff against snapshots |
 
 For detailed command reference, run `firecrawl <command> --help`.
 
@@ -71,6 +73,133 @@ For detailed command reference, run `firecrawl <command> --help`.
 - Use `scrape` first. It handles static pages and JS-rendered SPAs.
 - Use `scrape` + `interact` when you need to interact with a page, such as clicking buttons, filling out forms, navigating through a complex site, infinite scroll, or when scrape fails to grab all the content you need.
 - Never use interact for web searches - use `search` instead.
+
+**Monitor:** Schedule recurring scrapes or crawls and diff each result against the last retained snapshot. Bias toward `monitor` when the user's goal is ongoing change detection, alerting, or repeated checks over time. For a single page, default to setting a monitor with `--page <url>` and `--goal "..."`. Use for product pages, docs, blogs, changelogs, competitor sites — any page where changes matter. Each monitor should include a short `goal` describing what changes matter, and each check labels pages as `same`, `new`, `changed`, `removed`, or `error`, with webhook and email notification options.
+
+When writing `--goal`, convert the user's monitoring intent into a concise 2-3 sentence monitor goal, similar to the web app setup flow:
+
+- Start with `Alert when ...` and state what should trigger an alert using the user's stated intent.
+- Restate scope the user mentioned, such as top N, price, role type, company, region, topic, status, or a specific entity.
+- Include an `Ignore ...` sentence only for intent-specific exclusions that are obvious from the request, such as points/comments for rankings, unrelated marketing copy for pricing, or general company-page updates for jobs.
+- Do not repeat generic noise exclusions in every goal; the judge already handles whitespace, casing, punctuation, encoding, formatting-only changes, request/session IDs, cache busters, tracking params, generic metadata noise, and unrelated page chrome.
+- Do not invent page-specific sections, entities, thresholds, exclusions, or business rules unless the user mentioned them.
+- If the user is vague, keep the goal broad rather than guessing exclusions.
+- If the user asks for "any change", preserve that and do not add exclusions.
+- If the user mentions noise they do not care about, include that explicitly.
+
+Good goal examples:
+
+- User intent: `top 10 hackernews stories`
+  Goal: `Alert when stories enter, leave, or change rank within the Hacker News top 10. Ignore points, comments, and timestamps. Do not alert on changes outside the top 10.`
+- User intent: `pricing changes`
+  Goal: `Alert when pricing information changes, including prices, plan names, billing periods, tiers, limits, or included features. Ignore unrelated marketing copy, testimonials, and regional currency display changes unless the underlying offer changes.`
+- User intent: `new engineering roles`
+  Goal: `Alert when a new engineering role is posted. Ignore general company-page updates unless they add, remove, or change an engineering role.`
+- User intent: `track this page`
+  Goal: `Alert when substantive visible content on this page changes.`
+- User intent: `any change`
+  Goal: `Alert when any visible page content changes, including copy, numbers, timestamps, counters, links, and layout text.`
+
+Subcommands: `create | list | get | update | delete | run | checks | check`.
+
+```bash
+# create from flags
+firecrawl monitor create --name "Blog" --schedule "every 5 minutes" \
+  --goal "Alert when a new blog post is published." \
+  --page https://example.com/blog --email alerts@example.com
+
+# multiple pages
+firecrawl monitor create --name "Product pages" --schedule "every 5 minutes" \
+  --goal "Alert when pricing, docs, or changelog content changes." \
+  --scrape-urls https://example.com/pricing,https://example.com/docs,https://example.com/changelog
+
+# webhook notifications
+firecrawl monitor create --name "Docs webhook" --schedule "every 5 minutes" \
+  --goal "Alert when docs content changes." \
+  --page https://example.com/docs \
+  --webhook-url https://example.com/webhook \
+  --webhook-events monitor.page,monitor.check.completed
+
+# or from JSON (positional file, or piped stdin)
+firecrawl monitor create monitor.json
+cat monitor.json | firecrawl monitor create
+
+firecrawl monitor list --limit 20
+firecrawl monitor run <monitorId>             # trigger a check now
+firecrawl monitor checks <monitorId>          # list checks
+firecrawl monitor check <monitorId> <checkId> --page-status changed
+firecrawl monitor update <monitorId> --state paused
+firecrawl monitor delete <monitorId>
+```
+
+Schedules accept cron (`--cron "*/5 * * * *"`) or natural language (`--schedule "every 5 minutes"`). Minimum interval is 5 minutes. Targets are `--page <url>` for one page, `--scrape-urls a,b,c` for multiple scrape URLs, or `--crawl-url <url>` for a whole-site crawl each check. Use `--goal` for flag-based monitor creation, or include `"goal": "..."` in JSON payloads. Note: `--state` (not `--status`) sets active/paused; `--page-status` (not `--status`) filters page results on `check` — avoids collision with the global `--status` flag. Monitoring is not available for zero-data-retention teams.
+
+**JSON-mode change tracking:** By default monitors diff each page's markdown and you get a unified text diff back. When you care about **specific structured fields** (price, headline, in-stock flag, items in a list) instead of the whole page, add a `changeTracking` format with `modes: ["json"]` and a JSON schema to the target's `scrapeOptions.formats`. The flag-based form doesn't cover this — pass a JSON body via file or stdin:
+
+```bash
+cat > pricing-monitor.json <<'EOF'
+{
+  "name": "Pricing watch",
+  "goal": "Alert when plan prices or headline features change",
+  "schedule": { "text": "hourly", "timezone": "UTC" },
+  "targets": [{
+    "type": "scrape",
+    "urls": ["https://example.com/pricing"],
+    "scrapeOptions": {
+      "formats": [{
+        "type": "changeTracking",
+        "modes": ["json"],
+        "prompt": "Extract pricing tiers and headline features for each plan.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "plans": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name":     { "type": "string" },
+                  "price":    { "type": "string" },
+                  "features": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        }
+      }]
+    }
+  }]
+}
+EOF
+firecrawl monitor create pricing-monitor.json
+```
+
+The `check` response then carries a per-field diff (paths like `plans[0].price`) and the full extraction at this run, instead of (or in addition to) a markdown diff. Each changed page in `pages[]` looks like:
+
+```json
+{
+  "url": "https://example.com/pricing",
+  "status": "changed",
+  "diff": {
+    "json": {
+      "plans[0].price": { "previous": "$19/mo", "current": "$24/mo" },
+      "plans[1].features[2]": {
+        "previous": "10 GB storage",
+        "current": "25 GB storage"
+      }
+    }
+  },
+  "snapshot": {
+    "json": {
+      "plans": [
+        /* current full extraction */
+      ]
+    }
+  }
+}
+```
+
+Use `modes: ["json", "git-diff"]` for **mixed mode**: you get both `diff.json` (per-field) and `diff.text` (markdown sidecar), and the page is marked `changed` whenever either surface changed. For markdown-only monitors, `diff.text` holds the unified diff and `diff.json` is a `parse-diff` AST (`{ files: [...] }`); there is no `snapshot`.
 
 **Avoid redundant fetches:**
 
@@ -87,9 +216,11 @@ For detailed command reference, run `firecrawl <command> --help`.
 - **Clicks, forms, login, pagination, or post-scrape browser actions** -> [firecrawl-interact](../firecrawl-interact/SKILL.md)
 - **Downloading a site to local files** -> [firecrawl-download](../firecrawl-download/SKILL.md)
 - **Parsing a local file (PDF, DOCX, XLSX, HTML, etc.)** -> [firecrawl-parse](../firecrawl-parse/SKILL.md)
+- **Detecting content changes on a website and getting notified by webhook or email (pricing, jobs, posts, docs, status pages, anything ongoing)** -> [firecrawl-monitor](../firecrawl-monitor/SKILL.md)
 - **Install, auth, or setup problems** -> [rules/install.md](rules/install.md)
 - **Output handling and safe file-reading patterns** -> [rules/security.md](rules/security.md)
 - **Integrating Firecrawl into an app, adding `FIRECRAWL_API_KEY` to `.env`, or choosing endpoint usage in product code** -> use the `firecrawl-build` skills (already installed alongside this CLI skill)
+- **Producing Firecrawl-powered deliverables such as research briefs, SEO audits, QA reports, lead lists, knowledge bases, or design-system extraction** -> use the `firecrawl-workflows` skills (already installed alongside this CLI skill). These skills infer from context first and ask only short blocking questions when needed.
 
 ## Output & Organization
 
@@ -128,6 +259,25 @@ jq -r '.data.web[].url' .firecrawl/search.json
 # Get titles and URLs
 jq -r '.data.web[] | "\(.title): \(.url)"' .firecrawl/search.json
 ```
+
+## After search: send feedback (refunds 1 credit)
+
+Search costs 2 credits per call. **After you finish using a search result**, send structured feedback in the background. The first feedback per search id refunds 1 credit and feeds search-quality improvements.
+
+```bash
+SEARCH_ID=$(jq -r '.id' .firecrawl/search-react-hooks.json)
+
+firecrawl search-feedback "$SEARCH_ID" \
+  --rating good \
+  --valuable-sources '[{"url":"https://react.dev/reference/react/hooks","reason":"Authoritative"}]' \
+  --missing-content '[{"topic":"useDeferredValue example"},{"topic":"Server Components hooks"}]' \
+  --query-suggestions "Boost react.dev for react-hooks queries" \
+  --silent &
+```
+
+The most useful field is `--missing-content`: an _array_ of specific pieces of content you expected to find but didn't. Use one entry per missing topic. Bad/partial feedback with detailed `--missing-content` is just as valuable as good feedback.
+
+**Opt out:** `export FIRECRAWL_NO_SEARCH_FEEDBACK=1` makes the CLI skip every feedback call silently. Respect that flag — do not try to work around it. See [firecrawl-search](../firecrawl-search/SKILL.md) for the full pattern.
 
 ## Parallelization
 

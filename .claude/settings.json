@@ -1,13 +1,14 @@
 {
+  "hooks": {},
   "permissions": {
-    "allow": [
-      "Edit(~/.config/tmux/**)",
-      "Edit(//tmp/tmux-*/**)"
-    ],
     "additionalDirectories": [
       "~/.local/share/chezmoi-beads",
       "~/.local/share",
       "~/.config/tmux"
+    ],
+    "allow": [
+      "Edit(~/.config/tmux/**)",
+      "Edit(//tmp/tmux-*/**)"
     ]
   },
   "sandbox": {

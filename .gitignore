@@ -1,3 +1,9 @@
 # Local settings (machine-specific, not shared)
 .claude/settings.local.json
 .serena/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads/proxieddb/

@@ -26,6 +26,7 @@ Before ANY development task:
 5. If ALL tools in priority chain fail → ask user for guidance
 
 **Common command patterns:**
+
 ```bash
 # Search codebase
 rg "pattern" --type py -C 3
@@ -93,7 +94,7 @@ When working with Git worktrees or sparse checkouts, MUST verify the current wor
 
 **Model selection order (for commits/PRs):**
 
-Opus 4.6 → Sonnet 4+ → Haiku  (use highest available)
+Opus 4.6 → Sonnet 4+ → Haiku (use highest available)
 
 ## Tool Usage
 
@@ -133,6 +134,7 @@ Opus 4.6 → Sonnet 4+ → Haiku  (use highest available)
 Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
 
 Core workflow:
+
 1. `agent-browser open <url>` - Navigate to page
 2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
 3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
@@ -146,8 +148,8 @@ Core workflow:
 |-------|---------|-------------|
 | `systematic-debugging` | ANY error, bug, test failure, unexpected behavior | MUST use before proposing fixes |
 | `verification-before-completion` | Before claiming work is complete/fixed/passing | MUST verify with actual commands |
-| `fzymgc-house:grafana` | ANY Grafana operation | MUST use (skill overrides MCP) |
-| `fzymgc-house:terraform` | ANY Terraform operation | MUST use (skill overrides MCP) |
+| `homelab:grafana` | ANY Grafana operation | MUST use (skill overrides MCP) |
+| `homelab:terraform` | ANY Terraform operation | MUST use (skill overrides MCP) |
 
 ## Development Workflows
 
@@ -184,7 +186,7 @@ gh issue create --title "..." --body "..." --label "bug"
 |--------|-------------|
 | Add issue reviewers | MUST NOT do manually |
 | Request review | MUST use `requesting-code-review` skill |
-| Respond to PR comments | MUST use `fzymgc-house:respond-to-pr-comments` skill |
+| Respond to PR comments | MUST use `dev-flow:respond-to-comments` skill |
 | Add comments/commits | MUST include AI authorship byline |
 
 ### Code Review
@@ -245,7 +247,7 @@ date +%Y  # Returns: 2026
 
 **Example - Good Planning:**
 
-```
+```text
 user: Fix the auth bug
 assistant: *internally: auth could be middleware, routes, or tokens*
 assistant: *searches for auth files*
@@ -256,7 +258,7 @@ assistant: *makes coordinated batch changes to all 3 files*
 
 **Example - Bad Planning:**
 
-```
+```text
 user: Fix the auth bug
 assistant: *reads one file*
 assistant: *makes one-line change*
