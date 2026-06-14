@@ -224,11 +224,17 @@ cd "$(git rev-parse --show-toplevel)" || exit 1   # resolve relative SRC from an
 SRC="dot_local/bin/executable_tmux-jump-needy"
 fail=0; chk(){ if eval "$2"; then echo "ok: $1"; else echo "FAIL: $1"; fail=1; fi; }
 
+# robust clean slate: kill any prior cfgtest server and wait until it's gone
+# (a leftover server causes "index 2 in use" on new-window).
 tmux -L cfgtest kill-server 2>/dev/null
-tmux -L cfgtest new-session -d -s t -x 80 -y 24   # window 0
-tmux -L cfgtest new-window -t t                    # window 1
-tmux -L cfgtest new-window -t t                    # window 2
+for _ in 1 2 3 4 5; do tmux -L cfgtest has-session 2>/dev/null || break; sleep 0.2; done
+tmux -L cfgtest new-session -d -s t -x 80 -y 24
+tmux -L cfgtest new-window -t t 2>/dev/null
+tmux -L cfgtest new-window -t t 2>/dev/null
 sock=$(tmux -L cfgtest display-message -p '#{socket_path}')
+# Resolve real window indices — base-index may be 1 (user tmux.conf is sourced).
+wins=($(tmux -L cfgtest list-windows -t t -F '#{window_index}'))
+w1=${wins[0]}; w2=${wins[1]}
 # JUMP_DRYRUN makes the script print its intended action to STDOUT — needed
 # because the real 0-needy path uses `tmux display-message` (status bar, not
 # stdout) and the 1/≥2 paths have side effects, none of which a test can read.
@@ -236,22 +242,22 @@ J(){ TMUX="$sock,0,0" JUMP_DRYRUN=1 bash "$SRC" ; }
 
 # 0 needy: no bell flags set → message branch
 out=$(J 2>&1 || true)
-chk "0 needy → nothing-needs-you"          '[[ "$out" == *"nothing needs you"* ]]'
+chk "0 needy → nothing-needs-you"            '[[ "$out" == *"nothing needs you"* ]]'
 
 # helper: raise a bell flag on a window by writing a BEL to its pane
 ring(){ tmux -L cfgtest send-keys -t "t:$1" "printf '\\a'" Enter; sleep 0.3; }
 
-# 1 needy: ring window 1 → select-window branch names t:1
-ring 1
+# 1 needy: ring first window → select-window branch names it
+ring "$w1"
 out=$(J 2>&1 || true)
-chk "1 needy → select-window of flagged win" '[[ "$out" == *"select-window -t t:1"* ]]'
+chk "1 needy → select-window of flagged win" '[[ "$out" == *"select-window -t t:$w1"* ]]'
 
-# ≥2 needy: ring window 2 as well → display-menu listing both targets
-ring 2
+# ≥2 needy: ring second window too → display-menu listing both targets
+ring "$w2"
 out=$(J 2>&1 || true)
-chk "≥2 needy → display-menu"               '[[ "$out" == *"display-menu"* ]]'
-chk "menu includes t:1 target"               '[[ "$out" == *"select-window -t \"t:1\""* ]]'
-chk "menu includes t:2 target"               '[[ "$out" == *"select-window -t \"t:2\""* ]]'
+chk "≥2 needy → display-menu"                 '[[ "$out" == *"display-menu"* ]]'
+chk "menu includes w1 target"                 '[[ "$out" == *"select-window -t \"t:$w1\""* ]]'
+chk "menu includes w2 target"                 '[[ "$out" == *"select-window -t \"t:$w2\""* ]]'
 
 tmux -L cfgtest kill-server 2>/dev/null
 exit $fail
@@ -443,4 +449,4 @@ Run: `rm -f /tmp/t-notify.sh /tmp/t-jump.sh`
 ## Rollback
 
 Revert the three managed files and `chezmoi apply` them; no state migration. `@claude_attn` is a transient per-server window option (gone on tmux restart). The debounce stamp dir `${TMPDIR}/claude-tmux-notify/` is disposable.
-<!-- adr-capture: sha256=c2538f31832dbebf; session=cli; ts=2026-06-14T13:39:51Z; adrs=chezmoi-bhg.1,chezmoi-bhg.2 -->
+<!-- adr-capture: sha256=73417558f14e1d0a; session=cli; ts=2026-06-14T13:42:04Z; adrs=chezmoi-bhg.1,chezmoi-bhg.2 -->

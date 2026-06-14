@@ -1,7 +1,52 @@
 #!/usr/bin/env bash
-# tmux-jump-needy — select the next window flagged for attention (bell flag set
-# by the Claude attention-loop BEL). Visiting it clears the flag natively.
-# Used by tmux.conf `prefix-b` and the prefix-Space action menu.
-tmux list-windows -F '#{window_bell_flag} #{window_index}' \
-  | awk '$1==1{print $2; exit}' \
-  | xargs -r -I{} tmux select-window -t {}
+# tmux-jump-needy — go to the window(s) the Claude attention loop flagged (bell
+# flag). 0 needy → friendly message; 1 → jump straight there; ≥2 → a native
+# display-menu picker labelled from @claude_attn so you can see WHICH agent and
+# why. Closes the last hop the macOS notification's click-to-focus can't make
+# (Ghostty raises the surface; this lands the exact inner tmux window).
+# Bound to prefix-b and surfaced in the prefix-Space action menu.
+# Kept bash-3.2-safe (no mapfile): hook subprocess PATH is not guaranteed.
+set -uo pipefail
+
+fmt=$'#{window_bell_flag}\t#{session_name}:#{window_index}\t#{b:pane_current_path}\t#{@claude_attn}'
+
+targets=(); dirs=(); attns=()
+while IFS=$'\t' read -r flag target dir attn; do
+  [ "${flag:-0}" = "1" ] || continue
+  targets+=("$target"); dirs+=("$dir"); attns+=("$attn")
+done < <(tmux list-windows -a -F "$fmt")
+
+count=${#targets[@]}
+dry="${JUMP_DRYRUN:-}"   # when set, print the intended action to stdout (for tests)
+
+if [ "$count" -eq 0 ]; then
+  if [ -n "$dry" ]; then echo "message: nothing needs you"
+  else tmux display-message "✓ nothing needs you"; fi
+  exit 0
+fi
+
+if [ "$count" -eq 1 ]; then
+  if [ -n "$dry" ]; then echo "select-window -t ${targets[0]}"
+  else tmux select-window -t "${targets[0]}"; fi
+  exit 0
+fi
+
+# ≥2 needy → native display-menu. Accumulate (label, key, command) triples into
+# a bash array and expand "${menu[@]}" — no eval/xargs — so glyph/space labels
+# from @claude_attn quote safely. session:window is whitespace-free → safe target.
+menu=()
+i=0
+while [ "$i" -lt "$count" ]; do
+  prefix="${attns[$i]:-•}"
+  label="$prefix ${targets[$i]}  ${dirs[$i]}"
+  menu+=("$label" "" "select-window -t \"${targets[$i]}\"")
+  i=$(( i + 1 ))
+done
+
+if [ -n "$dry" ]; then
+  printf 'display-menu\n'
+  printf '%s\n' "${menu[@]}"   # one menu element per line: label, "", command, …
+  exit 0
+fi
+
+tmux display-menu -T "#[align=centre,fg=#c6a0f6,bold]  needs you " -x C -y C "${menu[@]}"
