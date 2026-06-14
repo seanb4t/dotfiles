@@ -57,6 +57,10 @@ run(){ TMUX="$sock,0,0" TMUX_PANE="$pane" bash "$SRC" "$1" ; }
 # clear any debounce stamp from a prior run — compute the key EXACTLY as the
 # script does (capture ident first so $() strips the trailing newline, THEN tr;
 # piping tmux output straight to tr would turn that newline into a stray '_').
+# Resolve the REAL session:window — `tmux -L cfgtest` still sources the user's
+# ~/.config/tmux/tmux.conf, which sets base-index 1, so windows are t:1/t:2 (not
+# t:0). Derive the expected identity from tmux instead of hardcoding an index.
+sw0=$(tmux -L cfgtest display-message -p -t "$pane" -F '#{session_name}:#{window_index}')
 ident0=$(tmux -L cfgtest display-message -p -t "$pane" -F '#{session_name}:#{window_index} #{b:pane_current_path}')
 key=$(printf '%s' "$ident0" | tr -c 'A-Za-z0-9' '_')
 rm -f "${TMPDIR:-/tmp}/claude-tmux-notify/$key"
@@ -65,15 +69,16 @@ rm -f "${TMPDIR:-/tmp}/claude-tmux-notify/$key"
 # it renders the ✅/⏳ UTF-8 as "M-…", and "^[" is only the OSC opener (^[]777),
 # never a glyph — so "^["-based patterns can never match a correct title.
 stop_seq=$(printf '{}' | run stop | jq -r .terminalSequence)
-chk "stop title carries ✅ + session:window" '[[ "$stop_seq" == *"777;notify;✅ t:0"* ]]'
+chk "stop title carries ✅ + session:window" '[[ "$stop_seq" == *"777;notify;✅ $sw0"* ]]'
 chk "stop body is finished-your-move"         '[[ "$stop_seq" == *"Finished"* ]]'
 
-# Notification fires from a DIFFERENT window (window 1) so its debounce key is
-# fresh and the banner is not suppressed by the stop call above.
+# Notification fires from a DIFFERENT window so its debounce key is fresh and the
+# banner is not suppressed by the stop call above.
 tmux -L cfgtest new-window -t t
 pane2=$(tmux -L cfgtest display-message -p -t t -F '#{pane_id}')
+sw2=$(tmux -L cfgtest display-message -p -t "$pane2" -F '#{session_name}:#{window_index}')
 notif_seq=$(printf '{"message":"Allow Bash?"}' | TMUX="$sock,0,0" TMUX_PANE="$pane2" bash "$SRC" notification | jq -r .terminalSequence)
-chk "notification title carries ⏳ + t:1"     '[[ "$notif_seq" == *"777;notify;⏳ t:1"* ]]'
+chk "notification title carries ⏳ + session:window" '[[ "$notif_seq" == *"777;notify;⏳ $sw2"* ]]'
 chk "notification body is the message"        '[[ "$notif_seq" == *"Allow Bash?"* ]]'
 
 # debounce: a SECOND stop on window 0 within 20s → BEL only, no 777;notify
@@ -438,4 +443,4 @@ Run: `rm -f /tmp/t-notify.sh /tmp/t-jump.sh`
 ## Rollback
 
 Revert the three managed files and `chezmoi apply` them; no state migration. `@claude_attn` is a transient per-server window option (gone on tmux restart). The debounce stamp dir `${TMPDIR}/claude-tmux-notify/` is disposable.
-<!-- adr-capture: sha256=f2ce97178491f05a; session=cli; ts=2026-06-14T13:30:48Z; adrs=chezmoi-bhg.1,chezmoi-bhg.2 -->
+<!-- adr-capture: sha256=c2538f31832dbebf; session=cli; ts=2026-06-14T13:39:51Z; adrs=chezmoi-bhg.1,chezmoi-bhg.2 -->

@@ -1,26 +1,75 @@
 #!/usr/bin/env bash
 # claude-tmux-notify — Claude Code Notification/Stop hook.
-# Emits a Ghostty OSC-777 desktop notification + a BEL (tmux window flag) via
-# the hook's {terminalSequence} field (Claude Code delivers it race-free through
-# tmux). Spec: docs/superpowers/specs/2026-06-13-ghostty-tmux-agent-cockpit-design.md
+# Emits an IDENTIFYING, event-typed, DEBOUNCED Ghostty OSC-777 desktop
+# notification + a BEL (tmux window flag) via the hook's {terminalSequence}
+# field (Claude Code delivers it race-free through tmux). The BEL/flag fires on
+# EVERY event; the desktop banner is suppressed if one already fired for this
+# session:window within DEBOUNCE_SECS, so a chatty agent lights its flag without
+# spamming Notification Center (which on macOS cannot coalesce — OSC 9/777 carry
+# only title+body, no replace id).
+# Spec: docs/superpowers/specs/2026-06-14-agent-notifications-better-non-persistent-design.md
 set -uo pipefail
 
+DEBOUNCE_SECS=20
 event="${1:-notification}"
 payload="$(cat)"
 
+# --- body + glyph by event type --------------------------------------------
 if [ "$event" = "stop" ]; then
-  body="Claude finished — your move"
+  glyph="✅"
+  body="Finished — your move"
 else
+  glyph="⏳"
   body="$(printf '%s' "$payload" | jq -r '.message // "Needs your attention"' 2>/dev/null || echo "Needs your attention")"
 fi
 
-# Optional tmux side-effect: flag the calling window. Guarded for the cmux
-# coexist case where Claude runs outside tmux ($TMUX_PANE unset).
+# --- identity (which agent), guarded for cmux-coexist (no $TMUX_PANE) -------
+in_tmux=0
 if [ -n "${TMUX_PANE:-}" ] && command -v tmux >/dev/null 2>&1; then
-  tmux set-option -w -t "$TMUX_PANE" @needs_attention 1 2>/dev/null || true
+  in_tmux=1
+  ident="$(tmux display-message -p -t "$TMUX_PANE" -F '#{session_name}:#{window_index} #{b:pane_current_path}' 2>/dev/null)"
+  [ -z "$ident" ] && ident="Claude Code"
+else
+  ident="Claude Code"
 fi
 
-# OSC-777 notify (BEL-terminated) + a standalone BEL so tmux monitor-bell flags
-# the window. jq encodes the control bytes (ESC, BEL) as JSON escapes.
-seq="$(printf '\033]777;notify;Claude Code;%s\007\007' "$body")"
+# --- sanitize for OSC-777 (;-delimited, BEL/ST-terminated) -----------------
+# Strip newlines, then neutralise ; (field separator), BEL, ESC to spaces so a
+# worktree path or model message can't split fields or terminate the sequence.
+sanitize() { printf '%s' "$1" | tr -d '\n\r' | tr ';\a\033' '   '; }
+title="$(sanitize "$glyph $ident")"
+body="$(sanitize "$body")"
+
+# --- mark the window for the picker (guarded) ------------------------------
+# @claude_attn = glyph + short body snippet; tmux-jump-needy reads it to label
+# the picker. Replaces the previously-unused @needs_attention option.
+if [ "$in_tmux" = 1 ]; then
+  snippet="$(printf '%s' "$body" | cut -c1-40)"
+  tmux set-option -w -t "$TMUX_PANE" @claude_attn "$glyph $snippet" 2>/dev/null || true
+fi
+
+# --- debounce the desktop banner (per session:window) ----------------------
+want_banner=1
+if [ "$in_tmux" = 1 ]; then
+  stampdir="${TMPDIR:-/tmp}/claude-tmux-notify"
+  mkdir -p "$stampdir" 2>/dev/null || true
+  key="$(printf '%s' "$ident" | tr -c 'A-Za-z0-9' '_')"
+  stamp="$stampdir/$key"
+  now="$(date +%s)"
+  last="$(cat "$stamp" 2>/dev/null || echo 0)"
+  if [ $(( now - last )) -lt "$DEBOUNCE_SECS" ]; then
+    want_banner=0
+  else
+    printf '%s' "$now" > "$stamp" 2>/dev/null || true
+  fi
+fi
+
+# --- build terminalSequence: BEL always; OSC-777 only when not debounced ----
+bel=$'\a'
+if [ "$want_banner" = 1 ]; then
+  osc="$(printf '\033]777;notify;%s;%s\007' "$title" "$body")"
+  seq="${osc}${bel}"
+else
+  seq="${bel}"
+fi
 jq -nc --arg seq "$seq" '{terminalSequence: $seq}'
