@@ -794,6 +794,15 @@
       "skillFolderHash": "6168f4287a774c2c84e5bffb4a9fb761ffe6f8e5",
       "installedAt": "2026-06-12T20:47:20.833Z",
       "updatedAt": "2026-06-12T20:47:20.833Z"
+    },
+    "karakeep": {
+      "source": "karakeep-app/karakeep",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/karakeep-app/karakeep.git",
+      "skillPath": "skills/SKILL.md",
+      "skillFolderHash": "86e510bc13800ea03262683cb5e72f06e0922dca",
+      "installedAt": "2026-06-13T21:41:21.374Z",
+      "updatedAt": "2026-06-13T21:41:21.374Z"
     }
   },
   "dismissed": {

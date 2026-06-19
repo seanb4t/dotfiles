@@ -208,7 +208,8 @@
     "ralph-loop@claude-plugins-official": false,
     "security-guidance@claude-plugins-official": true,
     "engram@engram": true,
-    "warp@claude-code-warp": true
+    "warp@claude-code-warp": true,
+    "tmux@fzymgc-house-skills": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -241,12 +242,6 @@
         "repo": "seanb4t/engram"
       },
       "autoUpdate": true
-    },
-    "weft": {
-      "source": {
-        "source": "directory",
-        "path": "/Volumes/Code/github.com/seanb4t/weft-dogfood"
-      }
     },
     "claude-code-warp": {
       "source": {

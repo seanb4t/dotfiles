@@ -1,0 +1,30 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!{{ lookPath "sh" }}
+set -eu
+
+# Touch ID for sudo, managed via /etc/pam.d/sudo_local — the drop-in Apple
+# preserves across OS updates (macOS 14+ already @includes it from sudo).
+# pam_reattach.so (above pam_tid) re-attaches sudo to the GUI session so Touch ID
+# also works inside tmux/screen. Renumbered after 0010 package install so the
+# Homebrew module exists when this runs.
+#
+# Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
+
+reattach=""
+for p in /opt/homebrew/lib/pam/pam_reattach.so /usr/local/lib/pam/pam_reattach.so; do
+  [ -f "$p" ] && reattach="$p" && break
+done
+
+tmpfile="$(mktemp)"
+{
+  echo "# Managed by chezmoi — Touch ID for sudo (survives OS updates)."
+  [ -n "$reattach" ] && echo "auth       optional       $reattach"
+  echo "auth       sufficient     pam_tid.so"
+} > "$tmpfile"
+
+if ! sudo cmp -s "$tmpfile" /etc/pam.d/sudo_local 2>/dev/null; then
+  sudo cp "$tmpfile" /etc/pam.d/sudo_local
+  sudo chmod 444 /etc/pam.d/sudo_local
+fi
+rm -f "$tmpfile"
+{{ end -}}
