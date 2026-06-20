@@ -35,11 +35,16 @@
 | `prefix x` | kill pane |
 | `prefix H/J/K/L` | resize (hold to repeat) |
 
-## Copy / grab (keyboard, mouse-off)
+## Copy / grab
+
+Copies land in the macOS clipboard automatically (`set-clipboard on` → OSC-52).
 
 | Key | Action |
 |-----|--------|
-| `prefix [` | scrollback / copy mode → `/` search · `v` select · `y` copy · `q` exit |
+| scroll up / `prefix [` | enter scrollback / copy mode → `/` search · `v` select · `y` copy · `q` exit |
+| drag-select | select with mouse; release copies (double-click = word, triple-click = line) |
+| `Shift`+drag | bypass tmux → native Ghostty selection of the **visible** screen (then `Cmd+C`) |
+| paste | `Cmd+V` (system clipboard) · `prefix ]` (tmux buffer) |
 | `prefix F` | **fingers** — hint-labels on-screen tokens; type a letter to copy (`prefix J` = jump only) |
 | `prefix Tab` | **extrakto** — fuzzy-pick text from pane / scrollback |
 
@@ -49,7 +54,7 @@
 |-----|--------|
 | `Shift+Enter` | newline in Claude Code (not submit) |
 | `Ctrl+V` | paste an **image** into Claude Code (`Cmd+V` = text) |
-| `prefix m` | toggle mouse (rare: drag-copy across side-by-side splits) |
+| `prefix m` | toggle mouse (default **on**: wheel scrolls into copy mode, drag selects) |
 | `prefix Space` | action menu (discover everything) |
 | `prefix ?` | this cheat-sheet |
 | `prefix r` | reload config |
