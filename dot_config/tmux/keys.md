@@ -35,6 +35,15 @@
 | `prefix x` | kill pane |
 | `prefix H/J/K/L` | resize (hold to repeat) |
 
+## Scratch popups
+
+Floating overlays — they hover over your layout without disturbing your splits.
+
+| Key | Action |
+|-----|--------|
+| `prefix g` | **scratch shell** — fresh shell in current dir, closes on exit |
+| `prefix G` | **scratch session** — durable `scratch` session, survives closing the popup |
+
 ## Copy / grab
 
 Copies land in the macOS clipboard automatically (`set-clipboard on` → OSC-52).
