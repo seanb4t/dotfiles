@@ -14,7 +14,6 @@ tap "hashicorp/tap", trusted: true
 tap "homebrew/core"
 tap "int128/kubelogin", trusted: true
 tap "jbangdev/tap", trusted: true
-tap "manaflow-ai/cmux", trusted: true
 tap "morantron/tmux-fingers"
 tap "nats-io/nats-tools", trusted: true
 tap "openhue/cli", trusted: true
@@ -33,6 +32,14 @@ brew "addlicense"
 brew "age"
 # Plugin for encrypting files with age and PIV tokens such as YubiKeys
 brew "age-plugin-yubikey"
+# C/C++ and Java libraries for Unicode and globalization
+brew "icu4c@78"
+# Portable Foreign Function Interface library
+brew "libffi"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Browser automation CLI for AI agents
+brew "agent-browser"
 # Checks ansible playbooks for practices and behaviour
 brew "ansible-lint"
 # GitOps Continuous Delivery for Kubernetes
@@ -45,6 +52,8 @@ brew "ast-grep"
 brew "atuin", restart_service: :changed
 # Official Amazon AWS command-line interface
 brew "awscli"
+# B2 Cloud Storage Command-Line Tools
+brew "b2-tools"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Programmable completion for Bash 3.2
@@ -53,8 +62,6 @@ brew "bash-completion"
 brew "bat"
 # Bash Automated Testing System
 brew "bats-core"
-# C/C++ and Java libraries for Unicode and globalization
-brew "icu4c@78"
 # Git for Data
 brew "dolt"
 # Memory upgrade for your coding agent
@@ -69,16 +76,12 @@ brew "btop"
 brew "buf"
 # Powerful, enterprise-ready, open source web server with automatic HTTPS
 brew "caddy"
-# CLI tool for analyzing Claude Code usage from local JSONL files
-brew "ccusage"
+# CLI to facilitate terraforming your existing Cloudflare resources
+brew "cf-terraforming"
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
 # CLI to install, manage & troubleshoot Kubernetes clusters running Cilium
 brew "cilium-cli"
-# Portable Foreign Function Interface library
-brew "libffi"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
 # CLI tool for Cloudflare Workers
 brew "cloudflare-wrangler"
 # Cloudflare Tunnel client (formerly Argo Tunnel)
@@ -89,6 +92,8 @@ brew "cmctl"
 brew "cocogitto"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+# Container Signing
+brew "cosign"
 # Tool for interacting with remote images and registries
 brew "crane"
 # Package compiler and linker metadata toolkit
@@ -121,8 +126,6 @@ brew "fish-lsp"
 brew "flock"
 # Command-line fuzzy finder written in Go
 brew "fzf"
-# Interact with Google Gemini AI models from the command-line
-brew "gemini-cli"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
@@ -221,6 +224,8 @@ brew "markdownlint-cli"
 brew "markdownlint-cli2"
 # Mac App Store command-line interface
 brew "mas"
+# Minimalist GNU for Windows and GCC cross-compilers
+brew "mingw-w64"
 # Replacement for ls, cp and other commands for object storage
 brew "minio-mc"
 # Deep clean and optimize your Mac
@@ -264,7 +269,7 @@ brew "rclone"
 # Fast, efficient and secure backup program
 brew "restic"
 # Powerful, clean, object-oriented scripting language
-brew "ruby", link: false
+brew "ruby"
 # Markdown Linter and Formatter written in Rust
 brew "rumdl"
 # Rust toolchain installer
@@ -327,6 +332,8 @@ brew "yamllint"
 brew "yq"
 # Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
+# Programming language designed for robustness, optimality, and clarity
+brew "zig"
 # Compression and file packaging/archive utility
 brew "zip"
 # Shell extension to navigate your filesystem faster
@@ -355,7 +362,7 @@ brew "nats-io/nats-tools/nsc"
 brew "oven-sh/bun/bun"
 # CLI for tracking coding agent changes with jujutsu
 brew "schpet/tap/jjagent"
-brew "yakitrak/yakitrak/obsidian-cli"
+brew "yakitrak/yakitrak/notesmd-cli", link: false
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
@@ -364,6 +371,14 @@ cask "1password-cli"
 cask "affine"
 # Application launcher and productivity software
 cask "alfred"
+# Enable Windows-like alt-tab
+cask "alt-tab"
+# Agent orchestration platform
+cask "antigravity"
+# Terminal interface for Antigravity agents
+cask "antigravity-cli"
+# Temporary notes with calculations and extensible features
+cask "antinote"
 # Records audio from any application
 cask "audio-hijack"
 # Data backup and storage service
@@ -388,8 +403,6 @@ cask "claude"
 cask "claude-code@latest"
 # Tool to remove unnecessary files and folders from disk
 cask "cleanmymac"
-# Ghostty-based terminal with vertical tabs and notifications for AI coding agents
-cask "cmux"
 # AI code review CLI
 cask "coderabbit"
 # OpenAI's coding agent that runs in your terminal
@@ -455,6 +468,8 @@ cask "karabiner-elements"
 cask "keycastr"
 # Official Kotlin Language Server
 cask "kotlin-lsp"
+# Kubernetes IDE
+cask "lens"
 # Host-based application firewall
 cask "little-snitch"
 # Cable-free audio router
@@ -497,8 +512,6 @@ cask "atomicjar/tap/testcontainers-desktop"
 cask "visual-studio-code"
 # Web browser with built-in email client focusing on customization and control
 cask "vivaldi"
-# Rust-based terminal
-cask "warp"
 # Multiplayer code editor
 cask "zed"
 # Video communication and virtual meeting platform
@@ -523,6 +536,7 @@ vscode "golang.go"
 vscode "grafana.grafana-alloy"
 vscode "hashicorp.hcl"
 vscode "hashicorp.terraform"
+vscode "jebbs.plantuml"
 vscode "ms-azuretools.vscode-azureterraform"
 vscode "ms-azuretools.vscode-containers"
 vscode "ms-azuretools.vscode-docker"

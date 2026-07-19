@@ -218,7 +218,6 @@ cd ../feature-branch
 # Install hooks based on what the repo uses
 [[ -f lefthook.yaml ]] && lefthook install
 [[ -f .pre-commit-config.yaml ]] && pre-commit install
-[[ -f .beads/config.yaml ]] && bd hooks install --chain
 ```
 
 **Date verification:**
@@ -295,17 +294,7 @@ assistant: Done!
 
 ## Environment Notes
 
-When running on macOS, be aware of sandbox restrictions on SQLite writes and symlinks. If writes to beads directories or DB files fail, SHOULD check sandbox permissions before attempting complex debugging.
-
-## Bead / Task Management
-
-For bead CLI operations:
-
-| Requirement | Details |
-|-------------|---------|
-| MUST use `--parent` | Not `-p` for parent flags |
-| MUST include `--description` | Always provide description argument |
-| MUST trim whitespace | Be careful with trailing whitespace in batch ID lists |
+When running on macOS, be aware of sandbox restrictions on SQLite writes and symlinks. If writes to local DB files fail, SHOULD check sandbox permissions before attempting complex debugging.
 
 ## CLAUDE.md Maintenance
 
@@ -319,3 +308,17 @@ For bead CLI operations:
 
 *Last updated: 2026-03-08*
 *AI Assistant: Claude Opus 4.6*
+
+<!-- CODEGRAPH_START -->
+## CodeGraph
+
+In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
+
+- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
+- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
+
+If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
+<!-- CODEGRAPH_END -->
+# graphify
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.

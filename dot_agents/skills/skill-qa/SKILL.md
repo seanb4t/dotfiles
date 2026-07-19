@@ -12,7 +12,6 @@ allowed-tools:
   - Glob
 metadata:
   author: fzymgc-house
-  version: 0.1.0 # x-release-please-version
 ---
 
 # Skill QA Review
