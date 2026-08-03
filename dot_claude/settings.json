@@ -108,12 +108,11 @@
       "WebFetch(domain:stackoverflow.com)",
       "WebFetch(domain:tailscale.com)",
       "Bash(bd *)",
-      "mcp__codegraph__*",
       "Bash(npx gsd-core *)",
       "Read(.planning/*)",
-      "Write(.planning/*)",
       "Read(STATE.md)",
-      "Write(STATE.md)"
+      "Edit(.planning/*)",
+      "Edit(STATE.md)"
     ],
     "deny": [
       "WebFetch(domain:pastebin.com)",
@@ -187,17 +186,16 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
+    "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "codegraph prompt-hook"
+            "command": "bash \"/Users/sean/.claude/hooks/local/gsd-active-workstream.sh\"",
+            "timeout": 10
           }
         ]
-      }
-    ],
-    "SessionStart": [
+      },
       {
         "hooks": [
           {
@@ -426,12 +424,6 @@
       "source": {
         "source": "github",
         "repo": "wshobson/agents"
-      }
-    },
-    "weft": {
-      "source": {
-        "source": "directory",
-        "path": "/Volumes/Code/github.com/seanb4t/weft"
       }
     },
     "openai-codex": {

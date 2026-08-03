@@ -296,6 +296,8 @@ brew "starship"
 brew "step"
 # Tail multiple Kubernetes pods & their containers
 brew "stern"
+# CLI for generating a Software Bill of Materials from container images
+brew "syft"
 # Traceroute implementation using TCP packets
 brew "tcptraceroute"
 # Language Server Protocol for Terraform
@@ -367,8 +369,6 @@ brew "yakitrak/yakitrak/notesmd-cli", link: false
 cask "1password"
 # Command-line interface for 1Password
 cask "1password-cli"
-# Note editor and whiteboard
-cask "affine"
 # Application launcher and productivity software
 cask "alfred"
 # Enable Windows-like alt-tab
@@ -484,6 +484,8 @@ cask "obsidian"
 cask "parallels"
 # PDF reader, editor and annotator
 cask "pdf-expert"
+# Imaging utility to install operating systems to a microSD card
+cask "raspberry-pi-imager"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Window snapping tool
@@ -492,8 +494,6 @@ cask "rectangle-pro"
 cask "fzymgc-house/tap/router-hosts"
 # Open source virtual/remote desktop application
 cask "rustdesk"
-# 3D CAD software
-cask "shapr3d"
 # Team communication and collaboration software
 cask "slack"
 # Sound and audio controller

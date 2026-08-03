@@ -100,17 +100,14 @@ Opus 4.6 → Sonnet 4+ → Haiku (use highest available)
 
 ### File Operations
 
-**Code search precedence (semantic-first, then raw):**
+**Code search precedence:**
 
 | Priority | Tool | Use Case | Requirement |
 |----------|------|----------|-------------|
-| 1 | `mcp__probe__search_code` | Find a function/struct/handler by description or symbol — returns whole AST blocks, not line snippets | SHOULD use for "where is X / how does Y work" questions before Read |
-| 2 | `mcp__probe__extract_code` | Pull a specific symbol or `path:line` range without manual offset math | SHOULD use when you know the symbol but not exact line bounds |
-| 3 | `mcp__probe__grep` | Structured ripgrep with file/line metadata | MAY use for raw text matches when probe's index is fresh |
-| 4 | Grep tool / `rg` | Raw file content search | MUST use (never raw shell `grep`); fallback when probe is stale or you need flags it doesn't expose |
-| 5 | Read/Write/Edit | File read/write operations on known paths | MUST use with offset/limit to read only needed portions |
+| 1 | Grep tool / `rg` | Find text/symbols in files | MUST use `rg` or the native Grep tool — never raw shell `grep` |
+| 2 | Read/Write/Edit | File read/write operations on known paths | MUST use with offset/limit to read only needed portions |
 
-**Rule of thumb:** for "where is X defined" or "how does Y work", probe before Read — probe returns the full enclosing function in one call, eliminating the grep→Read two-step. For "show me lines 200-250 of file Z", Read directly.
+**Rule of thumb:** for "where is X defined" or "how does Y work", search with the Grep tool or `rg` (`-t`/`-g` to scope, `-n -C3` for context), then Read the enclosing region. For "show me lines 200-250 of file Z", Read directly. In CodeGraph-indexed repos (`.codegraph/` present), `codegraph explore` still outranks raw search.
 
 **File creation/modification:**
 
@@ -309,6 +306,10 @@ When running on macOS, be aware of sandbox restrictions on SQLite writes and sym
 *Last updated: 2026-03-08*
 *AI Assistant: Claude Opus 4.6*
 
+# graphify
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
 <!-- CODEGRAPH_START -->
 ## CodeGraph
 
@@ -319,6 +320,3 @@ In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the re
 
 If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
 <!-- CODEGRAPH_END -->
-# graphify
-- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
-When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
