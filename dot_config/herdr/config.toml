@@ -46,25 +46,52 @@ new_cwd = "follow"
 # Keys — porting tmux muscle memory
 # ---------------------------------------------------------------------------
 # Already identical to tmux.conf out of the box, so NOT re-declared below:
-#   prefix+minus  split down      prefix+c  new tab
-#   prefix+w      picker          prefix+z  zoom
-#   prefix+x      close pane      prefix+?  help
+#   prefix+c  new tab        prefix+w  picker      prefix+z  zoom
+#   prefix+x  close pane     prefix+?  help        prefix+[  copy mode
+#
+# prefix+[ copy mode is a particularly close match: herdr ships tmux-style
+# motions (h/j/k/l, w/b/e, {/}, ctrl+u/ctrl+d, / and ? search with n/N) and
+# v-or-Space to select, y-or-Enter to copy — so `setw -g mode-keys vi` plus the
+# copy-mode-vi v/y binds in tmux.conf need no equivalent here.
 #
 # Collisions worth knowing (herdr wins; we are not fighting them):
-#   prefix+o  = open_notification_target   (tmux.conf: sesh picker)
-#   prefix+r  = resize_mode, NOT reload    (reload is prefix+shift+r)
-#   prefix+b  = toggle_sidebar             (tmux.conf: tmux-jump-needy)
-#               The sidebar IS the attention queue that script approximated,
-#               so this is a straight upgrade rather than a loss.
+#   prefix+o        = open_notification_target  (tmux.conf: sesh picker)
+#   prefix+r        = resize_mode, NOT reload   (reload is prefix+shift+r)
+#   prefix+b        = toggle_sidebar            (tmux.conf: tmux-jump-needy)
+#                     The sidebar IS the attention queue that script
+#                     approximated, so this is an upgrade rather than a loss.
+#   prefix+shift+HJKL = SWAP panes. tmux.conf uses those for RESIZE; herdr puts
+#                     resizing behind prefix+r (a mode). Easy to trip over.
+#   prefix+g        = goto picker. Do not rebind — see the popup note below.
+#
+# macOS modifier caveat: herdr's docs recommend the ctrl+alt family as the one
+# that survives OS, terminal and pane app everywhere, and warn that plain alt
+# "composes into a special character in most terminals" on macOS. It works here
+# because Ghostty sets `macos-option-as-alt = left` and tmux.conf already
+# depends on that for its M- binds. If an alt chord below ever goes dead,
+# suspect that first and fall back to ctrl+alt rather than debugging herdr.
 [keys]
 # tmux.conf: `set -g prefix C-Space`.
 prefix = "ctrl+space"
 
-# tmux.conf binds `|` for a right split. herdr's default is prefix+v; keep that
-# as the primary and DO NOT add a pipe binding — "|" is not in herdr's accepted
-# named-punctuation list (minus, comma, ampersand, plus, backtick) and an
-# invalid keybinding silently falls back.
-split_vertical = "prefix+v"
+# SPLIT VOCABULARY IS INVERTED BETWEEN THE TWO TOOLS. Read this before editing.
+#   herdr  split_vertical   = split RIGHT (vertical divider, side-by-side)
+#   herdr  split_horizontal = split DOWN  (horizontal divider, stacked)
+#   tmux   split-window -h  = side-by-side   -> herdr split_VERTICAL
+#   tmux   split-window -v  = stacked        -> herdr split_HORIZONTAL
+# herdr follows the vim/zellij convention (the divider's orientation names the
+# split); tmux names it after the axis panes are arranged along. Confirmed from
+# herdr.dev/docs/keyboard ("Split right / down | prefix+v / prefix+minus") and
+# the CLI, which is unambiguous: `herdr pane split --direction right|down`.
+#
+# So bind the tmux glyphs directly and stop translating in your head. "|" IS
+# accepted despite not being named in the docs' punctuation examples — verified
+# with `herdr config check`, which rejects genuinely invalid keys.
+#   prefix+|      right split   (tmux.conf: `bind | split-window -h`)
+#   prefix+minus  down split    (tmux.conf: `bind - split-window -v`)
+# herdr's own defaults are kept as aliases so the documented keys still work.
+split_vertical = ["prefix+|", "prefix+v"]
+split_horizontal = ["prefix+minus", "prefix+shift+minus"]
 
 # tmux.conf has prefix-free directional nav (`bind -n M-h/j/k/l select-pane`).
 # Ghostty is configured with `macos-option-as-alt = left`, so alt chords reach
@@ -89,8 +116,14 @@ tabs = "alt"
 # tmux.conf `prefix g`: ephemeral floating shell in the current pane's cwd,
 # closes on exit. herdr's popup type is a session-modal terminal — the direct
 # analogue of tmux display-popup, and it does not disturb the layout.
+#
+# NOT bound to prefix+g: that is herdr's `goto` picker, which is the nearest
+# thing herdr has to the sesh picker this setup relies on. `herdr config check`
+# does NOT detect binding collisions (it returns "ok" for a keys.command that
+# shadows a built-in action), so shadowing goto would have been silent. The
+# popups live in the prefix+alt namespace instead, which is unused by defaults.
 [[keys.command]]
-key = "prefix+g"
+key = "prefix+alt+s"
 type = "popup"
 command = "$SHELL"
 width = "80%"
