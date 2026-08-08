@@ -106,14 +106,24 @@ Defined in `.chezmoiexternal.toml`:
 
 ### Ignored Files
 
-`.chezmoiignore` excludes: `README.md`, `AGENTS.md`, `iterm/`,
+`.chezmoiignore` excludes: `README.md`, `AGENTS.md`, `CLAUDE.md`, `iterm/`,
 `**/fish_variables`, `**/*.bak`.
 
-Note it does **not** exclude `CLAUDE.md` or `.claude/`, despite what earlier
-revisions of this file claimed. Consequence: this file is applied to
-`~/CLAUDE.md`, where it is loaded for every project under `~` — so keep it
-scoped to facts that survive that blast radius. Global *coding* instructions
-belong in `dot_claude/CLAUDE.md` (`~/.claude/CLAUDE.md`) instead.
+`CLAUDE.md` was added to that list on 2026-08-08. Until then it was **not**
+excluded despite this file claiming otherwise, so it was applied to
+`~/CLAUDE.md` and loaded as project memory for every project under `~`. That
+orphan was deleted when the ignore landed — chezmoi stops managing an ignored
+file but does not remove it, so the deletion was manual.
+
+This file is now repo-local. Instruction routing:
+
+| Scope | File |
+|-------|------|
+| Global coding rules, every session | `dot_claude/CLAUDE.md` → `~/.claude/CLAUDE.md` |
+| This repo's architecture | `CLAUDE.md` (here, not deployed) |
+| Conditional, tool-specific | a skill in `dot_agents/skills/`, symlinked from `dot_claude/skills/` |
+
+`.claude/` itself is deliberately **not** ignored — `dot_claude/` is managed.
 
 ## Conventions
 
