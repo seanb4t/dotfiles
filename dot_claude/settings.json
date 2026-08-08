@@ -218,6 +218,16 @@
             "command": "\"/opt/homebrew/bin/node\" \"/Users/sean/.claude/hooks/gsd-update-banner.js\""
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/sean/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [
