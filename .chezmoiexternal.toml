@@ -8,7 +8,26 @@
   url = "https://raw.githubusercontent.com/sbstp/kubie/refs/heads/master/completion/kubie.fish"
   refreshPeriod = "168h"
 
-# tmux plugins — vendored as immutable archive pins (no TPM). See
+# herdr agent skill — teaches an agent to CONTROL herdr from inside a pane
+# (split panes, run commands without stealing focus, read output, wait on other
+# agents). Deliberately a skill and not CLAUDE.md prose: its own frontmatter
+# gates it on "user explicitly mentions Herdr" + HERDR_ENV=1, so it costs zero
+# context in the sessions that are not in a herdr pane.
+#
+# Pinned to a commit, not master, per the immutable-pin convention below.
+# Bump deliberately; `herdr --version` moving does not require this to move.
+# Upstream also publishes https://herdr.dev/agent-guide.md, which is the
+# human-facing setup/troubleshooting companion — referenced from CLAUDE.md
+# rather than vendored, since it is read on demand.
+[".agents/skills/herdr/SKILL.md"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/herdrdev/herdr/f6060cf682f69ef8302c25e8924c0b27aef7ae16/skills/herdr/SKILL.md"
+  refreshPeriod = "8760h"
+
+# tmux plugins — vendored as immutable archive pins (no TPM). tmux is no longer
+# the default multiplexer (herdr is, as of 2026-08-08) but is kept installed and
+# configured as a fallback; see
+# docs/superpowers/plans/2026-08-08-herdr-trial.md and
 # docs/superpowers/specs/2026-06-13-ghostty-tmux-agent-cockpit-design.md
 [".config/tmux/plugins/catppuccin/tmux"]
   type = "archive"

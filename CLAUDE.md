@@ -66,20 +66,54 @@ Most scripts and templates use `{{ if eq .chezmoi.os "darwin" }}` / `"linux"`. P
 | Path | Content |
 |------|---------|
 | `dot_config/fish/` | Fish shell config (fisher plugins, conf.d for grc/direnv/atuin/op-cli) |
-| `dot_config/tmux/` | tmux config (Catppuccin Macchiato, 7 TPM plugins, sesh session manager) |
-| `dot_config/ghostty/` | Ghostty terminal config, auto-attaches to tmux |
+| `dot_config/herdr/` | herdr config — **the default multiplexer** |
+| `dot_config/tmux/` | tmux config (Catppuccin Macchiato, vendored plugins, sesh) — fallback only |
+| `dot_config/ghostty/` | Ghostty terminal config; `command` runs `ghostty-mux` |
 | `private_dot_ssh/` | SSH configs with per-host includes (`config.<hostname>.tmpl`) |
 | `dot_kube/` | Kubernetes configs, mostly age-encrypted |
 | `.chezmoiscripts/` | All lifecycle scripts |
+
+### Multiplexer: herdr (since 2026-08-08)
+
+herdr replaced tmux as the default. tmux stays installed and configured as a
+fallback and reference.
+
+- **Switching**: `dot_local/bin/ghostty-mux` dispatches on `~/.local/state/mux`.
+  Default (no file) is herdr; `echo tmux > ~/.local/state/mux` sends *new*
+  Ghostty windows to the old `ghostty-tmux` wrapper. Existing windows keep
+  whatever they launched with.
+- **Server**: runs via `brew services` (RunAtLoad + KeepAlive), so it survives
+  reboot and restore happens at login, not at first-terminal-open.
+- **Config**: `herdr config check` validates (honours `HERDR_CONFIG_PATH`, so it
+  can check the chezmoi source without touching the live system);
+  `herdr server reload-config` applies to a running server. Invalid values do
+  **not** fail loudly at runtime — they fall back to a default with a startup
+  warning — so always run `config check` after editing.
+- **Gotcha**: herdr's settings UI *writes back* to `~/.config/herdr/config.toml`,
+  so it fights chezmoi. `chezmoi apply` refuses rather than clobbering, but a
+  `reload-config` after a refused apply silently reloads the old config. Fold UI
+  changes back into `dot_config/herdr/config.toml`, then `apply --force`.
+- **Agent guidance**: <https://herdr.dev/agent-guide.md> for setup and
+  troubleshooting. Controlling herdr *from inside a pane* is the vendored
+  `herdr` skill (`.agents/skills/herdr/`), which self-gates on `HERDR_ENV=1` —
+  do not duplicate its content into any CLAUDE.md.
 
 ### External Dependencies
 
 Defined in `.chezmoiexternal.toml`:
 - `kubie.fish` completion — fetched from GitHub, refreshed weekly.
+- herdr agent skill, catppuccin/tmux, extrakto — pinned to immutable commits/tags.
 
 ### Ignored Files
 
-`.chezmoiignore` excludes: `README.md`, `AGENTS.md`, `CLAUDE.md`, `.claude/`, `iterm/`, `**/fish_variables`, `**/*.bak`.
+`.chezmoiignore` excludes: `README.md`, `AGENTS.md`, `iterm/`,
+`**/fish_variables`, `**/*.bak`.
+
+Note it does **not** exclude `CLAUDE.md` or `.claude/`, despite what earlier
+revisions of this file claimed. Consequence: this file is applied to
+`~/CLAUDE.md`, where it is loaded for every project under `~` — so keep it
+scoped to facts that survive that blast radius. Global *coding* instructions
+belong in `dot_claude/CLAUDE.md` (`~/.claude/CLAUDE.md`) instead.
 
 ## Conventions
 
@@ -99,8 +133,10 @@ Defined in `.chezmoiexternal.toml`:
 - `chezmoi apply` stops on script failure — use `chezmoi apply ~/.config/fish/` to apply specific paths without triggering unrelated `run_onchange_` scripts (e.g., brew bundle).
 - `fisher update` updates all *installed* plugins, not just `fish_plugins`. To remove old plugins: update `fish_plugins` → `chezmoi apply ~/.config/fish/` → `fisher remove <old>` → `fisher install <new>`.
 - Fish `conf.d/` loads alphabetically — `00_` prefix ensures pre-configuration runs first.
-- tmux `extended-keys` sends xterm-style encoding; apps expecting CSI u (e.g., Claude Code for Shift+Enter) need explicit keybind translation in tmux.conf.
-- sesh picker: use `run-shell` + `fzf-tmux -p`, never `display-popup` wrapping `fzf-tmux -p` (double popup).
+- tmux `extended-keys` sends xterm-style encoding; apps expecting CSI u (e.g., Claude Code for Shift+Enter) need explicit keybind translation in tmux.conf. (tmux-only; herdr does not use this mechanism.)
+- sesh picker: use `run-shell` + `fzf-tmux -p`, never `display-popup` wrapping `fzf-tmux -p` (double popup). (tmux-only; sesh does not work with herdr — its equivalent is `prefix+g`, the session navigator.)
+- herdr keybinds: `herdr config check` validates syntax but does **not** detect collisions — it returns `ok` for a `[[keys.command]]` that shadows a built-in action. Scan new binds against `herdr --default-config` by hand.
+- herdr vs tmux split vocabulary is inverted: herdr's `split_vertical` is a *right* split (vim/zellij convention), tmux's `split-window -h` is the same shape. The CLI is unambiguous — `herdr pane split --direction right|down`.
 
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:6cd5cc61 -->
