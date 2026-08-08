@@ -122,19 +122,22 @@ Trial fails if any of 1–4 fail. 5–7 are cost questions, not correctness.
    Layout, cwd, and agent sessions come back.
 3. **Nothing silently reverts.** Run `chezmoi apply` after setup, then repeat
    test 1. Catches the settings.json conflict above.
-4. **Multiple Ghostty windows.** Open three. tmux needed a deliberate design
-   here — `new-session -t main` + `destroy-unattached on` — so each window got
-   an *independent view* of a shared window set rather than a mirror. Determine
-   what herdr does with several attached clients: independent focus per window,
-   or mirrored? If it mirrors, that is a real regression against the current
-   setup and `ghostty-tmux`'s grouped-session trick has no obvious analogue.
-5. **Shift+Enter / CSI-u under Ghostty.** There is an open herdr issue in this
+4. **Shift+Enter / CSI-u under Ghostty.** There is an open herdr issue in this
    family; tmux.conf currently needs `bind -n S-Enter send-keys Escape "[13;2u"`.
    Determine whether an equivalent workaround exists.
-6. **fish + PATH inside panes.** `shell_mode = "auto"` should give login shells;
+5. **fish + PATH inside panes.** `shell_mode = "auto"` should give login shells;
    confirm Homebrew PATH is sane in a fresh pane.
-7. **The picker gap.** Decide whether workspaces + sidebar actually replace the
+6. **The picker gap.** Decide whether workspaces + sidebar actually replace the
    sesh picker for the ~30-directory rotation, or whether that is a real loss.
+
+### Not a criterion: multi-window mirroring
+
+Resolved 2026-08-08 — `ghostty-tmux` mirrors on new windows in practice, and
+herdr does too, so this is parity rather than a regression. Accepted as-is.
+
+Note the comment block in `dot_local/bin/executable_ghostty-tmux` still claims
+later windows are "NOT mirrored"; that comment is inaccurate and is a separate
+cleanup, untouched by this branch.
 
 ## Rollback
 
