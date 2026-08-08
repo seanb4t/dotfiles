@@ -1,25 +1,29 @@
 #!/usr/bin/env bash
 # ghostty-mux — multiplexer dispatcher for Ghostty's `command`.
 #
-# Exists for the herdr trial (branch: trial/herdr). Ghostty's `command` is a
-# single global value, so pointing it straight at herdr would be a full cutover
-# with no fallback in the same window. This reads a one-word toggle instead, so
-# new windows can be aimed at either multiplexer without editing config or
-# restarting Ghostty.
+# herdr is the default multiplexer as of 2026-08-08. tmux is kept installed and
+# fully configured as a fallback and reference — this dispatcher is how you get
+# back to it without editing Ghostty config or restarting the app.
 #
-#   echo herdr > ~/.local/state/mux    # new Ghostty windows attach herdr
-#   echo tmux  > ~/.local/state/mux    # back to tmux
-#   rm         ~/.local/state/mux      # same as tmux (the default)
+#   rm         ~/.local/state/mux      # herdr (the default)
+#   echo tmux  > ~/.local/state/mux    # new Ghostty windows attach tmux
+#   echo herdr > ~/.local/state/mux    # explicit herdr; same as no file
 #
-# Existing windows keep whatever they launched with — that is deliberate. You
-# can run a herdr window next to a tmux window and compare them side by side.
+# Only new windows are affected — existing ones keep whatever they launched
+# with, so a tmux window and a herdr window can sit side by side.
 #
-# DEFAULT IS TMUX. The toggle must be set on purpose, so a fresh machine (or
-# this branch, un-flipped) behaves exactly as main does.
+# Anything other than "tmux" resolves to herdr, since herdr is the default. The
+# tmux escape hatch is therefore an EXACT match: if you are reaching for it
+# because herdr is misbehaving, a typo would silently give you herdr again, so
+# an unrecognized value warns on stderr before falling through.
 #
 # Full paths throughout: Ghostty's GUI launch environment does not necessarily
 # have /opt/homebrew/bin on PATH. This is the same reason ghostty-tmux pins
 # its tmux path.
+#
+# Note herdr normally runs as a background service (`brew services start herdr`,
+# RunAtLoad + KeepAlive), so this usually attaches an already-running server
+# rather than starting one. Restore happens at login, not here.
 
 set -u
 
@@ -28,24 +32,29 @@ tmux_wrapper="$HOME/.local/bin/ghostty-tmux"
 
 state_file="${XDG_STATE_HOME:-$HOME/.local/state}/mux"
 
-choice=tmux
+choice=herdr
 if [ -r "$state_file" ]; then
-  read -r choice <"$state_file" || choice=tmux
+  read -r choice <"$state_file" || choice=herdr
 fi
 # Trim whitespace and lowercase so a stray newline or "Herdr" still works.
 choice="$(printf '%s' "$choice" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')"
 
 case "$choice" in
-herdr)
-  # Fall back rather than leave the user with a dead terminal if herdr is
-  # missing (uninstalled, mid-upgrade, or the toggle outlived the trial).
-  if [ -x "$herdr_bin" ]; then
-    exec "$herdr_bin"
-  fi
-  printf 'ghostty-mux: %s not executable; falling back to tmux\n' "$herdr_bin" >&2
+tmux)
   exec "$tmux_wrapper"
+  ;;
+herdr | '')
   ;;
 *)
-  exec "$tmux_wrapper"
+  printf 'ghostty-mux: unknown multiplexer %s; using herdr (write "tmux" to %s for tmux)\n' \
+    "$choice" "$state_file" >&2
   ;;
 esac
+
+# herdr path. Fall back rather than leave the user with a dead terminal if the
+# binary is missing — mid-upgrade, uninstalled, or Homebrew prefix moved.
+if [ -x "$herdr_bin" ]; then
+  exec "$herdr_bin"
+fi
+printf 'ghostty-mux: %s not executable; falling back to tmux\n' "$herdr_bin" >&2
+exec "$tmux_wrapper"

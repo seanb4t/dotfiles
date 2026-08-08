@@ -108,10 +108,46 @@ focus_pane_right = ["prefix+l", "alt+l"]
 # last-tab action, only last_pane. prefix+tab / prefix+shift+tab already cycle
 # panes; prefix+p / prefix+n cycle tabs.
 
-[keys.indexed]
-# tmux.conf: `bind -n M-1..9 select-window -t N`. This makes alt+1..9 switch
-# tabs directly, without the prefix. prefix+1..9 keeps working too.
-tabs = "alt"
+# --- Nav: one scheme across all three levels ------------------------------
+# herdr's sidebar is a hierarchy — spaces (workspaces) on top, agents below,
+# tabs inside a workspace — and prefix+? showed prev/next/jump UNSET for both
+# workspaces and agents. Filled in with one consistent shape so the modifier
+# tells you the level, and the key tells you the motion:
+#
+#   level       prev / next        jump 1-9
+#   tabs        alt+[   alt+]      alt+1..9            (tmux M-[ / M-] / M-1..9)
+#   workspaces  alt+shift+[ / ]    prefix+shift+1..9   (workspace family is
+#                                                       prefix+shift+*)
+#   agents      ctrl+alt+[ / ]     prefix+alt+1..9
+#
+# Brackets carry prev/next at every level, matching tmux.conf's
+# `bind -n M-[ previous-window` / `M-] next-window`. Adding a modifier moves
+# up a level. herdr's docs recommend the ctrl+alt family as the chord space
+# terminals and desktops leave alone, so agents — the level most likely to be
+# hit from inside a busy pane — gets it.
+#
+# NOT using [keys.indexed]: herdr's own default config calls it "legacy ...
+# prefer switch_tab, switch_workspace, and focus_agent for new configs". It is
+# also one-modifier-per-category, so tabs owning "alt" there would have made
+# alt unavailable to agents. The modern actions take a full "mod+1..9" range
+# string each, so the three levels stay independent.
+previous_tab = ["prefix+p", "alt+["]
+next_tab = ["prefix+n", "alt+]"]
+switch_tab = ["prefix+1..9", "alt+1..9"]
+
+previous_workspace = "alt+shift+["
+next_workspace = "alt+shift+]"
+switch_workspace = "prefix+shift+1..9"
+
+previous_agent = "ctrl+alt+["
+next_agent = "ctrl+alt+]"
+focus_agent = "prefix+alt+1..9"
+
+# Worktrees: this setup lives in .worktrees/ checkouts, and both of these were
+# unset. new_worktree already has prefix+shift+g; open sits next to it.
+# Removal is deliberately awkward — it runs `git worktree remove`.
+open_worktree = "prefix+shift+o"
+remove_worktree = "prefix+alt+shift+d"
 
 # tmux.conf `prefix g`: ephemeral floating shell in the current pane's cwd,
 # closes on exit. herdr's popup type is a session-modal terminal — the direct

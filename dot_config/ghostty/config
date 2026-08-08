@@ -35,10 +35,9 @@ keybind = cmd+enter=unbind
 
 focus-follows-mouse = true
 
-# Ghostty.app auto-attaches a multiplexer via a wrapper. ghostty-mux dispatches
-# on ~/.local/state/mux: unset/"tmux" (the default) runs ghostty-tmux exactly as
-# before — first window owns `main`, later windows get independent grouped views
-# (shared window set); "herdr" attaches herdr instead, for the trial on branch
-# trial/herdr. cmux.app ignores this.
+# Ghostty.app auto-attaches a multiplexer via ghostty-mux, which dispatches on
+# ~/.local/state/mux. herdr is the default; `echo tmux > ~/.local/state/mux`
+# falls back to the old ghostty-tmux wrapper, which is kept configured as a
+# reference. Only new windows pick up a change. cmux.app ignores this.
 command = /Users/sean/.local/bin/ghostty-mux
 

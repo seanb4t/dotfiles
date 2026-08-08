@@ -1,6 +1,14 @@
 # herdr trial
 
-**Branch:** `trial/herdr` · **Date:** 2026-08-08 · **Status:** trial, not adopted
+**Branch:** `trial/herdr` · **Date:** 2026-08-08 · **Status: ADOPTED — herdr is
+the default multiplexer.** tmux stays installed and configured as a fallback and
+reference; `echo tmux > ~/.local/state/mux` returns to it for new windows.
+
+Adopted the same day the trial started, on the strength of criteria 1–3 plus
+hands-on use. What decided it: native per-pane agent session restore (the thing
+tmux-resurrect would have needed a frozen upstream and four workarounds to
+approximate), and the sidebar replacing four hand-written attention scripts.
+The accepted regression is unchanged — non-agent processes do not relaunch.
 
 Evaluating [herdr](https://herdr.dev) as a replacement for the Ghostty+tmux agent
 cockpit described in `../specs/2026-06-13-ghostty-tmux-agent-cockpit-design.md`.
