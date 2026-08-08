@@ -74,9 +74,12 @@ focus_pane_down = ["prefix+j", "alt+j"]
 focus_pane_up = ["prefix+k", "alt+k"]
 focus_pane_right = ["prefix+l", "alt+l"]
 
-# tmux.conf: `bind -n M-Tab last-window`. herdr's nearest equivalent is
-# last_pane (unset by default).
-last_pane = "alt+tab"
+# tmux.conf's `bind -n M-Tab last-window` has NO binding here on purpose:
+# alt+tab belongs to the AltTab app system-wide, so herdr would never see it.
+# last_pane is left unset (herdr's default). Note it was always an imperfect
+# map anyway — tmux's M-Tab was last-*window* (a herdr tab), and herdr has no
+# last-tab action, only last_pane. prefix+tab / prefix+shift+tab already cycle
+# panes; prefix+p / prefix+n cycle tabs.
 
 [keys.indexed]
 # tmux.conf: `bind -n M-1..9 select-window -t N`. This makes alt+1..9 switch
