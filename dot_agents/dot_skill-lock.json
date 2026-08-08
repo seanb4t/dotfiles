@@ -771,6 +771,24 @@
       "skillFolderHash": "162f8a5fa52813b06b16adb59e38b617103188e4",
       "installedAt": "2026-07-25T20:04:22.819Z",
       "updatedAt": "2026-07-25T20:04:22.819Z"
+    },
+    "simple-english": {
+      "source": "AminBlg/SimpleEnglish",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/AminBlg/SimpleEnglish.git",
+      "skillPath": "skills/simple-english/SKILL.md",
+      "skillFolderHash": "74737ef88499c741dd02665965c8b5c15c7d8780",
+      "installedAt": "2026-08-05T22:14:50.590Z",
+      "updatedAt": "2026-08-05T22:14:50.590Z"
+    },
+    "humanizer": {
+      "source": "blader/humanizer",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/blader/humanizer.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "523374dee72d67c7b2b5f858ea0094ffda49c3ac",
+      "installedAt": "2026-08-05T22:35:24.851Z",
+      "updatedAt": "2026-08-06T21:44:13.201Z"
     }
   },
   "dismissed": {

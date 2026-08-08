@@ -127,7 +127,6 @@
       "Edit(~/.ssh/**)",
       "Edit(~/.gnupg/**)",
       "Bash(gh pr merge *)",
-      "Bash(git merge *)",
       "Read(~/.kube/config)",
       "Read(~/.kube/configs/**)",
       "Read(~/.config/age-keys.txt)",
@@ -265,6 +264,17 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/sean/.claude/hooks/git-merge-guard.js\"",
+            "timeout": 5,
+            "statusMessage": "Checking git merge safety"
+          }
+        ]
+      },
+      {
         "matcher": "Write|Edit",
         "hooks": [
           {
@@ -313,6 +323,26 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/sean/.claude/hooks/gsd-write-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/sean/.claude/hooks/gsd-agent-isolation-guard.js\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "SubagentStop": [
@@ -339,6 +369,7 @@
       }
     ]
   },
+  "workflowKeywordTriggerEnabled": false,
   "statusLine": {
     "type": "command",
     "command": "ccstatusline",
@@ -465,6 +496,8 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
+  "editorMode": "normal",
+  "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true
 }
