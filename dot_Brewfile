@@ -165,6 +165,8 @@ brew "python@3.13"
 brew "grc"
 # Kubernetes package manager
 brew "helm"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
 # CLI email client written in Rust
 brew "himalaya"
 # Improved top (interactive process viewer)

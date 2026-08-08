@@ -1,0 +1,51 @@
+# herdr — trial config (branch: trial/herdr)
+#
+# Evaluating herdr as a replacement for the Ghostty+tmux agent cockpit.
+# See docs/superpowers/plans/2026-08-08-herdr-trial.md for what we are testing.
+#
+# Validated against herdr 0.8.0 with:
+#   HERDR_CONFIG_PATH=<this file> herdr config check    # => "config: ok"
+#
+# Always re-run that after editing. Invalid values do NOT fail loudly at
+# runtime — herdr falls back to a safe default and prints a startup warning —
+# but `config check` does catch them (bad keybindings, wrong types, unknown
+# sections). `herdr --default-config` prints the full annotated schema.
+#
+# Reload a running server after editing:  herdr server reload-config
+
+# Skip the first-run wizard; we configure declaratively via chezmoi instead.
+onboarding = false
+
+[keys]
+# Match existing tmux muscle memory (tmux.conf sets `set -g prefix C-Space`).
+# herdr's default is ctrl+b. During the trial tmux and herdr never nest, so
+# there is no conflict either way — this is purely so the trial measures the
+# tool and not the retraining.
+prefix = "ctrl+space"
+
+[terminal]
+# "auto" starts login shells on macOS so /usr/libexec/path_helper and Homebrew
+# init run in new panes. This is the same problem the ghostty-tmux wrapper
+# solved by hardcoding /opt/homebrew/bin/tmux — do not set this to "non_login"
+# without checking that PATH is still sane inside a pane.
+shell_mode = "auto"
+# Unset => $SHELL, which is fish here. Left unset deliberately.
+
+[session]
+# THE thing under test. Default is already true; set explicitly so the trial
+# is unambiguous and so flipping it off is a one-line experiment.
+resume_agents_on_restore = true
+
+[experimental]
+# Deliberately OFF. Pane history persists raw terminal output to
+# session-history.json, which would capture secrets, tokens and command output
+# to disk. This repo is public and has an explicit no-plaintext-secrets posture
+# (see engram 8fx3bpb83n); turning this on needs a separate decision.
+pane_history = false
+
+[worktrees]
+# Existing convention in this setup is <repo>/.worktrees/<name> (see the live
+# selfhosted-cluster and holomush checkouts). herdr instead creates
+# <directory>/<repo>/<branch>, so point it somewhere neutral rather than
+# letting it invent a second worktree layout inside a repo.
+directory = "~/Code/herdr-worktrees"
