@@ -16,6 +16,7 @@ tap "int128/kubelogin", trusted: true
 tap "jbangdev/tap", trusted: true
 tap "morantron/tmux-fingers"
 tap "nats-io/nats-tools", trusted: true
+tap "omnigent-ai/tap"
 tap "openhue/cli", trusted: true
 tap "oven-sh/bun", trusted: true
 tap "pulumi/tap", trusted: true
@@ -164,6 +165,8 @@ brew "python@3.13"
 brew "grc"
 # Kubernetes package manager
 brew "helm"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
 # CLI email client written in Rust
 brew "himalaya"
 # Improved top (interactive process viewer)
@@ -360,6 +363,8 @@ brew "jbangdev/tap/jbang"
 brew "morantron/tmux-fingers/tmux-fingers", trusted: true
 # A tool for creating NATS account and user access configurations
 brew "nats-io/nats-tools/nsc"
+# Meta-harness for AI agents
+brew "omnigent-ai/tap/omnigent", trusted: true
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
 # CLI for tracking coding agent changes with jujutsu
@@ -407,6 +412,8 @@ cask "cleanmymac"
 cask "coderabbit"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
+# Claude code parallelisation
+cask "conductor"
 # Containerized environments for coding agents
 cask "dagger/tap/container-use"
 # OpenJDK distribution from Amazon
@@ -496,6 +503,8 @@ cask "fzymgc-house/tap/router-hosts"
 cask "rustdesk"
 # Team communication and collaboration software
 cask "slack"
+# CLI to create, run, and deploy Slack apps
+cask "slack-cli"
 # Sound and audio controller
 cask "soundsource"
 # Music streaming service

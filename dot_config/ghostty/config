@@ -35,7 +35,9 @@ keybind = cmd+enter=unbind
 
 focus-follows-mouse = true
 
-# Ghostty.app auto-attaches tmux via a wrapper: first window owns `main`, later
-# windows get independent grouped views (shared window set). cmux.app ignores this.
-command = /Users/sean/.local/bin/ghostty-tmux
+# Ghostty.app auto-attaches a multiplexer via ghostty-mux, which dispatches on
+# ~/.local/state/mux. herdr is the default; `echo tmux > ~/.local/state/mux`
+# falls back to the old ghostty-tmux wrapper, which is kept configured as a
+# reference. Only new windows pick up a change. cmux.app ignores this.
+command = /Users/sean/.local/bin/ghostty-mux
 
