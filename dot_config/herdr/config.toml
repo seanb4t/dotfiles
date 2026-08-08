@@ -16,33 +16,165 @@
 # Skip the first-run wizard; we configure declaratively via chezmoi instead.
 onboarding = false
 
-[keys]
-# Match existing tmux muscle memory (tmux.conf sets `set -g prefix C-Space`).
-# herdr's default is ctrl+b. During the trial tmux and herdr never nest, so
-# there is no conflict either way — this is purely so the trial measures the
-# tool and not the retraining.
-prefix = "ctrl+space"
+# ---------------------------------------------------------------------------
+# Theme
+# ---------------------------------------------------------------------------
+[theme]
+# tmux.conf uses catppuccin macchiato. herdr's built-in "catppuccin" is the
+# mocha-weight variant; close enough to evaluate, and auto_switch gives us the
+# latte flip that the tmux setup never had.
+name = "catppuccin"
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
 
+# ---------------------------------------------------------------------------
+# Terminal
+# ---------------------------------------------------------------------------
 [terminal]
 # "auto" starts login shells on macOS so /usr/libexec/path_helper and Homebrew
 # init run in new panes. This is the same problem the ghostty-tmux wrapper
 # solved by hardcoding /opt/homebrew/bin/tmux — do not set this to "non_login"
 # without checking that PATH is still sane inside a pane.
 shell_mode = "auto"
-# Unset => $SHELL, which is fish here. Left unset deliberately.
+# default_shell unset => $SHELL, which is fish here. Deliberate.
+# Inherit cwd from the source pane, matching tmux's
+# `split-window -c "#{pane_current_path}"` bindings.
+new_cwd = "follow"
 
+# ---------------------------------------------------------------------------
+# Keys — porting tmux muscle memory
+# ---------------------------------------------------------------------------
+# Already identical to tmux.conf out of the box, so NOT re-declared below:
+#   prefix+minus  split down      prefix+c  new tab
+#   prefix+w      picker          prefix+z  zoom
+#   prefix+x      close pane      prefix+?  help
+#
+# Collisions worth knowing (herdr wins; we are not fighting them):
+#   prefix+o  = open_notification_target   (tmux.conf: sesh picker)
+#   prefix+r  = resize_mode, NOT reload    (reload is prefix+shift+r)
+#   prefix+b  = toggle_sidebar             (tmux.conf: tmux-jump-needy)
+#               The sidebar IS the attention queue that script approximated,
+#               so this is a straight upgrade rather than a loss.
+[keys]
+# tmux.conf: `set -g prefix C-Space`.
+prefix = "ctrl+space"
+
+# tmux.conf binds `|` for a right split. herdr's default is prefix+v; keep that
+# as the primary and DO NOT add a pipe binding — "|" is not in herdr's accepted
+# named-punctuation list (minus, comma, ampersand, plus, backtick) and an
+# invalid keybinding silently falls back.
+split_vertical = "prefix+v"
+
+# tmux.conf has prefix-free directional nav (`bind -n M-h/j/k/l select-pane`).
+# Ghostty is configured with `macos-option-as-alt = left`, so alt chords reach
+# the app. Kept alongside herdr's prefix+h/j/k/l defaults, which still work.
+focus_pane_left = ["prefix+h", "alt+h"]
+focus_pane_down = ["prefix+j", "alt+j"]
+focus_pane_up = ["prefix+k", "alt+k"]
+focus_pane_right = ["prefix+l", "alt+l"]
+
+# tmux.conf: `bind -n M-Tab last-window`. herdr's nearest equivalent is
+# last_pane (unset by default).
+last_pane = "alt+tab"
+
+[keys.indexed]
+# tmux.conf: `bind -n M-1..9 select-window -t N`. This makes alt+1..9 switch
+# tabs directly, without the prefix. prefix+1..9 keeps working too.
+tabs = "alt"
+
+# tmux.conf `prefix g`: ephemeral floating shell in the current pane's cwd,
+# closes on exit. herdr's popup type is a session-modal terminal — the direct
+# analogue of tmux display-popup, and it does not disturb the layout.
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "$SHELL"
+width = "80%"
+height = "80%"
+
+# tmux.conf's action menu (`prefix Space`) had a lazygit-shaped hole in it;
+# herdr's own docs use this exact example and it fits the popup model well.
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+width = "90%"
+height = "90%"
+
+# ---------------------------------------------------------------------------
+# UI
+# ---------------------------------------------------------------------------
+[ui]
+# tmux.conf runs `set -g mouse on` deliberately (engram 7fa0v05z0n): with mouse
+# off, wheel-up at a fish prompt became Up-arrow and opened the atuin search
+# TUI. herdr capturing the mouse is the equivalent fix.
+mouse_capture = true
+# Matches Ghostty's own `copy-on-select = true`.
+copy_on_select = true
+# The sidebar is the replacement for claude-attention-count + tmux-jump-needy,
+# so sort it as an attention queue rather than by workspace.
+agent_panel_sort = "priority"
+# Agent labels in pane borders replace catppuccin's @claude_attn window flags.
+show_agent_labels_on_pane_borders = true
+
+[ui.sidebar.agents]
+# Give Claude rows the stripped terminal title. Claude Code rewrites its process
+# name to its version string (panes report `2.1.224`, not `claude`), so the
+# title is the only per-pane identity available — this is what @claude_attn and
+# tmux-jump-needy were hand-rolling.
+[ui.sidebar.agents.rows_by_agent]
+claude = [
+  ["state_icon", "workspace", "tab"],
+  ["terminal_title_stripped"],
+  ["agent"],
+]
+
+[ui.toast]
+# Replaces the entire claude-tmux-notify / OSC 9-777 stack.
+# Set to "system" in the herdr settings UI on 2026-08-08 and preserved here.
+# Note engram mkex4cxrzw records that terminal-notifier and alerter broke on
+# macOS 26 — but that is about *those* tools, not herdr's own OS-notification
+# call, so it does not condemn this setting. If notifications stop appearing or
+# start duplicating, switch to "terminal", which asks Ghostty to raise them via
+# the OSC path that claude-tmux-notify uses today.
+delivery = "system"
+# macOS cannot coalesce or replace notifications (engram y0wg39g18v), so a
+# debounce is the only defense against a burst. This is herdr's built-in
+# version of the one claude-tmux-notify implements by hand.
+delay_seconds = 2
+
+[ui.sound]
+# Off during the trial — the visual sidebar is the thing under evaluation, and
+# a second attention channel would confound it.
+enabled = false
+
+# ---------------------------------------------------------------------------
+# Session
+# ---------------------------------------------------------------------------
 [session]
 # THE thing under test. Default is already true; set explicitly so the trial
 # is unambiguous and so flipping it off is a one-line experiment.
 resume_agents_on_restore = true
 
+# ---------------------------------------------------------------------------
+# Experimental
+# ---------------------------------------------------------------------------
 [experimental]
 # Deliberately OFF. Pane history persists raw terminal output to
 # session-history.json, which would capture secrets, tokens and command output
 # to disk. This repo is public and has an explicit no-plaintext-secrets posture
-# (see engram 8fx3bpb83n); turning this on needs a separate decision.
+# (engram 8fx3bpb83n); turning this on needs a separate decision.
 pane_history = false
+# Leave nesting off. Running tmux inside a herdr pane breaks agent detection
+# (herdr sees `tmux` as the foreground process), and nesting herdr in herdr has
+# the same class of problem. Coexistence happens at the Ghostty level via
+# ghostty-mux, not by nesting.
+allow_nested = false
 
+# ---------------------------------------------------------------------------
+# Worktrees
+# ---------------------------------------------------------------------------
 [worktrees]
 # Existing convention in this setup is <repo>/.worktrees/<name> (see the live
 # selfhosted-cluster and holomush checkouts). herdr instead creates
