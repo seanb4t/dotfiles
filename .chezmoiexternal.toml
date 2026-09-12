@@ -8,6 +8,11 @@
   url = "https://raw.githubusercontent.com/sbstp/kubie/refs/heads/master/completion/kubie.fish"
   refreshPeriod = "168h"
 
+[".config/atuin/themes/catppuccin-macchiato-mauve.toml"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/catppuccin/atuin/68aa64b77573c235044b614e752a781701af4eec/themes/macchiato/catppuccin-macchiato-mauve.toml"
+  refreshPeriod = "8760h"
+
 # tmux plugins — vendored as immutable archive pins (no TPM). tmux is no longer
 # the default multiplexer (herdr is, as of 2026-08-08) but is kept installed and
 # configured as a fallback; see
