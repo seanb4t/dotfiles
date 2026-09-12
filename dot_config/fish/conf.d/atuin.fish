@@ -1,6 +1,6 @@
 if type -q atuin; and status is-interactive
-  atuin init fish | source
-
-  # Disable fzf.fish history search (Ctrl+R) — atuin owns it
+  # Disable fzf history first: its cleanup erases the current Ctrl+R binding.
   fzf_configure_bindings --history=
+
+  atuin init fish | source
 end
