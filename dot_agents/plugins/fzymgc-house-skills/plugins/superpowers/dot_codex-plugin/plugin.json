@@ -1,0 +1,32 @@
+{
+  "name": "superpowers",
+  "version": "0.1.0",
+  "description": "Development workflow skills with git and jj VCS support (fork of obra/superpowers v5.0.2)",
+  "author": {
+    "name": "Sean Brandt",
+    "email": "4678+seanb4t@users.noreply.github.com",
+    "url": "https://github.com/seanb4t"
+  },
+  "homepage": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "repository": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "license": "UNLICENSED",
+  "keywords": ["planning", "debugging", "review", "workflow"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Superpowers",
+    "shortDescription": "Development workflow skills with git and jj support.",
+    "longDescription": "Codex wrapper for the superpowers plugin. Reuses the existing workflow skills and keeps agent, hook, command, and reference files available for Codex-compatible execution paths.",
+    "developerName": "fzymgc-house",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Run", "Write"],
+    "websiteURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "privacyPolicyURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "termsOfServiceURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "defaultPrompt": [
+      "Create a design and implementation plan for this change.",
+      "Debug this failure systematically and add a regression test.",
+      "Help me finish this branch with verification."
+    ],
+    "brandColor": "#7C3AED"
+  }
+}

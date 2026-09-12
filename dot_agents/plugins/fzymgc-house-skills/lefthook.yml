@@ -1,0 +1,29 @@
+# Lefthook configuration
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  parallel: true
+  commands:
+    lint-markdown:
+      glob: "*.md"
+      run: rumdl check {staged_files}
+
+    fmt-markdown:
+      glob: "*.md"
+      run: rumdl fmt {staged_files}
+      stage_fixed: true
+
+    ruff-check:
+      glob: "*.py"
+      run: ruff check --fix {staged_files}
+      stage_fixed: true
+
+    ruff-format:
+      glob: "*.py"
+      run: ruff format {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    conventional-commit:
+      run: cog verify --file {1}

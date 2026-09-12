@@ -1,0 +1,921 @@
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": "run-sdS826uRC6jot2ya",
+        "type": "runs",
+        "attributes": {
+          "actions": {
+            "is-cancelable": false,
+            "is-confirmable": false,
+            "is-discardable": false,
+            "is-force-cancelable": false
+          },
+          "allow-config-generation": true,
+          "allow-empty-apply": false,
+          "auto-apply": true,
+          "canceled-at": null,
+          "created-at": "2025-12-30T02:28:21.345Z",
+          "has-changes": true,
+          "is-destroy": false,
+          "message": "fix(cloudflare): update Access domain to match Cloudflare Pages URL (#479)\n\nThe docs site is deployed to Cloudflare Pages at cluster-docs.docs.fzymgc.house,\nnot docs.fzymgc.house. Update the Access application domain to protect the\ncorrect URL.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-authored-by: Claude Opus 4.5 <noreply@anthropic.com>",
+          "plan-only": false,
+          "refresh": true,
+          "refresh-only": false,
+          "replace-addrs": null,
+          "save-plan": false,
+          "source": "tfe-configuration-version",
+          "status-timestamps": {
+            "applied-at": "2025-12-30T02:29:35+00:00",
+            "planned-at": "2025-12-30T02:29:00+00:00",
+            "queuing-at": "2025-12-30T02:28:21+00:00",
+            "applying-at": "2025-12-30T02:29:18+00:00",
+            "planning-at": "2025-12-30T02:28:33+00:00",
+            "confirmed-at": "2025-12-30T02:29:01+00:00",
+            "plan-queued-at": "2025-12-30T02:28:21+00:00",
+            "apply-queued-at": "2025-12-30T02:29:01+00:00",
+            "queuing-apply-at": "2025-12-30T02:29:01+00:00",
+            "cost-estimated-at": "2025-12-30T02:29:01+00:00",
+            "plan-queueable-at": "2025-12-30T02:28:21+00:00",
+            "cost-estimating-at": "2025-12-30T02:29:00+00:00"
+          },
+          "status": "applied",
+          "target-addrs": null,
+          "trigger-reason": "matched",
+          "terraform-version": "1.14.3",
+          "updated-at": "2025-12-30T02:29:35.752Z",
+          "permissions": {
+            "can-apply": true,
+            "can-cancel": true,
+            "can-comment": true,
+            "can-discard": true,
+            "can-force-execute": true,
+            "can-force-cancel": true,
+            "can-override-policy-check": true
+          },
+          "variables": [],
+          "invoke-action-addrs": null
+        },
+        "relationships": {
+          "workspace": {
+            "data": {
+              "id": "ws-7WU8odS8KxcceMY6",
+              "type": "workspaces"
+            }
+          },
+          "apply": {
+            "data": {
+              "id": "apply-cSR3ZV4V78eHdYgX",
+              "type": "applies"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/apply"
+            }
+          },
+          "configuration-version": {
+            "data": {
+              "id": "cv-FKxE6GCe33dJ2QoQ",
+              "type": "configuration-versions"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/configuration-version"
+            }
+          },
+          "cost-estimate": {
+            "data": {
+              "id": "ce-PtcQHsK17zZRb1p5",
+              "type": "cost-estimates"
+            },
+            "links": {
+              "related": "/api/v2/cost-estimates/ce-PtcQHsK17zZRb1p5"
+            }
+          },
+          "plan": {
+            "data": {
+              "id": "plan-mJi8Ft8saTFo3y6v",
+              "type": "plans"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/plan"
+            }
+          },
+          "run-events": {
+            "data": [
+              {
+                "id": "re-npyftPdhSEoCLaf1",
+                "type": "run-events"
+              },
+              {
+                "id": "re-V5PoJF79dFVtJt8e",
+                "type": "run-events"
+              },
+              {
+                "id": "re-5s2CtFB1ZQ7G9gne",
+                "type": "run-events"
+              },
+              {
+                "id": "re-2nqMqoafzqAzx5uB",
+                "type": "run-events"
+              },
+              {
+                "id": "re-rV7isZqmo7hKtb9x",
+                "type": "run-events"
+              },
+              {
+                "id": "re-fnrSg4wme17q1Fqm",
+                "type": "run-events"
+              },
+              {
+                "id": "re-MV5ScpdYigBXD5uA",
+                "type": "run-events"
+              },
+              {
+                "id": "re-Se3pU8FMr5CwwNCn",
+                "type": "run-events"
+              },
+              {
+                "id": "re-iPwAxBns9YmoE47G",
+                "type": "run-events"
+              },
+              {
+                "id": "re-UG62tYhGmn6FzAFX",
+                "type": "run-events"
+              }
+            ],
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/run-events"
+            }
+          },
+          "task-stages": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/task-stages"
+            }
+          },
+          "policy-checks": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/policy-checks"
+            }
+          },
+          "comments": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-sdS826uRC6jot2ya/comments"
+            }
+          }
+        },
+        "links": {
+          "self": "/api/v2/runs/run-sdS826uRC6jot2ya"
+        }
+      },
+      {
+        "id": "run-pbytNRnMGb5PbhnU",
+        "type": "runs",
+        "attributes": {
+          "actions": {
+            "is-cancelable": false,
+            "is-confirmable": false,
+            "is-discardable": false,
+            "is-force-cancelable": false
+          },
+          "allow-config-generation": true,
+          "allow-empty-apply": false,
+          "auto-apply": true,
+          "canceled-at": null,
+          "created-at": "2025-12-30T02:21:48.081Z",
+          "has-changes": true,
+          "is-destroy": false,
+          "message": "Triggered via UI",
+          "plan-only": false,
+          "refresh": true,
+          "refresh-only": false,
+          "replace-addrs": [],
+          "save-plan": false,
+          "source": "tfe-ui",
+          "status-timestamps": {
+            "applied-at": "2025-12-30T02:23:07+00:00",
+            "planned-at": "2025-12-30T02:22:32+00:00",
+            "queuing-at": "2025-12-30T02:21:48+00:00",
+            "applying-at": "2025-12-30T02:22:50+00:00",
+            "planning-at": "2025-12-30T02:22:03+00:00",
+            "confirmed-at": "2025-12-30T02:22:33+00:00",
+            "plan-queued-at": "2025-12-30T02:21:48+00:00",
+            "apply-queued-at": "2025-12-30T02:22:33+00:00",
+            "queuing-apply-at": "2025-12-30T02:22:33+00:00",
+            "cost-estimated-at": "2025-12-30T02:22:33+00:00",
+            "plan-queueable-at": "2025-12-30T02:21:48+00:00",
+            "cost-estimating-at": "2025-12-30T02:22:32+00:00"
+          },
+          "status": "applied",
+          "target-addrs": null,
+          "trigger-reason": "manual",
+          "terraform-version": "1.14.3",
+          "updated-at": "2025-12-30T02:23:07.347Z",
+          "permissions": {
+            "can-apply": true,
+            "can-cancel": true,
+            "can-comment": true,
+            "can-discard": true,
+            "can-force-execute": true,
+            "can-force-cancel": true,
+            "can-override-policy-check": true
+          },
+          "variables": [],
+          "invoke-action-addrs": null
+        },
+        "relationships": {
+          "workspace": {
+            "data": {
+              "id": "ws-7WU8odS8KxcceMY6",
+              "type": "workspaces"
+            }
+          },
+          "apply": {
+            "data": {
+              "id": "apply-RR2wZym2Lm5e8zcc",
+              "type": "applies"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/apply"
+            }
+          },
+          "configuration-version": {
+            "data": {
+              "id": "cv-PzQaGsrXcDJCtggY",
+              "type": "configuration-versions"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/configuration-version"
+            }
+          },
+          "cost-estimate": {
+            "data": {
+              "id": "ce-4k8uxRk741z2vMxp",
+              "type": "cost-estimates"
+            },
+            "links": {
+              "related": "/api/v2/cost-estimates/ce-4k8uxRk741z2vMxp"
+            }
+          },
+          "created-by": {
+            "data": {
+              "id": "user-vfYPPbSsgWEjcRQY",
+              "type": "users"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/created-by"
+            }
+          },
+          "plan": {
+            "data": {
+              "id": "plan-4u32RP6w5r4t36VS",
+              "type": "plans"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/plan"
+            }
+          },
+          "run-events": {
+            "data": [
+              {
+                "id": "re-DKZBWC7XcxHUGAan",
+                "type": "run-events"
+              },
+              {
+                "id": "re-4tYCouV9TuG6bK1f",
+                "type": "run-events"
+              },
+              {
+                "id": "re-BrDDSk8umE5tR4tM",
+                "type": "run-events"
+              },
+              {
+                "id": "re-VmEkocTeQpUBfF5b",
+                "type": "run-events"
+              },
+              {
+                "id": "re-EohzHH5mHj3pcWjn",
+                "type": "run-events"
+              },
+              {
+                "id": "re-QdQrmFDvur1js7gQ",
+                "type": "run-events"
+              },
+              {
+                "id": "re-GkYe7SaW1EDHHxvN",
+                "type": "run-events"
+              },
+              {
+                "id": "re-Kvf5VUVY31c5pGvN",
+                "type": "run-events"
+              },
+              {
+                "id": "re-ry9yivnJt9my6kGG",
+                "type": "run-events"
+              },
+              {
+                "id": "re-MDNb1MuZ15AX3gWn",
+                "type": "run-events"
+              }
+            ],
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/run-events"
+            }
+          },
+          "task-stages": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/task-stages"
+            }
+          },
+          "policy-checks": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/policy-checks"
+            }
+          },
+          "comments": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-pbytNRnMGb5PbhnU/comments"
+            }
+          }
+        },
+        "links": {
+          "self": "/api/v2/runs/run-pbytNRnMGb5PbhnU"
+        }
+      },
+      {
+        "id": "run-BNw3Q7hv4tqyP8ki",
+        "type": "runs",
+        "attributes": {
+          "actions": {
+            "is-cancelable": false,
+            "is-confirmable": false,
+            "is-discardable": false,
+            "is-force-cancelable": false
+          },
+          "allow-config-generation": true,
+          "allow-empty-apply": false,
+          "auto-apply": true,
+          "canceled-at": null,
+          "created-at": "2025-12-30T02:16:29.192Z",
+          "has-changes": true,
+          "is-destroy": false,
+          "message": "docs: add HCP Terraform constraints and Zero Trust token permissions (#478)\n\n* fix(cloudflare): replace compact() with concat() to handle unknown IdP IDs\n\nThe compact() function cannot process unknown values during Terraform\nplanning. When identity provider resources are created in the same plan,\ntheir IDs are unknown until apply time.\n\nUsing concat() with splat expressions handles unknown values gracefully\nbecause Terraform knows the shape of the list even when values are unknown.\nThe splat expression github[*].id also returns an empty list when count=0,\neliminating the need for conditional logic.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\n\n* docs(tf): add HCP Terraform workflow constraints\n\nDocument that TFC runs must NOT be manually triggered via API or MCP\ntools - they are GitOps only, triggered automatically on PR merge.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\n\n* docs(cloudflare): add Zero Trust Access permissions to bootstrap token\n\nDocument the additional API token permissions required for Cloudflare\nZero Trust Access features:\n- Access: Identity Providers (Edit) - for SSO providers\n- Access: Apps and Policies (Edit) - for Access applications\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 4.5 <noreply@anthropic.com>",
+          "plan-only": false,
+          "refresh": true,
+          "refresh-only": false,
+          "replace-addrs": null,
+          "save-plan": false,
+          "source": "tfe-configuration-version",
+          "status-timestamps": {
+            "errored-at": "2025-12-30T02:19:00+00:00",
+            "planned-at": "2025-12-30T02:18:24+00:00",
+            "queuing-at": "2025-12-30T02:17:41+00:00",
+            "applying-at": "2025-12-30T02:18:39+00:00",
+            "planning-at": "2025-12-30T02:17:57+00:00",
+            "confirmed-at": "2025-12-30T02:18:25+00:00",
+            "plan-queued-at": "2025-12-30T02:17:41+00:00",
+            "apply-queued-at": "2025-12-30T02:18:25+00:00",
+            "queuing-apply-at": "2025-12-30T02:18:25+00:00",
+            "cost-estimated-at": "2025-12-30T02:18:25+00:00",
+            "plan-queueable-at": "2025-12-30T02:17:41+00:00",
+            "cost-estimating-at": "2025-12-30T02:18:24+00:00"
+          },
+          "status": "errored",
+          "target-addrs": null,
+          "trigger-reason": "matched",
+          "terraform-version": "1.14.3",
+          "updated-at": "2025-12-30T02:19:00.216Z",
+          "permissions": {
+            "can-apply": true,
+            "can-cancel": true,
+            "can-comment": true,
+            "can-discard": true,
+            "can-force-execute": true,
+            "can-force-cancel": true,
+            "can-override-policy-check": true
+          },
+          "variables": [],
+          "invoke-action-addrs": null
+        },
+        "relationships": {
+          "workspace": {
+            "data": {
+              "id": "ws-7WU8odS8KxcceMY6",
+              "type": "workspaces"
+            }
+          },
+          "apply": {
+            "data": {
+              "id": "apply-HvgaatXJwiLuwfF1",
+              "type": "applies"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/apply"
+            }
+          },
+          "configuration-version": {
+            "data": {
+              "id": "cv-PzQaGsrXcDJCtggY",
+              "type": "configuration-versions"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/configuration-version"
+            }
+          },
+          "cost-estimate": {
+            "data": {
+              "id": "ce-YtGRRkG4rPCiKbcj",
+              "type": "cost-estimates"
+            },
+            "links": {
+              "related": "/api/v2/cost-estimates/ce-YtGRRkG4rPCiKbcj"
+            }
+          },
+          "plan": {
+            "data": {
+              "id": "plan-5ZFNhGGf9Rv4uMeC",
+              "type": "plans"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/plan"
+            }
+          },
+          "run-events": {
+            "data": [
+              {
+                "id": "re-48qEtKr3ChyTVByG",
+                "type": "run-events"
+              },
+              {
+                "id": "re-BvajUjBVuNESe7zA",
+                "type": "run-events"
+              },
+              {
+                "id": "re-MQ2dY84r3Qf5HEQW",
+                "type": "run-events"
+              },
+              {
+                "id": "re-Pv5QiqaWi6RQGN3m",
+                "type": "run-events"
+              },
+              {
+                "id": "re-JkoNQLJfaEen9eEv",
+                "type": "run-events"
+              },
+              {
+                "id": "re-ceQ7Gtt5nySRrdjK",
+                "type": "run-events"
+              },
+              {
+                "id": "re-yTCUJY3S5qhC5M1Z",
+                "type": "run-events"
+              },
+              {
+                "id": "re-s5VxwsLsgienaZ6e",
+                "type": "run-events"
+              },
+              {
+                "id": "re-2VLYSXYysnWegXEo",
+                "type": "run-events"
+              },
+              {
+                "id": "re-AJ54iAFKntLBFSbB",
+                "type": "run-events"
+              }
+            ],
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/run-events"
+            }
+          },
+          "task-stages": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/task-stages"
+            }
+          },
+          "policy-checks": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/policy-checks"
+            }
+          },
+          "comments": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki/comments"
+            }
+          }
+        },
+        "links": {
+          "self": "/api/v2/runs/run-BNw3Q7hv4tqyP8ki"
+        }
+      },
+      {
+        "id": "run-2MGxLaz6mVmrir8v",
+        "type": "runs",
+        "attributes": {
+          "actions": {
+            "is-cancelable": false,
+            "is-confirmable": false,
+            "is-discardable": false,
+            "is-force-cancelable": false
+          },
+          "allow-config-generation": false,
+          "allow-empty-apply": false,
+          "auto-apply": false,
+          "canceled-at": null,
+          "created-at": "2025-12-30T02:03:36.038Z",
+          "has-changes": true,
+          "is-destroy": false,
+          "message": "Apply compact() to concat() fix for Access IdP handling",
+          "plan-only": false,
+          "refresh": true,
+          "refresh-only": false,
+          "replace-addrs": null,
+          "save-plan": false,
+          "source": "tfe-api",
+          "status-timestamps": {
+            "errored-at": "2025-12-30T02:17:41+00:00",
+            "planned-at": "2025-12-30T02:05:23+00:00",
+            "queuing-at": "2025-12-30T02:04:38+00:00",
+            "applying-at": "2025-12-30T02:17:23+00:00",
+            "planning-at": "2025-12-30T02:04:55+00:00",
+            "confirmed-at": "2025-12-30T02:17:11+00:00",
+            "plan-queued-at": "2025-12-30T02:04:38+00:00",
+            "apply-queued-at": "2025-12-30T02:17:11+00:00",
+            "queuing-apply-at": "2025-12-30T02:17:11+00:00",
+            "cost-estimated-at": "2025-12-30T02:05:23+00:00",
+            "plan-queueable-at": "2025-12-30T02:04:38+00:00",
+            "cost-estimating-at": "2025-12-30T02:05:23+00:00"
+          },
+          "status": "errored",
+          "target-addrs": null,
+          "trigger-reason": "manual",
+          "terraform-version": "1.14.3",
+          "updated-at": "2025-12-30T02:17:41.495Z",
+          "permissions": {
+            "can-apply": true,
+            "can-cancel": true,
+            "can-comment": true,
+            "can-discard": true,
+            "can-force-execute": true,
+            "can-force-cancel": true,
+            "can-override-policy-check": true
+          },
+          "variables": [],
+          "invoke-action-addrs": null
+        },
+        "relationships": {
+          "workspace": {
+            "data": {
+              "id": "ws-7WU8odS8KxcceMY6",
+              "type": "workspaces"
+            }
+          },
+          "apply": {
+            "data": {
+              "id": "apply-LrG7KdvQVnPD2DuQ",
+              "type": "applies"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/apply"
+            }
+          },
+          "configuration-version": {
+            "data": {
+              "id": "cv-9NviUHbNiBtitQ4D",
+              "type": "configuration-versions"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/configuration-version"
+            }
+          },
+          "confirmed-by": {
+            "data": {
+              "id": "user-vfYPPbSsgWEjcRQY",
+              "type": "users"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/confirmed-by"
+            }
+          },
+          "cost-estimate": {
+            "data": {
+              "id": "ce-kUV6wSDsr7i4QQRu",
+              "type": "cost-estimates"
+            },
+            "links": {
+              "related": "/api/v2/cost-estimates/ce-kUV6wSDsr7i4QQRu"
+            }
+          },
+          "plan": {
+            "data": {
+              "id": "plan-j6V3b92mCwQ6uXpB",
+              "type": "plans"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/plan"
+            }
+          },
+          "run-events": {
+            "data": [
+              {
+                "id": "re-sN3MPV7qn6JvAV1v",
+                "type": "run-events"
+              },
+              {
+                "id": "re-MJqM8roiVoCfdnqH",
+                "type": "run-events"
+              },
+              {
+                "id": "re-XgxsUWS8Pmn31eH9",
+                "type": "run-events"
+              },
+              {
+                "id": "re-xnQkm6UYhxp53F4G",
+                "type": "run-events"
+              },
+              {
+                "id": "re-rHPJ4sdtowpKEude",
+                "type": "run-events"
+              },
+              {
+                "id": "re-KF3ey5JYSLdfhNrB",
+                "type": "run-events"
+              },
+              {
+                "id": "re-eUBfZSSVTugw96gT",
+                "type": "run-events"
+              },
+              {
+                "id": "re-egy7zcgRndx8VbbG",
+                "type": "run-events"
+              },
+              {
+                "id": "re-8sZp1X6vHW3Ni54j",
+                "type": "run-events"
+              },
+              {
+                "id": "re-wvTSB7gxd1wzyf4f",
+                "type": "run-events"
+              }
+            ],
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/run-events"
+            }
+          },
+          "task-stages": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/task-stages"
+            }
+          },
+          "policy-checks": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/policy-checks"
+            }
+          },
+          "comments": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-2MGxLaz6mVmrir8v/comments"
+            }
+          }
+        },
+        "links": {
+          "self": "/api/v2/runs/run-2MGxLaz6mVmrir8v"
+        }
+      },
+      {
+        "id": "run-qM2nBN9HztdUXNZt",
+        "type": "runs",
+        "attributes": {
+          "actions": {
+            "is-cancelable": false,
+            "is-confirmable": false,
+            "is-discardable": false,
+            "is-force-cancelable": false
+          },
+          "allow-config-generation": true,
+          "allow-empty-apply": false,
+          "auto-apply": true,
+          "canceled-at": null,
+          "created-at": "2025-12-30T02:03:26.005Z",
+          "has-changes": true,
+          "is-destroy": false,
+          "message": "fix(cloudflare): replace compact() with concat() for Access IdP handling (#476)\n\nfix(cloudflare): replace compact() with concat() to handle unknown IdP IDs\n\nThe compact() function cannot process unknown values during Terraform\nplanning. When identity provider resources are created in the same plan,\ntheir IDs are unknown until apply time.\n\nUsing concat() with splat expressions handles unknown values gracefully\nbecause Terraform knows the shape of the list even when values are unknown.\nThe splat expression github[*].id also returns an empty list when count=0,\neliminating the need for conditional logic.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-authored-by: Claude Opus 4.5 <noreply@anthropic.com>",
+          "plan-only": false,
+          "refresh": true,
+          "refresh-only": false,
+          "replace-addrs": null,
+          "save-plan": false,
+          "source": "tfe-configuration-version",
+          "status-timestamps": {
+            "errored-at": "2025-12-30T02:04:37+00:00",
+            "planned-at": "2025-12-30T02:04:04+00:00",
+            "queuing-at": "2025-12-30T02:03:26+00:00",
+            "applying-at": "2025-12-30T02:04:19+00:00",
+            "planning-at": "2025-12-30T02:03:37+00:00",
+            "confirmed-at": "2025-12-30T02:04:04+00:00",
+            "plan-queued-at": "2025-12-30T02:03:26+00:00",
+            "apply-queued-at": "2025-12-30T02:04:05+00:00",
+            "queuing-apply-at": "2025-12-30T02:04:04+00:00",
+            "cost-estimated-at": "2025-12-30T02:04:04+00:00",
+            "plan-queueable-at": "2025-12-30T02:03:26+00:00",
+            "cost-estimating-at": "2025-12-30T02:04:04+00:00"
+          },
+          "status": "errored",
+          "target-addrs": null,
+          "trigger-reason": "matched",
+          "terraform-version": "1.14.3",
+          "updated-at": "2025-12-30T02:04:37.963Z",
+          "permissions": {
+            "can-apply": true,
+            "can-cancel": true,
+            "can-comment": true,
+            "can-discard": true,
+            "can-force-execute": true,
+            "can-force-cancel": true,
+            "can-override-policy-check": true
+          },
+          "variables": [],
+          "invoke-action-addrs": null
+        },
+        "relationships": {
+          "workspace": {
+            "data": {
+              "id": "ws-7WU8odS8KxcceMY6",
+              "type": "workspaces"
+            }
+          },
+          "apply": {
+            "data": {
+              "id": "apply-PgJNDWqgMRs8648i",
+              "type": "applies"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/apply"
+            }
+          },
+          "configuration-version": {
+            "data": {
+              "id": "cv-9NviUHbNiBtitQ4D",
+              "type": "configuration-versions"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/configuration-version"
+            }
+          },
+          "cost-estimate": {
+            "data": {
+              "id": "ce-CrnzfwmGbdMKvdPJ",
+              "type": "cost-estimates"
+            },
+            "links": {
+              "related": "/api/v2/cost-estimates/ce-CrnzfwmGbdMKvdPJ"
+            }
+          },
+          "plan": {
+            "data": {
+              "id": "plan-EHtxzNpvCWsrfV62",
+              "type": "plans"
+            },
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/plan"
+            }
+          },
+          "run-events": {
+            "data": [
+              {
+                "id": "re-NGmoRQB3fu1tkj77",
+                "type": "run-events"
+              },
+              {
+                "id": "re-3AyTC2Vipc5KANJs",
+                "type": "run-events"
+              },
+              {
+                "id": "re-AvtkWG4RpBJkcnyi",
+                "type": "run-events"
+              },
+              {
+                "id": "re-Uh6adM52cfCeMrAh",
+                "type": "run-events"
+              },
+              {
+                "id": "re-oqqJjF9e5eUmz4Dy",
+                "type": "run-events"
+              },
+              {
+                "id": "re-furPAm6fovWnkXoW",
+                "type": "run-events"
+              },
+              {
+                "id": "re-VSZo4SEhE27nGyDq",
+                "type": "run-events"
+              },
+              {
+                "id": "re-pQ5T4at4MQTt7Jxp",
+                "type": "run-events"
+              },
+              {
+                "id": "re-7URRPBYete2XwWL8",
+                "type": "run-events"
+              },
+              {
+                "id": "re-bTTRGxAiV11KyCV6",
+                "type": "run-events"
+              }
+            ],
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/run-events"
+            }
+          },
+          "task-stages": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/task-stages"
+            }
+          },
+          "policy-checks": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/policy-checks"
+            }
+          },
+          "comments": {
+            "data": [],
+            "links": {
+              "related": "/api/v2/runs/run-qM2nBN9HztdUXNZt/comments"
+            }
+          }
+        },
+        "links": {
+          "self": "/api/v2/runs/run-qM2nBN9HztdUXNZt"
+        }
+      }
+    ],
+    "links": {
+      "self": "https://app.terraform.io/api/v2/runs?filter%5Borganization%5D%5Bname%5D=fzymgc-house&filter%5Bworkspace%5D%5Bname%5D=main-cluster-cloudflare&page%5Bnumber%5D=1&page%5Bsize%5D=5",
+      "first": "https://app.terraform.io/api/v2/runs?filter%5Borganization%5D%5Bname%5D=fzymgc-house&filter%5Bworkspace%5D%5Bname%5D=main-cluster-cloudflare&page%5Bnumber%5D=1&page%5Bsize%5D=5",
+      "prev": null,
+      "next": "https://app.terraform.io/api/v2/runs?filter%5Borganization%5D%5Bname%5D=fzymgc-house&filter%5Bworkspace%5D%5Bname%5D=main-cluster-cloudflare&page%5Bnumber%5D=2&page%5Bsize%5D=5",
+      "last": "https://app.terraform.io/api/v2/runs?filter%5Borganization%5D%5Bname%5D=fzymgc-house&filter%5Bworkspace%5D%5Bname%5D=main-cluster-cloudflare&page%5Bnumber%5D=3&page%5Bsize%5D=5"
+    },
+    "meta": {
+      "pagination": {
+        "current-page": 1,
+        "page-size": 5,
+        "prev-page": null,
+        "next-page": 2,
+        "total-pages": 3,
+        "total-count": 15
+      },
+      "status-counts": {
+        "pending": 0,
+        "fetching": 0,
+        "fetching-completed": 0,
+        "pre-plan-running": 0,
+        "pre-plan-completed": 0,
+        "queuing": 0,
+        "plan-queued": 2,
+        "planning": 0,
+        "planned": 0,
+        "confirmed": 0,
+        "queuing-apply": 0,
+        "apply-queued": 0,
+        "applying": 0,
+        "applied": 3,
+        "discarded": 0,
+        "errored": 23,
+        "canceled": 3,
+        "cost-estimating": 0,
+        "cost-estimated": 0,
+        "policy-checking": 0,
+        "policy-override": 0,
+        "policy-checked": 0,
+        "policy-soft-failed": 0,
+        "planned-and-finished": 10,
+        "planned-and-saved": 0,
+        "post-plan-running": 0,
+        "post-plan-completed": 0,
+        "pre-apply-running": 0,
+        "pre-apply-completed": 0,
+        "post-apply-running": 0,
+        "post-apply-completed": 0,
+        "assessing": 0,
+        "assessed": 0,
+        "pre-plan-awaiting-decision": 0,
+        "post-plan-awaiting-decision": 0,
+        "pre-apply-awaiting-decision": 0,
+        "total": 41
+      }
+    }
+  }
+}

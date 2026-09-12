@@ -1,0 +1,220 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "fzymgc-house-skills",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/marketplace.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "homelab": {
+      "release-type": "simple",
+      "package-name": "homelab",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "homelab/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/homelab/.codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "homelab/skills/grafana": {
+      "release-type": "simple",
+      "package-name": "grafana",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "homelab/skills/grafana/SKILL.md"
+        }
+      ]
+    },
+    "homelab/skills/terraform": {
+      "release-type": "simple",
+      "package-name": "terraform",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "homelab/skills/terraform/SKILL.md"
+        }
+      ]
+    },
+    "homelab/skills/skill-qa": {
+      "release-type": "simple",
+      "package-name": "skill-qa",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "homelab/skills/skill-qa/SKILL.md"
+        }
+      ]
+    },
+    "pr-review": {
+      "release-type": "simple",
+      "package-name": "pr-review",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "pr-review/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/pr-review/.codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "pr-review/skills/review-pr": {
+      "release-type": "simple",
+      "package-name": "review-pr",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "pr-review/skills/review-pr/SKILL.md"
+        }
+      ]
+    },
+    "pr-review/skills/address-findings": {
+      "release-type": "simple",
+      "package-name": "address-findings",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "pr-review/skills/address-findings/SKILL.md"
+        }
+      ]
+    },
+    "pr-review/skills/respond-to-comments": {
+      "release-type": "simple",
+      "package-name": "respond-to-comments",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "pr-review/skills/respond-to-comments/SKILL.md"
+        }
+      ]
+    },
+    "jj": {
+      "release-type": "simple",
+      "package-name": "jj",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "jj/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/jj/.codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "jj/skills/jujutsu": {
+      "release-type": "simple",
+      "package-name": "jujutsu",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "jj/skills/jujutsu/SKILL.md"
+        }
+      ]
+    },
+    "superpowers": {
+      "release-type": "simple",
+      "package-name": "superpowers",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "superpowers/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/superpowers/.codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "superpowers/skills/using-worktrees": {
+      "release-type": "simple",
+      "package-name": "using-worktrees",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/using-worktrees/SKILL.md"
+        }
+      ]
+    },
+    "superpowers/skills/finishing-a-development-branch": {
+      "release-type": "simple",
+      "package-name": "finishing-a-development-branch",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/finishing-a-development-branch/SKILL.md"
+        }
+      ]
+    },
+    "superpowers/skills/requesting-code-review": {
+      "release-type": "simple",
+      "package-name": "requesting-code-review",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/requesting-code-review/SKILL.md"
+        }
+      ]
+    },
+    "superpowers/skills/brainstorming": {
+      "release-type": "simple",
+      "package-name": "brainstorming",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/brainstorming/SKILL.md"
+        }
+      ]
+    },
+    "superpowers/skills/writing-plans": {
+      "release-type": "simple",
+      "package-name": "writing-plans",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/writing-plans/SKILL.md"
+        }
+      ]
+    },
+    "superpowers/skills/executing-plans": {
+      "release-type": "simple",
+      "package-name": "executing-plans",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/executing-plans/SKILL.md"
+        }
+      ]
+    },
+    "superpowers/skills/subagent-driven-development": {
+      "release-type": "simple",
+      "package-name": "subagent-driven-development",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "superpowers/skills/subagent-driven-development/SKILL.md"
+        }
+      ]
+    }
+  }
+}

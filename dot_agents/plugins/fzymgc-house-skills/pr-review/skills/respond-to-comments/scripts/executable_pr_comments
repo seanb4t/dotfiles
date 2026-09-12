@@ -1,0 +1,408 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = []
+# ///
+"""
+Minimal PR comment operations with markdown output.
+
+Commands:
+  list <pr> [--unacked]              List all comments (filter unacknowledged)
+  get <pr> <comment_id> [--save <path>]  Get specific comment, optionally save to file
+  latest <pr>                        Get most recent comment
+  ack <pr> <comment_id>              Acknowledge comment with +1
+  comment <pr> <text>                Add comment to PR (inline text)
+  comment <pr> --file <path>         Add comment from file (preferred)
+"""
+
+import json
+import subprocess
+import sys
+
+
+def run_gh(cmd: list[str]) -> str:
+    """Run gh CLI command and return output."""
+    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+    return result.stdout.strip()
+
+
+def get_repo_from_git() -> str:
+    """Get current repo in owner/name format."""
+    remote = run_gh(["git", "remote", "get-url", "origin"])
+    # Parse owner/repo from git@github.com:owner/repo.git or https://github.com/owner/repo
+    if "github.com" in remote:
+        parts = remote.split("github.com")[-1].strip(":/").replace(".git", "")
+        return parts
+    raise ValueError("Not a GitHub repository")
+
+
+def get_database_id(node_id: str, node_type: str, pr: str) -> int:
+    """Convert GraphQL node ID to numeric database ID."""
+    repo = get_repo_from_git()
+    owner, name = repo.split("/")
+
+    if node_type == "review":
+        query = f'''
+        {{
+          repository(owner: "{owner}", name: "{name}") {{
+            pullRequest(number: {pr}) {{
+              reviews(first: 100) {{
+                nodes {{
+                  id
+                  databaseId
+                }}
+              }}
+            }}
+          }}
+        }}
+        '''
+        result = json.loads(run_gh(["gh", "api", "graphql", "-f", f"query={query}"]))
+        nodes = result["data"]["repository"]["pullRequest"]["reviews"]["nodes"]
+    else:  # review_comment
+        query = f'''
+        {{
+          repository(owner: "{owner}", name: "{name}") {{
+            pullRequest(number: {pr}) {{
+              comments(first: 100) {{
+                nodes {{
+                  id
+                  databaseId
+                }}
+              }}
+            }}
+          }}
+        }}
+        '''
+        result = json.loads(run_gh(["gh", "api", "graphql", "-f", f"query={query}"]))
+        nodes = result["data"]["repository"]["pullRequest"]["comments"]["nodes"]
+
+    # Find matching node and return databaseId
+    for node in nodes:
+        if node["id"] == node_id:
+            return node["databaseId"]
+
+    raise ValueError(f"Node ID {node_id} not found")
+
+
+def check_acked(comment_id: str, comment_type: str, pr: str) -> bool:
+    """Check if comment has +1 reaction from authenticated user."""
+    try:
+        repo = get_repo_from_git()
+
+        if comment_type == "review_comment":
+            # PR comments are actually issue comments
+            endpoint = f"repos/{repo}/issues/comments/{comment_id}/reactions"
+        else:  # review
+            endpoint = f"repos/{repo}/pulls/{pr}/reviews/{comment_id}/reactions"
+
+        reactions = json.loads(run_gh(["gh", "api", endpoint]))
+
+        # Get current user
+        user = json.loads(run_gh(["gh", "api", "user"]))
+        username = user["login"]
+
+        # Check for +1 from current user
+        for reaction in reactions:
+            if reaction["content"] == "+1" and reaction["user"]["login"] == username:
+                return True
+        return False
+    except Exception as e:
+        print(f"⚠ Could not check ack status for {comment_id}: {e}", file=sys.stderr)
+        return False
+
+
+def list_comments(pr: str, unacked_only: bool = False):
+    """List all PR comments in markdown format."""
+    data = json.loads(
+        run_gh(["gh", "pr", "view", pr, "--json", "number,title,comments,reviews"])
+    )
+
+    print(f"# PR #{data['number']}: {data['title']}\n")
+
+    has_output = False
+
+    # Review comments (inline code comments)
+    for c in data.get("comments", []):
+        if not c.get("body"):
+            continue
+
+        cid = f"RC_{c['id']}"
+        # Convert node ID to database ID for API calls
+        db_id = get_database_id(c["id"], "review_comment", pr)
+        acked = check_acked(db_id, "review_comment", pr)
+
+        if unacked_only and acked:
+            continue
+
+        has_output = True
+        ack_mark = "✓" if acked else "○"
+        file_info = (
+            f"{c.get('path', 'unknown')}:{c.get('line', '?')}" if c.get("path") else ""
+        )
+
+        print(f"## [{ack_mark}] {cid} - @{c['author']['login']}")
+        if file_info:
+            print(f"**File:** {file_info}")
+        print(f"\n{c['body']}\n")
+        if not acked:
+            print(f"*Ack:* `{SELF} ack {pr} {cid}`\n")
+
+    # Reviews (approve/request changes/comment)
+    for r in data.get("reviews", []):
+        if not r.get("body"):
+            continue
+
+        rid = f"R_{r['id']}"
+        # Convert node ID to database ID for API calls
+        db_id = get_database_id(r["id"], "review", pr)
+        acked = check_acked(db_id, "review", pr)
+
+        if unacked_only and acked:
+            continue
+
+        has_output = True
+        ack_mark = "✓" if acked else "○"
+        state = r.get("state", "COMMENTED")
+
+        print(f"## [{ack_mark}] {rid} - @{r['author']['login']} ({state})")
+        print(f"\n{r['body']}\n")
+        if not acked:
+            print(f"*Ack:* `{SELF} ack {pr} {rid}`\n")
+
+    if not has_output:
+        print(
+            "*No comments found*"
+            if not unacked_only
+            else "*No unacknowledged comments*"
+        )
+
+
+def get_comment(pr: str, comment_id: str, save_path: str = None):
+    """Get specific comment with acknowledgment status."""
+    data = json.loads(
+        run_gh(["gh", "pr", "view", pr, "--json", "number,title,comments,reviews"])
+    )
+
+    # Determine type and extract GraphQL ID (after RC_ or R_ prefix)
+    is_review = comment_id.startswith("R_")
+    graphql_id = comment_id.split("_", 1)[1]
+
+    # Find comment by matching the GraphQL ID
+    comments = data.get("reviews" if is_review else "comments", [])
+    comment = next((c for c in comments if c["id"] == graphql_id), None)
+
+    if not comment:
+        print(f"Comment {comment_id} not found", file=sys.stderr)
+        sys.exit(1)
+
+    # Convert node ID to database ID for API calls
+    node_type = "review" if is_review else "review_comment"
+    db_id = get_database_id(comment["id"], node_type, pr)
+    acked = check_acked(db_id, node_type, pr)
+    ack_mark = "✓" if acked else "○"
+
+    # Build output
+    output_lines = []
+    output_lines.append(
+        f"# [{ack_mark}] {comment_id} - @{comment['author']['login']}\n"
+    )
+    output_lines.append(f"**PR:** #{data['number']} - {data['title']}")
+
+    if is_review:
+        output_lines.append(f"**State:** {comment.get('state', 'COMMENTED')}")
+    else:
+        if comment.get("path"):
+            output_lines.append(
+                f"**File:** {comment['path']}:{comment.get('line', '?')}"
+            )
+
+    output_lines.append(f"**URL:** {comment.get('url', 'N/A')}")
+    output_lines.append(f"\n## Comment\n\n{comment['body']}\n")
+
+    if not acked:
+        output_lines.append(f"**Acknowledge:** `{SELF} ack {pr} {comment_id}`")
+
+    output = "\n".join(output_lines)
+
+    # Save to file if requested
+    if save_path:
+        with open(save_path, "w") as f:
+            f.write(output)
+        print(f"✓ Comment saved to {save_path}")
+    else:
+        print(output)
+
+
+def get_latest(pr: str):
+    """Get most recent comment."""
+    data = json.loads(run_gh(["gh", "pr", "view", pr, "--json", "comments,reviews"]))
+
+    # Collect all comments with timestamps
+    all_comments = []
+
+    for c in data.get("comments", []):
+        if c.get("body"):
+            all_comments.append(
+                {
+                    "id": f"RC_{c['id']}",
+                    "created": c.get("createdAt", ""),
+                    "data": c,
+                    "type": "review_comment",
+                }
+            )
+
+    for r in data.get("reviews", []):
+        if r.get("body"):
+            all_comments.append(
+                {
+                    "id": f"R_{r['id']}",
+                    "created": r.get("submittedAt", ""),
+                    "data": r,
+                    "type": "review",
+                }
+            )
+
+    if not all_comments:
+        print("No comments found")
+        return
+
+    # Sort by timestamp, get latest
+    latest = max(all_comments, key=lambda x: x["created"])
+
+    # Use get_comment to display
+    get_comment(pr, latest["id"])
+
+
+def ack_comment(pr: str, comment_id: str):
+    """Acknowledge comment with +1 reaction."""
+    # Fetch PR data to get databaseId
+    data = json.loads(run_gh(["gh", "pr", "view", pr, "--json", "comments,reviews"]))
+
+    # Determine type and extract GraphQL ID
+    is_review = comment_id.startswith("R_")
+    graphql_id = comment_id.split("_", 1)[1]
+
+    # Find comment to get databaseId
+    comments = data.get("reviews" if is_review else "comments", [])
+    comment = next((c for c in comments if c["id"] == graphql_id), None)
+
+    if not comment:
+        print(f"Comment {comment_id} not found", file=sys.stderr)
+        sys.exit(1)
+
+    # Convert node ID to database ID for API call
+    repo = get_repo_from_git()
+    node_type = "review" if is_review else "review_comment"
+    db_id = get_database_id(graphql_id, node_type, pr)
+
+    if is_review:
+        endpoint = f"repos/{repo}/pulls/{pr}/reviews/{db_id}/reactions"
+    else:
+        # PR comments are actually issue comments
+        endpoint = f"repos/{repo}/issues/comments/{db_id}/reactions"
+
+    run_gh(["gh", "api", endpoint, "-X", "POST", "-f", "content=+1"])
+
+    print(f"✓ Acknowledged {comment_id}")
+
+
+def add_comment(pr: str, text: str = None, file_path: str = None):
+    """Add comment to PR from text or file."""
+    if file_path:
+        with open(file_path, "r") as f:
+            text = f.read()
+
+    if not text:
+        raise ValueError("No comment text provided")
+
+    run_gh(["gh", "pr", "comment", pr, "--body", text])
+
+    print(f"✓ Comment added to PR #{pr}")
+
+
+SELF = sys.argv[0]
+"""Absolute path to this script, used in output so agents can copy-paste commands."""
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__, file=sys.stderr)
+        sys.exit(1)
+
+    cmd = sys.argv[1]
+
+    try:
+        if cmd == "list":
+            if len(sys.argv) < 3:
+                print(f"Usage: {SELF} list <pr> [--unacked]", file=sys.stderr)
+                sys.exit(1)
+            pr = sys.argv[2]
+            unacked_only = "--unacked" in sys.argv
+            list_comments(pr, unacked_only)
+
+        elif cmd == "get":
+            if len(sys.argv) < 4:
+                print(
+                    f"Usage: {SELF} get <pr> <comment_id> [--save <path>]",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+            pr = sys.argv[2]
+            comment_id = sys.argv[3]
+            save_path = None
+
+            if "--save" in sys.argv:
+                save_idx = sys.argv.index("--save") + 1
+                if save_idx >= len(sys.argv):
+                    print("Error: --save requires a path argument", file=sys.stderr)
+                    sys.exit(1)
+                save_path = sys.argv[save_idx]
+
+            get_comment(pr, comment_id, save_path)
+
+        elif cmd == "latest":
+            if len(sys.argv) < 3:
+                print(f"Usage: {SELF} latest <pr>", file=sys.stderr)
+                sys.exit(1)
+            get_latest(sys.argv[2])
+
+        elif cmd == "ack":
+            if len(sys.argv) < 4:
+                print(f"Usage: {SELF} ack <pr> <comment_id>", file=sys.stderr)
+                sys.exit(1)
+            ack_comment(sys.argv[2], sys.argv[3])
+
+        elif cmd == "comment":
+            if len(sys.argv) < 4:
+                print(
+                    f"Usage: {SELF} comment <pr> <text> | comment <pr> --file <path>",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+            pr = sys.argv[2]
+            if "--file" in sys.argv:
+                file_idx = sys.argv.index("--file") + 1
+                if file_idx >= len(sys.argv):
+                    print("Error: --file requires a path argument", file=sys.stderr)
+                    sys.exit(1)
+                add_comment(pr, file_path=sys.argv[file_idx])
+            else:
+                add_comment(pr, text=" ".join(sys.argv[3:]))
+
+        else:
+            print(f"Unknown command: {cmd}", file=sys.stderr)
+            print(__doc__, file=sys.stderr)
+            sys.exit(1)
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e.stderr if e.stderr else str(e)}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

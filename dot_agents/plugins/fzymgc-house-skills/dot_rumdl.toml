@@ -1,0 +1,17 @@
+# rumdl configuration file
+
+[global]
+exclude = [
+    ".git",
+    ".github",
+    "node_modules",
+    ".serena",
+    "CHANGELOG.md",
+    "LICENSE.md",
+]
+respect-gitignore = true
+
+[MD013]
+line-length = 140
+code-blocks = false
+tables = false

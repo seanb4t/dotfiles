@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"data\":{\"type\":\"\"}}\n"
+      }
+    ]
+  }
+}

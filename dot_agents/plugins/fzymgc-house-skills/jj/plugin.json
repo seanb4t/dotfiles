@@ -1,0 +1,30 @@
+{
+  "name": "jj",
+  "version": "0.1.0",
+  "description": "Jujutsu (jj) VCS workflow guidance for colocated and standalone repos",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-jj-detect",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/guard-git-mutating",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

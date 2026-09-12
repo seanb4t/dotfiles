@@ -1,0 +1,61 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""PostToolUse hook: auto-format edited files.
+
+Reads hook JSON from stdin, extracts file_path, runs appropriate formatter.
+Exits 0 regardless of formatter success (best-effort).
+"""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+
+def main() -> None:
+    raw = sys.stdin.read()
+    if not raw.strip():
+        sys.exit(0)
+
+    try:
+        data = json.loads(raw)
+        file_path = data.get("tool_input", {}).get("file_path", "")
+    except (json.JSONDecodeError, AttributeError):
+        sys.exit(0)
+
+    if not file_path:
+        sys.exit(0)
+
+    path = Path(file_path)
+    if not path.is_file():
+        sys.exit(0)
+
+    suffix = path.suffix.lower()
+
+    try:
+        if suffix == ".py":
+            subprocess.run(
+                ["ruff", "check", "--fix", "--quiet", str(path)],
+                capture_output=True,
+            )
+            subprocess.run(
+                ["ruff", "format", "--quiet", str(path)],
+                capture_output=True,
+            )
+        elif suffix == ".md":
+            subprocess.run(
+                ["rumdl", "check", "--fix", str(path)],
+                capture_output=True,
+            )
+    except OSError:
+        pass  # formatter not installed or not executable — best-effort, skip
+
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

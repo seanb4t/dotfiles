@@ -1,0 +1,32 @@
+{
+  "name": "jj",
+  "version": "0.1.0",
+  "description": "Jujutsu (jj) VCS workflow guidance for colocated and standalone repos",
+  "author": {
+    "name": "Sean Brandt",
+    "email": "4678+seanb4t@users.noreply.github.com",
+    "url": "https://github.com/seanb4t"
+  },
+  "homepage": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "repository": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "license": "UNLICENSED",
+  "keywords": ["jj", "jujutsu", "git", "vcs"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "JJ",
+    "shortDescription": "Jujutsu workflow guidance for colocated repositories.",
+    "longDescription": "Codex wrapper for the jj plugin. Reuses the existing jujutsu skill and keeps command and hook assets in the wrapper for repository-local workflow guidance.",
+    "developerName": "fzymgc-house",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Run", "Write"],
+    "websiteURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "privacyPolicyURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "termsOfServiceURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "defaultPrompt": [
+      "Explain the current jj workspace state and next safe commands.",
+      "Help me rebase this change in a colocated jj plus git repo.",
+      "Show the safest way to finish and push this jj change."
+    ],
+    "brandColor": "#1D4ED8"
+  }
+}

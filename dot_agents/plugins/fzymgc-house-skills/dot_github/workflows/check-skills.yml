@@ -1,0 +1,113 @@
+name: Check Skills
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Check release-please config covers all skills
+        run: |
+          # Auto-discover plugin directories that contain a skills/ subdirectory.
+          # This avoids hardcoding plugin names — new plugins are found automatically.
+          skill_find_paths=()
+          for d in */skills; do
+            [ -d "$d" ] && skill_find_paths+=("$d")
+          done
+          if [ ${#skill_find_paths[@]} -eq 0 ]; then
+            echo "::error::No plugin skill directories found"
+            exit 1
+          fi
+          actual=$(find "${skill_find_paths[@]}" -name SKILL.md -exec dirname {} \; 2>/dev/null | sort -u)
+          # release-please-config.json may have plugin-level keys (e.g., "jj")
+          # or skill-level keys (e.g., "homelab/skills/grafana"). This script
+          # handles both by expanding plugin-level keys to their skill dirs.
+          #
+          # Extract all config keys, then resolve to skill directories:
+          # - Keys with /skills/ are skill-level entries (use directly)
+          # - Other keys (plugin-level) expand to their skill dirs
+          all_keys=$(jq -r '.packages | keys[] | select(. != ".")' release-please-config.json)
+          # Validate keys and expand plugin-level keys to skill dirs in a single
+          # pass. The while loop runs in the main shell (here-string, no pipe)
+          # so exit 1 actually aborts the step; output goes to a temp file that
+          # is sorted afterwards.
+          configured_tmp=$(mktemp)
+          while read -r key; do
+            if [[ "$key" =~ [^a-zA-Z0-9_./-] ]]; then
+              echo "::error::Unsafe character in release-please key: $key" >&2
+              rm -f "$configured_tmp"
+              exit 1
+            fi
+            if [[ "$key" == *".."* ]]; then
+              echo "::error::key '$key' contains '..' path traversal" >&2
+              rm -f "$configured_tmp"
+              exit 1
+            fi
+            case "$key" in
+              */skills/*) echo "$key" ;;
+              *) find "$key/skills" -name SKILL.md -exec dirname {} \; 2>/dev/null ;;
+            esac
+          done <<< "$all_keys" >> "$configured_tmp"
+          configured=$(sort -u "$configured_tmp"); rm -f "$configured_tmp"
+          if ! diff <(echo "$actual") <(echo "$configured"); then
+            echo "::error::Skill directories and release-please-config.json are out of sync"
+            exit 1
+          fi
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install jj
+        run: |
+          JJ_VERSION="v0.28.2"
+          curl -sSfL "https://github.com/jj-vcs/jj/releases/download/${JJ_VERSION}/jj-${JJ_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/jj.tar.gz
+          tar xzf /tmp/jj.tar.gz -C /usr/local/bin --strip-components=0 ./jj
+          rm /tmp/jj.tar.gz
+          jj --version
+      - name: Run hook tests
+        run: uv run --with pytest pytest .claude/hooks/tests/ jj/hooks/tests/ tests/ -v --import-mode=importlib
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Install rumdl
+        run: |
+          RUMDL_VERSION="v0.1.43"
+          ASSET="rumdl-${RUMDL_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          gh release download "$RUMDL_VERSION" --repo rvben/rumdl \
+            --pattern "$ASSET" --pattern "${ASSET}.sha256" --dir /tmp
+          cd /tmp && sha256sum -c "${ASSET}.sha256"
+          tar xz -C /usr/local/bin rumdl < "/tmp/${ASSET}"
+          rm -f "/tmp/${ASSET}" "/tmp/${ASSET}.sha256"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint markdown
+        run: |
+          rumdl check homelab/skills/*/SKILL.md \
+            pr-review/skills/*/SKILL.md \
+            jj/skills/*/SKILL.md \
+            superpowers/skills/using-worktrees/SKILL.md \
+            superpowers/skills/requesting-code-review/SKILL.md \
+            superpowers/references/vcs-preamble.md \
+            jj/commands/*.md \
+            pr-review/agents/*.md
+          # Note: superpowers skills that are lightly modified from upstream
+          # (brainstorming, writing-plans, finishing-a-development-branch,
+          # subagent-driven-development) are excluded from lint to avoid
+          # diverging from upstream style, which would complicate sync-upstream.
+      - name: Validate evals against schema
+        run: |
+          pip install 'check-jsonschema>=0.37,<0.38'
+          check-jsonschema --schemafile pr-review/evals/evals.schema.json \
+            pr-review/evals/evals.json \
+            jj/evals/evals.json

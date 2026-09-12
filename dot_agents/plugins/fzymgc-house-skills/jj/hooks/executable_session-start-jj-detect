@@ -1,0 +1,202 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""SessionStart hook: detect jj repo and prime context.
+
+Checks if the working directory is inside a jj repo. If so, prints
+context about the repo type (pure jj vs colocated) and VCS rules
+to stderr, which becomes additional context for the session.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import shutil
+import subprocess
+import sys
+
+
+def main() -> None:
+    try:
+        raw = sys.stdin.read()
+        data = json.loads(raw) if raw.strip() else {}
+    except (json.JSONDecodeError, OSError):
+        sys.exit(0)
+
+    cwd = data.get("cwd", os.getcwd())
+
+    # Walk up to find .jj/
+    jj_root = None
+    check_dir = cwd
+    for _ in range(50):
+        if os.path.isdir(os.path.join(check_dir, ".jj")):
+            jj_root = check_dir
+            break
+        parent = os.path.dirname(check_dir)
+        if parent == check_dir:
+            break
+        check_dir = parent
+
+    if jj_root is None:
+        sys.exit(0)
+
+    # Determine repo type
+    has_git = os.path.isdir(os.path.join(jj_root, ".git"))
+    repo_type = "colocated jj+git" if has_git else "pure jj"
+
+    # Check jj availability
+    jj_path = shutil.which("jj")
+    if jj_path is None:
+        print(
+            f"jj repo detected ({repo_type}) at {jj_root} but jj is not installed."
+        )
+        sys.exit(0)
+
+    # Get jj version for context
+    jj_version = ""
+    try:
+        result = subprocess.run(
+            ["jj", "--no-pager", "version"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode == 0:
+            jj_version = result.stdout.strip()
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+    # Get current workspace info
+    workspace_info = ""
+    try:
+        result = subprocess.run(
+            ["jj", "--no-pager", "workspace", "list"],
+            cwd=jj_root, capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode == 0:
+            ws_count = len(result.stdout.strip().splitlines())
+            workspace_info = f"{ws_count} workspace(s)"
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+    # Get active work summary (unpushed, non-empty changes)
+    active_work = ""
+    try:
+        result = subprocess.run(
+            ["jj", "--no-pager", "--ignore-working-copy", "log", "-r",
+             "mine() & ~ancestors(trunk()) & ~empty()", "--no-graph",
+             "-T", r'change_id.short(8) ++ " " ++ description.first_line() ++ "\n"',
+             "-n", "5"],
+            cwd=jj_root, capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            active_work = result.stdout.strip()
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+    # Check for conflicts
+    conflicts = ""
+    try:
+        result = subprocess.run(
+            ["jj", "--no-pager", "--ignore-working-copy", "log", "-r",
+             "conflicts()", "--no-graph",
+             "-T", r'change_id.short(8) ++ " " ++ description.first_line() ++ "\n"',
+             "-n", "5"],
+            cwd=jj_root, capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            conflicts = result.stdout.strip()
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+    # Build context message — write to stdout so SessionStart hook injects it
+    # into the model's context (stderr only shows in user transcript)
+    parts = [f"This is a {repo_type} repo"]
+    if jj_version:
+        parts.append(jj_version)
+    if workspace_info:
+        parts.append(workspace_info)
+    lines = [
+        ". ".join(parts) + ".",
+        "",
+        "## REQUIRED: Load jj skill",
+        "",
+        "You MUST invoke the Skill tool with skill=\"jj:jujutsu\" BEFORE your"
+        " first response in this session. The skill contains workspace"
+        " management, conflict resolution, and advanced jj workflows"
+        " beyond this quick reference.",
+        "",
+        "## VCS Policy: jj-first (enforced by PreToolUse guard hook)",
+        "",
+        "You MUST use jj commands for all VCS operations in this repo.",
+        "You MUST NOT use mutating git commands (they are blocked by a PreToolUse hook).",
+        "You SHOULD prefer jj equivalents over read-only git commands (log, diff, status, etc.).",
+        "You MAY use git plumbing commands (rev-parse, ls-files) and gh CLI.",
+        "You MUST pass --no-pager on every jj command in agent environments.",
+        "",
+        "## Quick Reference: git → jj",
+        "",
+        "Everyday workflow:",
+        "  git status        → jj status (or jj st)",
+        "  git diff           → jj diff (working copy) / jj diff -r REV",
+        "  git add + commit   → jj commit -m 'msg' (auto-tracks all files)",
+        "  git commit --amend → jj describe -m 'msg' (edit current change description)",
+        "  git log            → jj log (shows change IDs, conflicts, divergence)",
+        "  git show COMMIT    → jj show REV (or jj diff -r REV)",
+        "",
+        "Branching & navigation:",
+        "  git checkout BRANCH → jj new BOOKMARK (new change on top) / jj edit REV (edit in-place)",
+        "  git switch -c NAME  → jj new; jj bookmark create NAME -r @",
+        "  git branch           → jj bookmark list",
+        "  git branch -d NAME   → jj bookmark delete NAME",
+        "",
+        "History rewriting:",
+        "  git rebase --onto D S → jj rebase -s S -o D (-d is deprecated; use -o / --onto)",
+        "  git cherry-pick REV   → jj duplicate REV (whole commit) / jj restore --from REV PATH (files)",
+        "  git revert REV        → jj backout -r REV",
+        "  git reset --soft HEAD~ → jj squash --into @-- (fold into grandparent)",
+        "  git stash              → not needed (@ is always a commit; jj new to start fresh)",
+        "",
+        "Remote operations:",
+        "  git fetch   → jj git fetch",
+        "  git pull    → jj git fetch (then jj rebase -o BOOKMARK if needed)",
+        "  git push    → jj git push (pushes bookmarks with remote tracking)",
+        "",
+        "Workspace (worktrees):",
+        "  git worktree add → jj workspace add PATH --name NAME",
+        "  git worktree list → jj workspace list",
+        "  git worktree remove → jj workspace forget NAME",
+        "",
+        "## Key jj Concepts",
+        "",
+        "  @ = working-copy commit (often empty until you edit files)",
+        "  @- = parent of working copy (your most recent meaningful commit)",
+        "  Change ID (e.g. kxqpmsqz) is stable across rebases; commit ID changes",
+        "  All files are auto-tracked — no staging area, no 'git add'",
+        "  Working copy is always a commit — no stashing needed",
+        "",
+        "## Escape Hatch",
+        "",
+        "  If git is genuinely required, append '# jj-exempt' to the command.",
+        "  This escalates to human approval (ask) — it is NOT a free pass.",
+    ]
+    if has_git:
+        lines.append("")
+        lines.append("## Colocated Repo Notes")
+        lines.append("")
+        lines.append("  You MAY use read-only git plumbing (rev-parse, ls-files) and gh CLI.")
+        lines.append("  You SHOULD use jj log/diff/status/show instead of git equivalents")
+        lines.append("  (the guard hook will advise when better jj alternatives exist).")
+
+    if active_work:
+        lines.append("")
+        lines.append(f"## Active Work (unpushed, non-empty)\n{active_work}")
+    if conflicts:
+        lines.append("")
+        lines.append(f"## Commits with Conflicts\n{conflicts}")
+
+    print("\n".join(lines))
+
+
+if __name__ == "__main__":
+    main()

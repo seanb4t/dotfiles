@@ -1,0 +1,32 @@
+{
+  "name": "pr-review",
+  "version": "1.0.0",
+  "description": "PR review workflow with specialized review agents and automated fix loop",
+  "author": {
+    "name": "Sean Brandt",
+    "email": "4678+seanb4t@users.noreply.github.com",
+    "url": "https://github.com/seanb4t"
+  },
+  "homepage": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "repository": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "license": "UNLICENSED",
+  "keywords": ["pull-request", "review", "beads", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PR Review",
+    "shortDescription": "Structured PR review and review-finding workflows.",
+    "longDescription": "Codex wrapper for the PR review plugin. Exposes the existing review, fix-loop, and comment-response skills while keeping the agent prompt files available for Codex spawn_agent shims.",
+    "developerName": "fzymgc-house",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Run", "Write"],
+    "websiteURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "privacyPolicyURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "termsOfServiceURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "defaultPrompt": [
+      "Review PR #123 for code, tests, and security issues.",
+      "Work through the open findings for PR #123.",
+      "Draft responses to GitHub review comments on PR #123."
+    ],
+    "brandColor": "#B45309"
+  }
+}

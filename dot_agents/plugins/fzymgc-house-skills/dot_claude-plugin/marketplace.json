@@ -1,0 +1,32 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "fzymgc-house-skills",
+  "version": "1.7.0",
+  "description": "Skills for use with fzymgc-house self-hosted cluster",
+  "owner": {
+    "name": "Sean Brandt",
+    "email": "4678+seanb4t@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "homelab",
+      "description": "Infrastructure skills for homelab cluster (Grafana, Terraform)",
+      "source": "./homelab"
+    },
+    {
+      "name": "pr-review",
+      "description": "PR review workflow with specialized review agents and automated fix loop",
+      "source": "./pr-review"
+    },
+    {
+      "name": "jj",
+      "description": "Jujutsu (jj) VCS workflow guidance for colocated repos",
+      "source": "./jj"
+    },
+    {
+      "name": "superpowers",
+      "description": "Development workflow skills with git and jj VCS support (fork of obra/superpowers v5.0.2)",
+      "source": "./superpowers"
+    }
+  ]
+}

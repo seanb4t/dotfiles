@@ -1,0 +1,21 @@
+{
+  ".": "1.7.0",
+  "homelab": "1.0.0",
+  "homelab/skills/grafana": "1.2.0",
+  "homelab/skills/terraform": "1.2.0",
+  "homelab/skills/skill-qa": "1.2.0",
+  "pr-review": "2.3.0",
+  "pr-review/skills/review-pr": "2.2.0",
+  "pr-review/skills/address-findings": "2.2.0",
+  "pr-review/skills/respond-to-comments": "2.2.0",
+  "jj": "0.5.1",
+  "jj/skills/jujutsu": "0.6.0",
+  "superpowers": "0.3.0",
+  "superpowers/skills/using-worktrees": "0.3.0",
+  "superpowers/skills/finishing-a-development-branch": "0.3.0",
+  "superpowers/skills/requesting-code-review": "0.3.0",
+  "superpowers/skills/brainstorming": "0.3.0",
+  "superpowers/skills/writing-plans": "0.3.0",
+  "superpowers/skills/executing-plans": "0.2.0",
+  "superpowers/skills/subagent-driven-development": "0.3.0"
+}

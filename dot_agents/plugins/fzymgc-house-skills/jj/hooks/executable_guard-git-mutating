@@ -1,0 +1,267 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""PreToolUse hook: enforce jj-first VCS usage in jj repos.
+
+Four-tier response model:
+1. Mutating git commands (commit, push, rebase, ...) — DENY with jj equivalent
+2. Read-only git with better jj alternatives (log, diff, status, ...) — ALLOW + educate
+3. Interactive jj commands (split, resolve, squash -i) — ASK (human decides)
+4. Plumbing git commands (rev-parse, ls-files, ...) — ALLOW silently
+
+Escape hatch: include '# jj-exempt' in the command to escalate from DENY to ASK
+(requires human approval, not a free pass).
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import sys
+
+# Mutating git subcommands that should use jj equivalents (DENY)
+MUTATING_SUBCOMMANDS = {
+    "add",
+    "branch",
+    "checkout",
+    "cherry-pick",
+    "clean",
+    "clone",
+    "commit",
+    "fetch",
+    "init",
+    "merge",
+    "mv",
+    "pull",
+    "push",
+    "rebase",
+    "reset",
+    "restore",
+    "revert",
+    "rm",
+    "stash",
+    "switch",
+    "tag",
+    "worktree",
+}
+
+# Read-only git subcommands that work but have better jj equivalents (ADVISE)
+ADVISORY_SUBCOMMANDS = {
+    "blame": "jj file annotate",
+    "diff": "jj diff (understands working-copy commit; use jj diff -r X for arbitrary revisions)",
+    "log": "jj log (shows change IDs, working copy, divergent/conflicted state)",
+    "show": "jj show (or jj diff -r <rev>)",
+    "status": "jj status (shows working-copy changes relative to parent)",
+}
+
+# Truly read-only git commands with no meaningful jj advantage — always silent
+# rev-parse, ls-files, ls-tree, remote (read), config (read), describe, cat-file
+SILENT_SUBCOMMANDS = {
+    "cat-file",
+    "config",
+    "describe",
+    "ls-files",
+    "ls-remote",
+    "ls-tree",
+    "remote",
+    "rev-list",
+    "rev-parse",
+}
+
+# Pattern: "git <subcommand>" possibly after &&, ||, ;, |, $(, etc.
+# Handles: git commit, git -C /path commit, git --no-pager commit, $(git commit)
+GIT_CMD_RE = re.compile(
+    r"(?:^|[;&|]\s*|&&\s*|\|\|\s*|\$\(\s*)"  # command separator or start
+    r"git\s+"  # "git " with whitespace
+    r"(?:-\S+(?:\s+\S+)?\s+)*"  # optional flags (handles -C /path as two tokens)
+    r"(\w[\w-]*)",  # capture the subcommand
+)
+
+
+def _check_interactive_jj(command: str) -> list[str]:
+    """Check for interactive jj commands that hang in agent environments."""
+    found = []
+    # jj split (always interactive unless given paths — but even with paths,
+    # it opens a diff editor by default)
+    if re.search(r"(?:^|[;&|]\s*|&&\s*|\|\|\s*)\s*jj\s+split\b", command):
+        found.append("jj split")
+    # jj resolve (opens merge tool)
+    if re.search(r"(?:^|[;&|]\s*|&&\s*|\|\|\s*)\s*jj\s+resolve\b", command):
+        found.append("jj resolve")
+    # jj squash -i / --interactive
+    if re.search(r"(?:^|[;&|]\s*|&&\s*|\|\|\s*)\s*jj\s+squash\s+.*(?:-i\b|--interactive\b)", command):
+        found.append("jj squash -i")
+    return found
+
+
+def main() -> None:
+    try:
+        raw = sys.stdin.read()
+        data = json.loads(raw) if raw.strip() else {}
+        tool_input = data.get("tool_input") or {}
+        command = tool_input.get("command", "") if isinstance(tool_input, dict) else ""
+    except (json.JSONDecodeError, OSError, AttributeError):
+        # Can't parse input — allow by default (best-effort)
+        sys.exit(0)
+    if not command:
+        sys.exit(0)
+
+    # Escape hatch: explicit opt-out, but require human approval
+    if "# jj-exempt" in command:
+        result = {
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "ask",
+                "permissionDecisionReason": (
+                    "jj-exempt: agent is requesting to use a raw git command "
+                    "in a jj repo. Review the command and approve or deny."
+                ),
+            }
+        }
+        json.dump(result, sys.stdout)
+        return
+
+    cwd = data.get("cwd", "")
+    if not cwd:
+        sys.exit(0)
+
+    # Check if .jj/ exists in cwd or any parent (walk up to find repo root)
+    jj_found = False
+    check_dir = cwd
+    for _ in range(50):  # depth limit
+        if os.path.isdir(os.path.join(check_dir, ".jj")):
+            jj_found = True
+            break
+        parent = os.path.dirname(check_dir)
+        if parent == check_dir:
+            break
+        check_dir = parent
+
+    if not jj_found:
+        # Not a jj repo — allow everything
+        sys.exit(0)
+
+    # Classify all git subcommands in the command string
+    mutating_found = []
+    advisory_found = {}  # subcommand -> jj equivalent
+    for match in GIT_CMD_RE.finditer(command):
+        subcommand = match.group(1)
+        if subcommand in MUTATING_SUBCOMMANDS:
+            mutating_found.append(f"git {subcommand}")
+        elif subcommand in ADVISORY_SUBCOMMANDS:
+            advisory_found[f"git {subcommand}"] = ADVISORY_SUBCOMMANDS[subcommand]
+        # SILENT_SUBCOMMANDS and unknown subcommands: no action
+
+    # Also check for interactive jj commands that hang in agent environments
+    interactive_jj_found = _check_interactive_jj(command)
+
+    if not mutating_found and not interactive_jj_found and not advisory_found:
+        # Safe command, no advice needed — allow silently
+        sys.exit(0)
+
+    # Advisory-only: allow but educate via systemMessage
+    if advisory_found and not mutating_found and not interactive_jj_found:
+        hints = [f"  {cmd} → {jj_alt}" for cmd, jj_alt in advisory_found.items()]
+        result = {
+            "systemMessage": (
+                "Tip: jj has better equivalents for these read-only git commands:\n"
+                + "\n".join(hints)
+                + "\njj commands understand the working-copy commit model and show "
+                "change IDs, conflicts, and divergence. Consider switching."
+            ),
+        }
+        json.dump(result, sys.stdout)
+        return
+
+    if interactive_jj_found and not mutating_found:
+        alternatives = {
+            "jj split": "use jj squash --from <rev> <paths> to move specific files",
+            "jj resolve": "edit conflict markers directly, then jj squash",
+            "jj squash -i": "use jj squash (non-interactive) or jj squash <paths>",
+        }
+        hints = []
+        for cmd in interactive_jj_found:
+            hint = alternatives.get(cmd, "use non-interactive alternative")
+            hints.append(f"  {cmd} → {hint}")
+        reason = (
+            f"Interactive jj command detected: {', '.join(interactive_jj_found)}.\n"
+            "These commands open an editor/TUI and will hang in agent environments.\n"
+            "Non-interactive alternatives:\n" + "\n".join(hints)
+        )
+        result = {
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "ask",
+                "permissionDecisionReason": reason,
+            }
+        }
+        try:
+            json.dump(result, sys.stdout)
+        except OSError:
+            sys.exit(2)
+        return
+
+    # Build the jj equivalents hint
+    equivalents = {
+        "git add": "jj (auto-tracks new files)",
+        "git branch": "jj bookmark",
+        "git checkout": "jj edit / jj new",
+        "git cherry-pick": "jj rebase",
+        "git clean": "jj (not needed — untracked files are auto-managed)",
+        "git clone": "jj git clone",
+        "git commit": "jj commit",
+        "git fetch": "jj git fetch",
+        "git init": "jj git init",
+        "git merge": "jj new A B",
+        "git mv": "mv (jj auto-tracks renames)",
+        "git pull": "jj git fetch",
+        "git push": "jj git push",
+        "git rebase": "jj rebase",
+        "git reset": "jj restore / jj undo",
+        "git restore": "jj restore",
+        "git revert": "jj backout",
+        "git rm": "rm (jj auto-tracks deletions)",
+        "git stash": "jj (not needed — working copy is a commit)",
+        "git switch": "jj edit / jj new",
+        "git tag": "jj tag (or jj bookmark for lightweight refs)",
+        "git worktree": "jj workspace",
+    }
+
+    hints = []
+    for cmd in mutating_found:
+        if cmd in equivalents:
+            hints.append(f"  {cmd} → {equivalents[cmd]}")
+        else:
+            hints.append(f"  {cmd} → use jj equivalent")
+
+    reason = (
+        f"BLOCKED: Mutating git command in jj repo: {', '.join(mutating_found)}.\n"
+        f"jj equivalents:\n" + "\n".join(hints)
+    )
+
+    system_msg = (
+        f"This is a jj repo. Use jj equivalents instead of git:\n"
+        + "\n".join(hints)
+        + "\nIf git is genuinely required, add '# jj-exempt' comment to the command (requires human approval)."
+    )
+
+    result = {
+        "hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "permissionDecision": "deny",
+            "permissionDecisionReason": reason,
+        },
+        "systemMessage": system_msg,
+    }
+    try:
+        json.dump(result, sys.stdout)
+    except OSError:
+        # Broken pipe — framework closed stdout; exit 2 to block the command
+        # rather than silently allowing it
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()

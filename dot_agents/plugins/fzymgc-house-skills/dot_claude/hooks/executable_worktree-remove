@@ -1,0 +1,358 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""WorktreeRemove hook: remove worktrees from sibling directory.
+
+Input:  JSON on stdin with "path" field.
+Output: none (exit 0 on success, exit 1 on failure).
+
+Behavior:
+  1. Validate path is under a *_worktrees/ parent (reject traversal, symlinks)
+  2. Detect repo root (from git/jj, or inferred from _worktrees path)
+  3. VCS-aware workspace deregistration:
+     - jj repos (.jj/): jj workspace forget worktree-<name>
+     - git repos (.git/): git worktree remove, then git worktree prune
+  4. shutil.rmtree() the worktree directory
+  5. Clean up empty parent directory
+
+Safety: exits cleanly (0) for nonexistent paths. Warns but continues
+        when VCS deregistration fails — directory is always removed.
+"""
+
+from __future__ import annotations
+
+import json
+import shutil
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from worktree_helpers import (
+    cleanup_empty_parent,
+    detect_repo_root,
+    run_cmd,
+    sanitize_for_output,
+    validate_safe_name,
+)
+
+
+def _jj_cleanup(repo_root: Path, workspace_name: str) -> bool:
+    """Forget the jj workspace for the given worktree name.
+
+    Returns True if forget failed (metadata leak), False on success.
+    """
+    jj_workspace = f"worktree-{workspace_name}"
+
+    if shutil.which("jj") is None:
+        print(
+            f"WARNING: .jj/ found but jj not installed — workspace metadata not cleaned "
+            f"(run: jj workspace forget {sanitize_for_output(jj_workspace)} "
+            f"from {sanitize_for_output(str(repo_root))} after reinstalling jj)",
+            file=sys.stderr,
+        )
+        return False  # directory removal still succeeds; metadata leak is advisory
+
+    # Check workspace list first
+    ws_list_result = run_cmd(["jj", "--no-pager", "workspace", "list"], cwd=repo_root)
+    if ws_list_result.returncode != 0:
+        ws_err_msg = sanitize_for_output(ws_list_result.stderr.strip())
+        print(
+            f"WARNING: jj workspace list failed: {ws_err_msg or '(no details)'} — "
+            f"attempting workspace forget anyway for {sanitize_for_output(jj_workspace)}",
+            file=sys.stderr,
+        )
+    else:
+        ws_list = ws_list_result.stdout
+        ws_with_colon = f"{jj_workspace}:"
+        if ws_with_colon not in ws_list:
+            if jj_workspace in ws_list:
+                print(
+                    f"WARNING: workspace '{sanitize_for_output(jj_workspace)}' found in "
+                    f"jj workspace list but format differs from expected (missing colon "
+                    f"separator) — attempting forget anyway",
+                    file=sys.stderr,
+                )
+            else:
+                # Not listed — attempt forget anyway (idempotent)
+                print(
+                    f"INFO: workspace '{sanitize_for_output(jj_workspace)}' not found in "
+                    f"jj workspace list output — attempting forget anyway (idempotent)",
+                    file=sys.stderr,
+                )
+
+    # Determine if workspace appeared in the list (or if listing failed, assume it might be listed)
+    ws_was_listed = (
+        ws_list_result.returncode != 0  # list failed — can't confirm absence
+        or ws_with_colon in (ws_list_result.stdout or "")
+        or jj_workspace in (ws_list_result.stdout or "")
+    )
+
+    forget_result = run_cmd(
+        ["jj", "--no-pager", "workspace", "forget", jj_workspace], cwd=repo_root
+    )
+    if forget_result.returncode != 0:
+        jj_err = sanitize_for_output(forget_result.stderr.strip()[:500])
+        if ws_was_listed:
+            # Workspace was registered but forget failed — real metadata leak
+            print(
+                f"ERROR: jj workspace forget failed for "
+                f"{sanitize_for_output(jj_workspace)}: {jj_err}; "
+                f"workspace directory will still be removed "
+                f"(run 'jj workspace forget {sanitize_for_output(jj_workspace)}' "
+                f"manually to clean up)",
+                file=sys.stderr,
+            )
+            return True  # jj_forget_failed — metadata leak
+        else:
+            # Workspace was not listed — forget failure is expected, not a leak
+            print(
+                f"INFO: jj workspace forget failed for "
+                f"{sanitize_for_output(jj_workspace)} (workspace was not registered): "
+                f"{jj_err}",
+                file=sys.stderr,
+            )
+            return False  # no metadata leak
+
+    return False  # success
+
+
+def main() -> int:
+    try:
+        raw = sys.stdin.read()
+    except OSError as exc:
+        print(f"ERROR: failed to read stdin: {exc}", file=sys.stderr)
+        return 1
+    try:
+        data = json.loads(raw) if raw.strip() else {}
+    except json.JSONDecodeError as exc:
+        print(
+            f"ERROR: failed to parse JSON input ({exc}) — skipping removal",
+            file=sys.stderr,
+        )
+        return 1
+
+    worktree_path_str: str = data.get("path", "")
+    if not worktree_path_str:
+        print(
+            "ERROR: no path field in WorktreeRemove input — skipping removal",
+            file=sys.stderr,
+        )
+        return 1
+
+    worktree_path = Path(worktree_path_str)
+    if not worktree_path.is_dir():
+        print(
+            f"{{\"warning\":\"worktree directory already removed: "
+            f"{sanitize_for_output(str(worktree_path))}\"}}",
+            file=sys.stderr,
+        )
+        return 0
+
+    # Canonicalize path to prevent traversal via ../ segments
+    try:
+        worktree_path = worktree_path.resolve(strict=True)
+    except (OSError, RuntimeError) as exc:
+        print(
+            f"ERROR: could not canonicalize path "
+            f"'{sanitize_for_output(worktree_path_str)}': "
+            f"{sanitize_for_output(str(exc)[:500])}",
+            file=sys.stderr,
+        )
+        return 1
+
+    # Validate basename — lenient: warn but allow non-conforming names
+    workspace_name = worktree_path.name
+    try:
+        validate_safe_name(workspace_name, "worktree name")
+    except ValueError:
+        print(
+            f"WARNING: worktree name '{sanitize_for_output(workspace_name)}' "
+            f"contains unusual characters — proceeding with removal",
+            file=sys.stderr,
+        )
+
+    # Detect repo root — fallback: infer from _worktrees parent
+    # Use script's CWD (caller's working directory), not the worktree path,
+    # because git rev-parse from inside a worktree returns the worktree as root.
+    repo_root_inferred = False
+    try:
+        repo_root = detect_repo_root(cwd=Path.cwd())
+        # Defensive: if CWD was inside a worktree, detect_repo_root may return
+        # the worktree directory. Check if the result looks like it's inside
+        # a _worktrees/ parent and, if so, infer the real repo root.
+        if repo_root.parent.name.endswith("_worktrees"):
+            inferred_name = repo_root.parent.name[: -len("_worktrees")]
+            inferred_root = repo_root.parent.parent / inferred_name
+            if inferred_root.is_dir() and (
+                (inferred_root / ".jj").is_dir() or (inferred_root / ".git").is_dir()
+            ):
+                print(
+                    f"WARNING: detect_repo_root returned a worktree directory "
+                    f"'{sanitize_for_output(str(repo_root))}' — inferred actual repo root as "
+                    f"'{sanitize_for_output(str(inferred_root))}'",
+                    file=sys.stderr,
+                )
+                repo_root = inferred_root
+                repo_root_inferred = True
+    except RuntimeError as exc:
+        root_err = sanitize_for_output(str(exc)[:500])
+        worktrees_dir = worktree_path.parent
+        inferred_name = worktrees_dir.name
+        inferred_root_parent = worktrees_dir.parent
+        if inferred_name.endswith("_worktrees"):
+            repo_name_inferred = inferred_name[: -len("_worktrees")]
+            repo_root = inferred_root_parent / repo_name_inferred
+            if not repo_root.is_dir():
+                print(
+                    f"ERROR: inferred repo root "
+                    f"'{sanitize_for_output(str(repo_root))}' does not exist "
+                    f"— refusing removal for safety",
+                    file=sys.stderr,
+                )
+                print(
+                    f"Manual cleanup required: rm -rf "
+                    f"'{sanitize_for_output(str(worktree_path))}'",
+                    file=sys.stderr,
+                )
+                return 1
+            repo_root_inferred = True
+            print(
+                f"WARNING: detect_repo_root failed — inferred repo root as "
+                f"'{sanitize_for_output(str(repo_root))}' from worktree path "
+                f"(detect_repo_root: {root_err})",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                f"ERROR: could not determine repo root and path does not match "
+                f"expected _worktrees pattern — refusing removal for safety",
+                file=sys.stderr,
+            )
+            print(
+                f"Manual cleanup required: rm -rf "
+                f"'{sanitize_for_output(str(worktree_path))}'",
+                file=sys.stderr,
+            )
+            return 1
+
+    # Validate repo name and that path is inside expected sibling directory
+    repo_name = repo_root.name
+    try:
+        validate_safe_name(repo_name, "repository directory name")
+    except ValueError as exc:
+        print(f"ERROR: {sanitize_for_output(str(exc))}", file=sys.stderr)
+        return 1
+
+    expected_parent = repo_root.parent / f"{repo_name}_worktrees"
+    try:
+        expected_parent = expected_parent.resolve(strict=True)
+    except (OSError, RuntimeError) as exc:
+        print(
+            f"ERROR: _worktrees parent directory "
+            f"'{sanitize_for_output(str(expected_parent))}' does not exist but "
+            f"WORKTREE_PATH '{sanitize_for_output(str(worktree_path))}' does — "
+            f"inconsistent state: {sanitize_for_output(str(exc)[:500])}",
+            file=sys.stderr,
+        )
+        return 1
+
+    # Check worktree_path is inside expected_parent
+    try:
+        worktree_path.relative_to(expected_parent)
+    except ValueError:
+        print(
+            f"ERROR: WORKTREE_PATH '{sanitize_for_output(str(worktree_path))}' is "
+            f"outside expected parent '{sanitize_for_output(str(expected_parent))}' "
+            f"— refusing removal",
+            file=sys.stderr,
+        )
+        return 1
+
+    # When repo root was inferred, verify it actually contains a repo
+    skip_vcs_cleanup = False
+    if repo_root_inferred:
+        has_jj = (repo_root / ".jj").is_dir()
+        has_git = (repo_root / ".git").is_dir()
+        if not has_jj and not has_git:
+            print(
+                f"WARNING: inferred repo root '{sanitize_for_output(str(repo_root))}' "
+                f"has no .jj/ or .git/ — skipping VCS cleanup",
+                file=sys.stderr,
+            )
+            skip_vcs_cleanup = True
+        elif not has_jj:
+            # Has .git/ — verify git works
+            git_check = run_cmd(
+                ["git", "rev-parse", "--git-dir"], cwd=repo_root
+            )
+            if git_check.returncode != 0:
+                print(
+                    f"WARNING: inferred repo root "
+                    f"'{sanitize_for_output(str(repo_root))}' has .git/ but "
+                    f"git rev-parse failed — VCS state may be corrupt; "
+                    f"skipping VCS cleanup",
+                    file=sys.stderr,
+                )
+                skip_vcs_cleanup = True
+
+    # VCS-aware cleanup
+    jj_forget_failed = False
+    git_remove_failed = False
+
+    if skip_vcs_cleanup:
+        pass
+    elif (repo_root / ".jj").is_dir():
+        jj_forget_failed = _jj_cleanup(repo_root, workspace_name)
+    else:
+        # Standard git worktree cleanup
+        git_result = run_cmd(
+            ["git", "worktree", "remove", "--force", str(worktree_path)],
+            cwd=repo_root,
+        )
+        if git_result.returncode != 0:
+            git_err = sanitize_for_output(git_result.stderr.strip()[:500])
+            print(
+                f"WARNING: git worktree remove failed for "
+                f"'{sanitize_for_output(str(worktree_path))}': {git_err}",
+                file=sys.stderr,
+            )
+            git_remove_failed = True
+
+    # Always remove directory, even if jj workspace forget failed.
+    # Use ignore_errors=False but handle ENOENT: git worktree remove --force
+    # may have already deleted the directory.
+    if worktree_path.exists():
+        try:
+            shutil.rmtree(str(worktree_path))
+        except OSError as exc:
+            print(
+                f"ERROR: failed to remove worktree directory "
+                f"'{sanitize_for_output(str(worktree_path))}': "
+                f"{sanitize_for_output(str(exc)[:500])}",
+                file=sys.stderr,
+            )
+            return 1
+
+    # If git worktree remove failed, prune now that directory is gone
+    if git_remove_failed:
+        prune_result = run_cmd(["git", "worktree", "prune"], cwd=repo_root)
+        if prune_result.returncode != 0:
+            prune_err = sanitize_for_output(prune_result.stderr.strip()[:500])
+            print(
+                f"WARNING: git worktree prune also failed: {prune_err} — "
+                f"stale metadata may remain in .git/worktrees/",
+                file=sys.stderr,
+            )
+
+    cleanup_empty_parent(worktree_path.parent)
+
+    # jj forget failure = exit 1 (metadata leak is a hard error)
+    # git prune failure = exit 0 (cosmetic)
+    if jj_forget_failed:
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
