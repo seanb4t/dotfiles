@@ -1,0 +1,796 @@
+{
+  "$schema": "./evals.schema.json",
+  "skill_name": "pr-review-plugin",
+  "evals": [
+    {
+      "id": "T1",
+      "type": "triggering",
+      "prompt": "review PR #42 for security issues",
+      "expected_skill": "review-pr",
+      "expected_output": "Should trigger review-pr with aspects: security",
+      "assertions": [{"name": "triggers-review-pr", "description": "Triggers the review-pr skill", "type": "skill_triggered", "check": "review-pr"}]
+    },
+    {
+      "id": "T2",
+      "type": "triggering",
+      "prompt": "fix the issues from the PR review",
+      "expected_skill": "address-findings",
+      "expected_output": "Should trigger address-findings, not respond-to-comments",
+      "assertions": [{"name": "triggers-address-findings", "description": "Triggers the address-findings skill", "type": "skill_triggered", "check": "address-findings"}]
+    },
+    {
+      "id": "T3",
+      "type": "triggering",
+      "prompt": "what did the reviewer say on my PR?",
+      "expected_skill": "respond-to-comments",
+      "expected_output": "Should trigger respond-to-comments quick lookup",
+      "assertions": [{"name": "triggers-respond-to-comments", "description": "Triggers the respond-to-comments skill", "type": "skill_triggered", "check": "respond-to-comments"}]
+    },
+    {
+      "id": "T4",
+      "type": "triggering",
+      "prompt": "address the findings from the code review",
+      "expected_skill": "address-findings",
+      "expected_output": "Should trigger address-findings based on 'findings' keyword",
+      "assertions": [{"name": "triggers-address-findings", "description": "Triggers the address-findings skill", "type": "skill_triggered", "check": "address-findings"}]
+    },
+    {
+      "id": "T5",
+      "type": "triggering",
+      "prompt": "check PR #15 feedback and fix it",
+      "expected_skill": "respond-to-comments",
+      "expected_output": "Should trigger respond-to-comments full workflow",
+      "assertions": [{"name": "triggers-respond-to-comments", "description": "Triggers the respond-to-comments skill", "type": "skill_triggered", "check": "respond-to-comments"}]
+    },
+    {
+      "id": "T6",
+      "type": "triggering",
+      "prompt": "run a comprehensive analysis of PR 7",
+      "expected_skill": "review-pr",
+      "expected_output": "Should trigger review-pr despite indirect phrasing",
+      "assertions": [{"name": "triggers-review-pr", "description": "Triggers the review-pr skill", "type": "skill_triggered", "check": "review-pr"}]
+    },
+    {
+      "id": "T7",
+      "type": "triggering",
+      "prompt": "I need to work through the review beads for PR 23",
+      "expected_skill": "address-findings",
+      "expected_output": "Should trigger address-findings based on 'review beads'",
+      "assertions": [{"name": "triggers-address-findings", "description": "Triggers the address-findings skill", "type": "skill_triggered", "check": "address-findings"}]
+    },
+    {
+      "id": "T8",
+      "type": "triggering",
+      "prompt": "acknowledge the comments on PR 11",
+      "expected_skill": "respond-to-comments",
+      "expected_output": "Should trigger respond-to-comments for ack operation",
+      "assertions": [{"name": "triggers-respond-to-comments", "description": "Triggers the respond-to-comments skill", "type": "skill_triggered", "check": "respond-to-comments"}]
+    },
+    {
+      "id": "T9",
+      "type": "triggering",
+      "prompt": "can you look at the code quality of this pull request",
+      "expected_skill": "review-pr",
+      "expected_output": "Should trigger review-pr for code quality analysis",
+      "assertions": [{"name": "triggers-review-pr", "description": "Triggers the review-pr skill", "type": "skill_triggered", "check": "review-pr"}]
+    },
+    {
+      "id": "T10",
+      "type": "triggering",
+      "prompt": "the reviewer left some changes requested, help me fix them",
+      "expected_skill": "respond-to-comments",
+      "expected_output": "Should trigger respond-to-comments full workflow",
+      "assertions": [{"name": "triggers-respond-to-comments", "description": "Triggers the respond-to-comments skill", "type": "skill_triggered", "check": "respond-to-comments"}]
+    },
+    {
+      "id": "B1",
+      "type": "behavioral",
+      "skill": "review-pr",
+      "prompt": "/review-pr 42 security api",
+      "expected_output": "Should select only security-auditor, api-contract-checker, and code-reviewer (always-on). Should NOT launch tests, types, comments, simplify, spec, errors agents.",
+      "assertions": [
+        {
+          "name": "selects-security-agent",
+          "description": "Launches security-auditor agent",
+          "type": "contains",
+          "check": "security-auditor OR security"
+        },
+        {
+          "name": "selects-api-agent",
+          "description": "Launches api-contract-checker agent",
+          "type": "contains",
+          "check": "api-contract-checker OR api"
+        },
+        {
+          "name": "selects-code-agent-always-on",
+          "description": "Launches code-reviewer (always-on)",
+          "type": "contains",
+          "check": "code-reviewer OR code"
+        },
+        {
+          "name": "does-not-launch-all",
+          "description": "Does not launch all 9 agents when specific aspects requested",
+          "type": "manual",
+          "check": "Verify only 3 agents launched, not all 9"
+        }
+      ]
+    },
+    {
+      "id": "B2",
+      "type": "behavioral",
+      "skill": "review-pr",
+      "prompt": "/review-pr 99",
+      "expected_output": "Full all mode. Creates parent bead with pr-review label. Batches security+code first. Uses sonnet by default.",
+      "assertions": [
+        {
+          "name": "creates-parent-bead",
+          "description": "Attempts bd create with pr-review label",
+          "type": "contains",
+          "check": "bd create"
+        },
+        {
+          "name": "batches-security-code-first",
+          "description": "First batch includes security and code agents",
+          "type": "manual",
+          "check": "Security and code agents in first batch of Task calls"
+        },
+        {
+          "name": "uses-sonnet-default",
+          "description": "Default model is sonnet for agents",
+          "type": "manual",
+          "check": "Agent dispatches use sonnet model"
+        }
+      ]
+    },
+    {
+      "id": "B3",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "/address-findings 42",
+      "expected_output": "Checks out PR branch, runs bd list, finds no findings, reports 'No review findings for PR #42. Run /review-pr first.'",
+      "assertions": [
+        {
+          "name": "checks-out-pr-branch",
+          "description": "Runs gh pr checkout before querying beads",
+          "type": "contains",
+          "check": "gh pr checkout"
+        },
+        {
+          "name": "verifies-bd-available",
+          "description": "Runs bd --version as prerequisite",
+          "type": "contains",
+          "check": "bd --version"
+        },
+        {
+          "name": "queries-review-epic",
+          "description": "Queries beads for review findings",
+          "type": "contains",
+          "check": "bd list"
+        },
+        {
+          "name": "graceful-stop-no-findings",
+          "description": "Reports no findings and suggests running review-pr",
+          "type": "manual",
+          "check": "Output mentions running /review-pr when no findings exist"
+        }
+      ]
+    },
+    {
+      "id": "B4",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "/address-findings",
+      "expected_output": "Should ask the user for the PR number since none was provided in ARGUMENTS",
+      "assertions": [
+        {
+          "name": "asks-for-pr-number",
+          "description": "Prompts user for PR number when not provided",
+          "type": "manual",
+          "check": "Output asks for PR number or attempts to infer from context"
+        }
+      ]
+    },
+    {
+      "id": "B5",
+      "type": "behavioral",
+      "skill": "respond-to-comments",
+      "prompt": "/respond-to-comments list 15",
+      "expected_output": "Quick lookup path: runs scripts/pr_comments list 15 and presents output. Does NOT enter full workflow.",
+      "assertions": [
+        {
+          "name": "runs-list-command",
+          "description": "Executes the list subcommand",
+          "type": "contains",
+          "check": "pr_comments list"
+        },
+        {
+          "name": "quick-lookup-not-workflow",
+          "description": "Does not start the full 5-phase workflow",
+          "type": "manual",
+          "check": "No Phase 1/Phase 2 workflow steps, just command output"
+        }
+      ]
+    },
+    {
+      "id": "B6",
+      "type": "behavioral",
+      "skill": "respond-to-comments",
+      "prompt": "/respond-to-comments 15",
+      "expected_output": "Full workflow: checks bd prerequisite, reads unacked comments, queries beads for prior findings. Should locate worktree in sibling directory.",
+      "assertions": [
+        {
+          "name": "checks-bd-prerequisite",
+          "description": "Runs bd --version as prerequisite",
+          "type": "contains",
+          "check": "bd --version"
+        },
+        {
+          "name": "reads-unacked-comments",
+          "description": "Lists unacked comments first",
+          "type": "contains",
+          "check": "unacked"
+        },
+        {
+          "name": "queries-beads-for-context",
+          "description": "Cross-references with existing beads",
+          "type": "contains",
+          "check": "bd list"
+        },
+        {
+          "name": "locates-sibling-worktree",
+          "description": "Checks for worktree in sibling directory",
+          "type": "contains",
+          "check": "worktree"
+        }
+      ]
+    },
+    {
+      "id": "B-JJ1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "address the review findings for PR #99",
+      "context": "Repo root contains .jj/ directory",
+      "expected_output": "Should detect jj repo and use jj commands for integration (rebase, bookmark set, workspace forget) instead of git cherry-pick",
+      "assertions": [
+        {
+          "name": "uses-jj-rebase",
+          "description": "Uses jj rebase for integration instead of cherry-pick",
+          "type": "contains",
+          "check": "jj rebase"
+        },
+        {
+          "name": "no-git-cherry-pick",
+          "description": "Does not use git cherry-pick in jj repos",
+          "type": "not_contains",
+          "check": "git cherry-pick"
+        }
+      ]
+    },
+    {
+      "id": "B-JJ2",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "fix-worker returned: STATUS: FIXED, VCS: jj, CHANGE_ID: abc123. Integrate this fix.",
+      "expected_output": "Should use jj rebase and jj bookmark set with the CHANGE_ID",
+      "assertions": [
+        {
+          "name": "uses-jj-rebase-with-change-id",
+          "description": "Uses jj rebase with the reported CHANGE_ID",
+          "type": "contains",
+          "check": "jj rebase"
+        },
+        {
+          "name": "uses-bookmark-set",
+          "description": "Updates bookmark after rebase",
+          "type": "contains",
+          "check": "jj bookmark set"
+        }
+      ]
+    },
+    {
+      "id": "B-JJ3",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "fix-worker returned: STATUS: FIXED, VCS: jj, CHANGE_ID: kkmpptxz, FILES_CHANGED: src/config.py. Worktree at ../repo_worktrees/fix-abc. Integrate and clean up.",
+      "expected_output": "Should use jj rebase, jj bookmark set, jj workspace forget, and rm -rf for cleanup",
+      "assertions": [
+        {
+          "name": "uses-workspace-forget",
+          "description": "Cleans up jj workspace after integration",
+          "type": "contains",
+          "check": "jj workspace forget"
+        },
+        {
+          "name": "removes-directory",
+          "description": "Removes worktree directory after workspace forget",
+          "type": "contains",
+          "check": "rm -rf"
+        },
+        {
+          "name": "forget-before-rm",
+          "description": "jj workspace forget must precede rm -rf (workspace metadata cleaned before directory removed)",
+          "type": "manual",
+          "check": "Verify jj workspace forget appears BEFORE rm -rf in the output sequence"
+        }
+      ]
+    },
+    {
+      "id": "B-JJ4",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "verification-runner returned: STATUS: PASS, VCS: jj, CHANGE_ID: kkmpptxz. All checks green.",
+      "context": "Repo root contains .jj/ directory",
+      "expected_output": "Should use jj commands for any post-verification VCS operations and report CHANGE_ID in summary",
+      "assertions": [
+        {
+          "name": "reports-change-id",
+          "description": "Reports CHANGE_ID in verification summary, not WORKTREE_BRANCH",
+          "type": "contains",
+          "check": "CHANGE_ID"
+        },
+        {
+          "name": "uses-jj-for-vcs",
+          "description": "Uses jj commands for any VCS operations after verification",
+          "type": "manual",
+          "check": "Verify agent uses jj (not git) for any VCS operations following verification"
+        }
+      ]
+    },
+    {
+      "id": "B-JJ-WC1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "After committing a fix in a jj workspace, verify the committed state by checking the change description.",
+      "context": "Agent is in a jj workspace after running jj commit. Need to verify what was committed.",
+      "expected_output": "Agent should use @- (parent of working copy) to inspect the committed state, not @ (empty working copy)",
+      "assertions": [
+        {
+          "name": "uses-at-minus",
+          "description": "Uses @- revision for verification after commit",
+          "type": "contains",
+          "check": "@-"
+        },
+        {
+          "name": "does-not-use-bare-at",
+          "description": "Does not use bare @ for committed state verification",
+          "type": "manual",
+          "check": "Verify agent uses @- (parent) not @ (working copy) when inspecting committed changes"
+        }
+      ]
+    },
+    {
+      "id": "B-JJ-ATMINUS1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "After running jj undo to revert a conflicted rebase, verify the bookmark tip was restored correctly.",
+      "context": "Repo has .jj/ directory. jj undo was just run. Agent needs to verify the bookmark state.",
+      "expected_output": "Should use @- (parent) to check committed state, not @ (empty working copy)",
+      "assertions": [
+        {
+          "name": "uses-at-minus",
+          "description": "Uses @- to reference committed state",
+          "type": "contains",
+          "check": "@-"
+        },
+        {
+          "name": "no-bare-at-for-verify",
+          "description": "Does not use bare @ for verification of committed state",
+          "type": "not_contains",
+          "check": "jj log -r @\n"
+        }
+      ]
+    },
+    {
+      "id": "B-FW1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Dispatch a fix-worker agent to fix finding fzymgc-house-skills-qsh.1 in file src/main.py line 42",
+      "context": "Repo root contains .jj/ directory. Agent is running in a worktree workspace under *_worktrees/.",
+      "expected_output": "fix-worker should detect jj via vcs-detection-preamble, use jj commit (not git commit), and report VCS: jj with CHANGE_ID (not WORKTREE_BRANCH)",
+      "assertions": [
+        {
+          "name": "detects-jj-repo",
+          "description": "fix-worker detects .jj/ and identifies as jj repo",
+          "type": "contains",
+          "check": "jj"
+        },
+        {
+          "name": "uses-jj-commit",
+          "description": "Uses jj commit or jj describe for committing changes, not git commit",
+          "type": "manual",
+          "check": "Verify fix-worker uses jj commit/describe, NOT git commit"
+        },
+        {
+          "name": "uses-jj-commit-auto",
+          "description": "Response contains jj commit or jj describe",
+          "type": "contains",
+          "check": "jj commit"
+        },
+        {
+          "name": "reports-vcs-jj",
+          "description": "Reports VCS: jj in output",
+          "type": "contains",
+          "check": "VCS: jj"
+        },
+        {
+          "name": "reports-change-id",
+          "description": "Reports CHANGE_ID instead of WORKTREE_BRANCH",
+          "type": "contains",
+          "check": "CHANGE_ID"
+        },
+        {
+          "name": "no-git-commit",
+          "description": "Does not use git commit in jj repo",
+          "type": "not_contains",
+          "check": "git commit"
+        }
+      ]
+    },
+    {
+      "id": "B-VCS1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Fix finding fzymgc-house-skills-qsh.99 in this repo",
+      "context": "Agent is in a jj repo. jj workspace list shows the default workspace with its current commit — agent is in the default workspace, not a worktree workspace.",
+      "expected_output": "Agent reports STATUS: FAILED with message about default workspace and does not proceed with file operations",
+      "assertions": [
+        {
+          "name": "reports-failed-status",
+          "description": "Reports STATUS: FAILED when in default workspace",
+          "type": "contains",
+          "check": "STATUS: FAILED"
+        },
+        {
+          "name": "mentions-default-workspace",
+          "description": "Error message references default workspace as the reason",
+          "type": "contains",
+          "check": "default workspace"
+        },
+        {
+          "name": "no-file-operations",
+          "description": "Does not proceed with any file operations or code changes",
+          "type": "manual",
+          "check": "Verify agent stops immediately without editing, writing, or modifying any files"
+        },
+        {
+          "name": "no-edit-tool",
+          "description": "Does not use Edit tool in default workspace",
+          "type": "not_contains",
+          "check": "Edit"
+        }
+      ]
+    },
+    {
+      "id": "B-VCS2",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Fix finding fzymgc-house-skills-abc.42 in this repo",
+      "context": "Agent is in a pure-jj repo (has .jj/ directory but NO .git/ directory). The VCS detection preamble should detect jj as the VCS.",
+      "expected_output": "Agent reports VCS: jj and proceeds with jj commands for VCS operations, not git commands",
+      "assertions": [
+        {
+          "name": "detects-jj-vcs",
+          "description": "Reports jj as the detected VCS in a pure-jj repo",
+          "type": "contains",
+          "check": "VCS: jj"
+        },
+        {
+          "name": "no-git-commands",
+          "description": "Does not use git commands for VCS operations in a jj-only repo",
+          "type": "not_contains",
+          "check": "git commit"
+        }
+      ]
+    },
+    {
+      "id": "B-VCS3",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "The fix-worker returned STATUS: FAILED for finding fzymgc-house-skills-xyz.99. The agent reported VCS: jj. How should I handle this failure?",
+      "context": "A fix-worker agent in a jj repo returned STATUS: FAILED. The failed operation left no state to clean up. jj's op log only records successful operations.",
+      "expected_output": "Does not suggest running jj undo to clean up after the failed fix-worker, since the failed operation left no op-log entry to undo",
+      "assertions": [
+        {
+          "name": "no-jj-undo-for-failure",
+          "description": "Does not recommend jj undo to clean up a failed operation",
+          "type": "not_contains",
+          "check": "jj undo"
+        },
+        {
+          "name": "acknowledges-no-cleanup",
+          "description": "Recognizes that a failed operation needs no VCS cleanup",
+          "type": "manual",
+          "check": "Response should acknowledge that a failed jj operation leaves no op-log entry and needs no VCS cleanup (e.g., mentions re-queue, retry, or that there is nothing to undo)"
+        },
+        {
+          "name": "mentions-no-op-log",
+          "description": "Mentions that failed operation has no op-log entry",
+          "type": "contains",
+          "check": "no op"
+        }
+      ]
+    },
+    {
+      "id": "B-VCS-NONE1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "The fix-worker returned STATUS: FAILED with message 'No VCS detected (not inside a jj or git repository)'. How should I handle this?",
+      "context": "A worktree-isolated agent ran in a directory where neither jj root nor git rev-parse succeeded. The VCS detection preamble's 'none' branch fired.",
+      "expected_output": "Should NOT retry (VCS detection failure is deterministic). Should log the failure, clean up the worktree, and re-queue the finding.",
+      "assertions": [
+        {
+          "name": "no-retry",
+          "description": "Does not suggest retrying the same operation",
+          "type": "not_contains",
+          "check": "retry"
+        },
+        {
+          "name": "cleanup-worktree",
+          "description": "Recommends cleaning up the unusable worktree",
+          "type": "contains",
+          "check": "rm -rf"
+        }
+      ]
+    },
+    {
+      "id": "B-WC-COLLISION",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Dispatch fix-worker for finding example-abc.1. The WorktreeCreate hook returns non-zero because the target worktree path already exists.",
+      "context": "Repo has .jj/ directory. The worktree path at ../repo_worktrees/fix-worker-xxx already exists from a previous failed run.",
+      "expected_output": "Should surface the error to the user and not silently stall. Should suggest cleaning up the stale worktree path and retrying.",
+      "assertions": [
+        {
+          "name": "surfaces-error-to-user",
+          "description": "Reports the WorktreeCreate hook failure to the user rather than stalling silently",
+          "type": "contains",
+          "check": "already exists"
+        },
+        {
+          "name": "suggests-cleanup",
+          "description": "Suggests removing or cleaning up the stale worktree path",
+          "type": "contains",
+          "check": "rm -rf"
+        },
+        {
+          "name": "no-silent-stall",
+          "description": "Does not hang or continue dispatching without reporting the error",
+          "type": "manual",
+          "check": "Verify agent reports the hook failure and stops rather than silently retrying or proceeding"
+        },
+        {
+          "name": "suggests-retry-after-cleanup",
+          "description": "Advises user to retry after cleaning up the stale path",
+          "type": "manual",
+          "check": "Response includes guidance to retry after the stale worktree directory is removed"
+        }
+      ]
+    },
+    {
+      "id": "B-VR1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Run verification-runner on the fix. fix-worker returned: STATUS: FIXED, VCS: jj, CHANGE_ID: abc12345, FILES_CHANGED: src/config.py. Verify the fix alignment.",
+      "context": "Repo root contains .jj/ directory. verification-runner is running in a jj workspace.",
+      "expected_output": "verification-runner should report CHANGE_ID (not WORKTREE_BRANCH) in its output, detecting and using jj VCS semantics throughout",
+      "assertions": [
+        {
+          "name": "reports-change-id",
+          "description": "Output includes CHANGE_ID when operating in jj workspace",
+          "type": "contains",
+          "check": "CHANGE_ID"
+        },
+        {
+          "name": "no-worktree-branch",
+          "description": "Does not report WORKTREE_BRANCH in jj repo context",
+          "type": "not_contains",
+          "check": "WORKTREE_BRANCH"
+        },
+        {
+          "name": "reports-vcs-jj",
+          "description": "Reports VCS: jj in structured output",
+          "type": "contains",
+          "check": "VCS: jj"
+        },
+        {
+          "name": "uses-jj-for-verification",
+          "description": "Uses jj commands for VCS state inspection, not git equivalents",
+          "type": "manual",
+          "check": "Verify verification-runner uses jj show/diff rather than git show/diff for VCS operations"
+        }
+      ]
+    },
+    {
+      "id": "B7",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "/address-findings 50",
+      "context": "jj repo with open review findings. One fix-worker's rebase produces a conflict commit (jj rebase returns 0 but commit has conflict markers).",
+      "expected_output": "Should detect conflict via jj log -r <change-id> -T conflict template, run jj undo to revert, mark FAILED, and re-queue. Should NOT use @- parent comparison.",
+      "assertions": [
+        {
+          "name": "detects-conflict-via-template",
+          "description": "Uses jj log conflict template instead of @- comparison",
+          "type": "contains",
+          "check": "if(conflict"
+        },
+        {
+          "name": "runs-jj-undo-on-conflict",
+          "description": "Runs jj undo when conflict detected",
+          "type": "contains",
+          "check": "jj undo"
+        },
+        {
+          "name": "no-undo-on-hard-failure",
+          "description": "Does NOT run jj undo when rebase hard-fails (non-zero exit)",
+          "type": "manual",
+          "check": "Hard failure path skips jj undo"
+        },
+        {
+          "name": "no-git-cherry-pick-fallback",
+          "description": "Does not fall back to git cherry-pick in jj repos",
+          "type": "not_contains",
+          "check": "git cherry-pick"
+        }
+      ]
+    },
+    {
+      "id": "B8",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "/address-findings 50",
+      "context": "fix-worker response omits VCS field. Worktree path still exists. Repo is a jj colocated repo.",
+      "expected_output": "Should check worktree path exists, detect VCS via jj root, infer CHANGE_ID via cd <path> && jj log, log a warning about missing VCS field, and continue with integration.",
+      "assertions": [
+        {
+          "name": "checks-worktree-exists",
+          "description": "Verifies worktree path exists before inference",
+          "type": "manual",
+          "check": "Output includes test -d or path existence check before running inference commands"
+        },
+        {
+          "name": "detects-vcs-via-jj-root",
+          "description": "Uses jj root for VCS detection instead of test -d",
+          "type": "contains",
+          "check": "jj root"
+        },
+        {
+          "name": "infers-change-id",
+          "description": "Uses cd into worktree path then jj log to infer CHANGE_ID",
+          "type": "contains",
+          "check": "jj log"
+        },
+        {
+          "name": "logs-warning",
+          "description": "Logs warning about missing VCS field",
+          "type": "manual",
+          "check": "Warning logged about fix-worker omitting VCS field"
+        }
+      ]
+    },
+    {
+      "id": "B-RG1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "review-gate receives the following diff output from jj show:\nDiff (git format):\n--- a/src/config.py\n+++ b/src/config.py\n@@ -10,6 +10,8 @@\n+    MAX_RETRIES = 3\n+    TIMEOUT = 30\nVerify the fix correctly addresses finding fzymgc-house-skills-qsh.5 about missing timeout configuration.",
+      "context": "Repo root contains .jj/ directory. review-gate is evaluating a diff produced by jj show (jj diff format).",
+      "expected_output": "review-gate should correctly identify the changed file (src/config.py) and added lines from the jj-format diff without false positives or misidentified hunks",
+      "assertions": [
+        {
+          "name": "identifies-changed-file",
+          "description": "Correctly identifies src/config.py as the changed file",
+          "type": "contains",
+          "check": "src/config.py"
+        },
+        {
+          "name": "no-false-positives",
+          "description": "Does not report false failures due to jj diff format differences",
+          "type": "manual",
+          "check": "Verify review-gate does not flag jj diff headers or metadata lines as errors"
+        },
+        {
+          "name": "no-false-positive-auto",
+          "description": "Does not report FAIL status",
+          "type": "not_contains",
+          "check": "FAIL"
+        },
+        {
+          "name": "identifies-added-lines",
+          "description": "Correctly identifies the added MAX_RETRIES and TIMEOUT lines",
+          "type": "manual",
+          "check": "Verify review-gate recognizes the + prefixed lines as additions, not noise"
+        },
+        {
+          "name": "identifies-max-retries",
+          "description": "Identifies MAX_RETRIES as an added line",
+          "type": "contains",
+          "check": "MAX_RETRIES"
+        }
+      ]
+    },
+    {
+      "id": "B-GIT-NEG1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Dispatch a fix-worker agent to fix finding example-123.1 in file src/main.py line 10",
+      "context": "Repo has .git/ directory but no .jj/ directory (git-only repo)",
+      "expected_output": "fix-worker should detect git-only repo via VCS detection preamble and use git commands, NOT jj commands",
+      "assertions": [
+        {
+          "name": "no-jj-commit",
+          "description": "Does not use jj commit in git-only repo",
+          "type": "not_contains",
+          "check": "jj commit"
+        },
+        {
+          "name": "no-jj-describe",
+          "description": "Does not use jj describe in git-only repo",
+          "type": "not_contains",
+          "check": "jj describe"
+        },
+        {
+          "name": "uses-git-commit",
+          "description": "Uses git commit for committing in git-only repo",
+          "type": "contains",
+          "check": "git commit"
+        }
+      ]
+    },
+    {
+      "id": "B-VCS-FW-GIT1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Dispatch a fix-worker agent to fix finding example-fw.1 in file src/utils.py line 25",
+      "context": "Repo has .git/ directory but no .jj/ directory (git-only repo). Agent is in a worktree on branch worktree/fix-worker-abc.",
+      "expected_output": "fix-worker should detect git-only repo, use git commit, and report WORKTREE_BRANCH (not CHANGE_ID) in its output",
+      "assertions": [
+        {
+          "name": "reports-worktree-branch",
+          "description": "Reports WORKTREE_BRANCH in git-only repo",
+          "type": "contains",
+          "check": "WORKTREE_BRANCH"
+        },
+        {
+          "name": "no-change-id",
+          "description": "Does not report CHANGE_ID in git-only repo",
+          "type": "not_contains",
+          "check": "CHANGE_ID"
+        },
+        {
+          "name": "reports-vcs-git",
+          "description": "Reports VCS: git in structured output",
+          "type": "contains",
+          "check": "VCS: git"
+        },
+        {
+          "name": "uses-git-commit",
+          "description": "Uses git commit for committing in git-only repo",
+          "type": "contains",
+          "check": "git commit"
+        }
+      ]
+    },
+    {
+      "id": "B-VCS-GIT1",
+      "type": "behavioral",
+      "skill": "address-findings",
+      "prompt": "Fix finding fzymgc-house-skills-abc.1 in this file",
+      "context": "Agent is in a git repo (no .jj/). Current branch is 'main', not 'worktree/*'.",
+      "expected_output": "Agent reports STATUS: FAILED because it is not on a worktree/* branch",
+      "assertions": [
+        {
+          "name": "reports-failed-status",
+          "description": "Reports STATUS: FAILED when not on a worktree/* branch",
+          "type": "contains",
+          "check": "STATUS: FAILED"
+        },
+        {
+          "name": "no-file-edits",
+          "description": "Does not use Edit tool when branch check fails",
+          "type": "not_contains",
+          "check": "Edit("
+        }
+      ]
+    }
+  ]
+}

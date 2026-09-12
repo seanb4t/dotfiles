@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/fzymgc-house/fzymgc-house-skills/pr-review/evals/evals.schema.json",
+  "title": "Evals File",
+  "description": "Schema for Claude Code skill evaluation files",
+  "type": "object",
+  "required": ["skill_name", "evals"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "skill_name": {
+      "type": "string",
+      "description": "Name of the plugin or skill being evaluated"
+    },
+    "evals": {
+      "type": "array",
+      "description": "List of evaluation cases",
+      "items": {
+        "$ref": "#/definitions/eval"
+      }
+    }
+  },
+  "definitions": {
+    "eval": {
+      "type": "object",
+      "required": ["id", "type", "prompt", "expected_output", "assertions"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this eval (e.g. T1, B2, JJ-T1)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["triggering", "behavioral", "negative"],
+          "description": "Eval category: triggering (skill activation), behavioral (skill behavior), negative (non-activation)"
+        },
+        "skill": {
+          "type": "string",
+          "description": "Skill under test for behavioral evals"
+        },
+        "prompt": {
+          "type": "string",
+          "description": "User prompt or input to evaluate"
+        },
+        "context": {
+          "type": "string",
+          "description": "Optional environmental context (e.g. repo state, directory contents)"
+        },
+        "expected_skill": {
+          "type": ["string", "null"],
+          "description": "Skill expected to be triggered; null if none should trigger"
+        },
+        "expected_output": {
+          "type": "string",
+          "description": "Human-readable description of expected behavior"
+        },
+        "assertions": {
+          "type": "array",
+          "description": "List of assertions to verify the eval",
+          "items": {
+            "$ref": "#/definitions/assertion"
+          }
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["name", "description", "type", "check"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Kebab-case identifier for this assertion"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what is being asserted"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "skill_triggered",
+            "skill_not_triggered",
+            "command_invoked",
+            "contains",
+            "not_contains",
+            "manual"
+          ],
+          "description": "Assertion mechanism: skill_triggered/skill_not_triggered (skill activation), command_invoked (slash command), contains/not_contains (output text match), manual (human review required)"
+        },
+        "check": {
+          "type": "string",
+          "description": "Value to check: skill name, command name, text to match, or manual verification instructions"
+        }
+      }
+    }
+  }
+}

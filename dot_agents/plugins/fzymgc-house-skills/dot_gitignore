@@ -1,0 +1,29 @@
+# Claude Code - ignore all except shared config
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Environment
+.envrc
+
+# Serena
+.serena/
+
+# Test caches
+.pytest_cache/
+
+# OS
+.DS_Store
+.worktrees/
+pr-review/evals-workspace/
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db

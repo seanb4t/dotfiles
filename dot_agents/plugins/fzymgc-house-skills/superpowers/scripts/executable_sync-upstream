@@ -1,0 +1,270 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# --- Paths ---
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+PLUGIN_DIR=$(dirname "$SCRIPT_DIR")
+MANIFEST="$PLUGIN_DIR/references/upstream-manifest.md"
+
+# --- Colors (if terminal) ---
+if [[ -t 1 ]]; then
+  BOLD='\033[1m'
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[0;33m'
+  CYAN='\033[0;36m'
+  RESET='\033[0m'
+else
+  BOLD='' RED='' GREEN='' YELLOW='' CYAN='' RESET=''
+fi
+
+# --- Temp dir with cleanup ---
+TMPDIR_SYNC=$(mktemp -d)
+trap 'rm -rf "$TMPDIR_SYNC"' EXIT
+
+# --- Helpers ---
+info()  { printf "${CYAN}%s${RESET}\n" "$*"; }
+warn()  { printf "${YELLOW}WARNING: %s${RESET}\n" "$*"; }
+error() { printf "${RED}ERROR: %s${RESET}\n" "$*" >&2; }
+header(){ printf "\n${BOLD}=== %s ===${RESET}\n" "$*"; }
+
+# --- Read current upstream version from manifest frontmatter ---
+current_version=$(awk '/^---$/{n++; next} n==1 && /^upstream_version:/{sub(/.*: */, ""); print}' "$MANIFEST")
+if [[ -z "$current_version" ]]; then
+  error "Could not read upstream_version from $MANIFEST"
+  exit 1
+fi
+info "Current local version: $current_version"
+
+# --- Fetch latest upstream tag ---
+latest_tag=$(gh api repos/obra/superpowers/tags --jq '.[0].name')
+if [[ -z "$latest_tag" ]]; then
+  error "Could not fetch latest upstream tag"
+  exit 1
+fi
+info "Latest upstream tag:   $latest_tag"
+
+# --- Compare ---
+if [[ "$current_version" == "$latest_tag" ]]; then
+  printf "${GREEN}Already up to date at %s${RESET}\n" "$current_version"
+  exit 0
+fi
+
+header "New upstream version available: $current_version -> $latest_tag"
+
+# --- Download and extract tarball ---
+info "Downloading upstream tarball..."
+tarball="$TMPDIR_SYNC/superpowers-upstream.tar.gz"
+gh api "repos/obra/superpowers/tarball/$latest_tag" > "$tarball"
+
+info "Extracting..."
+tar xzf "$tarball" -C "$TMPDIR_SYNC"
+
+# GitHub tarballs extract into a directory like obra-superpowers-<sha>/
+UPSTREAM_DIR=$(find "$TMPDIR_SYNC" -mindepth 1 -maxdepth 1 -type d | head -1)
+if [[ -z "$UPSTREAM_DIR" || ! -d "$UPSTREAM_DIR" ]]; then
+  error "Failed to locate extracted upstream directory"
+  exit 1
+fi
+info "Upstream extracted to: $UPSTREAM_DIR"
+
+# --- Parse manifest into arrays ---
+# We parse the yaml block between ```yaml and ``` in the manifest
+declare -a VERBATIM_ENTRIES=()
+declare -a MODIFIED_ENTRIES=()
+declare -a MODIFIED_UPSTREAM_PATHS=()
+
+in_yaml=0
+current_file=""
+current_status=""
+current_upstream_path=""
+
+flush_modified() {
+  if [[ -n "$current_file" && "$current_status" == "modified" ]]; then
+    MODIFIED_ENTRIES+=("$current_file")
+    MODIFIED_UPSTREAM_PATHS+=("${current_upstream_path:-$current_file}")
+  fi
+  current_file=""
+  current_status=""
+  current_upstream_path=""
+}
+
+while IFS= read -r line; do
+  # Detect yaml block boundaries
+  if [[ "$line" == '```yaml' ]]; then
+    in_yaml=1
+    continue
+  fi
+  if [[ "$line" == '```' && "$in_yaml" -eq 1 ]]; then
+    flush_modified
+    in_yaml=0
+    continue
+  fi
+  [[ "$in_yaml" -eq 0 ]] && continue
+
+  # Skip comments and blank lines
+  [[ "$line" =~ ^[[:space:]]*# ]] && continue
+  [[ "$line" =~ ^[[:space:]]*$ ]] && continue
+
+  # Indented lines (sub-keys of a modified entry)
+  if [[ "$line" =~ ^[[:space:]]+(status|upstream_path):[[:space:]]*(.*) ]]; then
+    key="${BASH_REMATCH[1]}"
+    val="${BASH_REMATCH[2]}"
+    if [[ "$key" == "status" ]]; then
+      current_status="$val"
+    elif [[ "$key" == "upstream_path" ]]; then
+      current_upstream_path="$val"
+    fi
+    continue
+  fi
+
+  # Top-level entry: "path: value" or "path:" (block mapping)
+  if [[ "$line" =~ ^([^:]+):[[:space:]]*(.*) ]]; then
+    # Flush any pending modified entry
+    flush_modified
+
+    path="${BASH_REMATCH[1]}"
+    value="${BASH_REMATCH[2]}"
+
+    if [[ "$value" == "verbatim" ]]; then
+      VERBATIM_ENTRIES+=("$path")
+    elif [[ "$value" == "local" ]]; then
+      : # skip local entries
+    elif [[ -z "$value" ]]; then
+      # Block mapping — next lines will have status/upstream_path
+      current_file="$path"
+    fi
+  fi
+done < "$MANIFEST"
+
+# --- Process verbatim entries ---
+header "Verbatim Updates"
+auto_count=0
+verbatim_fail=0
+
+for entry in "${VERBATIM_ENTRIES[@]}"; do
+  src="$UPSTREAM_DIR/$entry"
+  dst="$PLUGIN_DIR/$entry"
+
+  if [[ "$entry" == */ ]]; then
+    # Directory entry
+    if [[ -d "$src" ]]; then
+      mkdir -p "$dst"
+      rsync -a --delete "$src" "$dst"
+      printf "  ${GREEN}Updated${RESET} %s (directory)\n" "$entry"
+      auto_count=$((auto_count + 1))
+    else
+      printf "  ${YELLOW}MISSING${RESET} %s — not found in upstream\n" "$entry"
+      verbatim_fail=$((verbatim_fail + 1))
+    fi
+  else
+    # Single file
+    if [[ -f "$src" ]]; then
+      mkdir -p "$(dirname "$dst")"
+      cp -f "$src" "$dst"
+      printf "  ${GREEN}Updated${RESET} %s\n" "$entry"
+      auto_count=$((auto_count + 1))
+    else
+      printf "  ${YELLOW}MISSING${RESET} %s — not found in upstream\n" "$entry"
+      verbatim_fail=$((verbatim_fail + 1))
+    fi
+  fi
+done
+
+# --- Process modified entries ---
+header "Modified Files — Review Required"
+modified_count=0
+
+for i in "${!MODIFIED_ENTRIES[@]}"; do
+  local_path="${MODIFIED_ENTRIES[$i]}"
+  upstream_path="${MODIFIED_UPSTREAM_PATHS[$i]}"
+
+  upstream_file="$UPSTREAM_DIR/$upstream_path"
+  local_file="$PLUGIN_DIR/$local_path"
+
+  if [[ ! -f "$upstream_file" ]]; then
+    printf "  ${YELLOW}MISSING${RESET} upstream %s — not found in tarball\n" "$upstream_path"
+    continue
+  fi
+  if [[ ! -f "$local_file" ]]; then
+    printf "  ${YELLOW}MISSING${RESET} local %s — not found locally\n" "$local_path"
+    continue
+  fi
+
+  # Generate diff (local vs new upstream)
+  if diff -u "$local_file" "$upstream_file" > "$TMPDIR_SYNC/diff_$i.patch" 2>/dev/null; then
+    printf "  ${GREEN}No changes${RESET} %s\n" "$local_path"
+  else
+    modified_count=$((modified_count + 1))
+    printf "\n  ${YELLOW}CHANGED${RESET} %s\n" "$local_path"
+    if [[ "$upstream_path" != "$local_path" ]]; then
+      printf "  ${CYAN}(upstream: %s)${RESET}\n" "$upstream_path"
+    fi
+    printf "  ${BOLD}--- Diff (local vs new upstream) ---${RESET}\n"
+    # Show diff with indentation
+    sed 's/^/    /' "$TMPDIR_SYNC/diff_$i.patch"
+    echo
+  fi
+done
+
+# --- Detect new upstream skills not in manifest ---
+header "New Upstream Files"
+new_count=0
+
+# Collect all manifest paths (verbatim + modified upstream_paths + local) for comparison
+declare -A KNOWN_PATHS
+for entry in "${VERBATIM_ENTRIES[@]}"; do
+  KNOWN_PATHS["$entry"]=1
+done
+for i in "${!MODIFIED_ENTRIES[@]}"; do
+  KNOWN_PATHS["${MODIFIED_UPSTREAM_PATHS[$i]}"]=1
+  KNOWN_PATHS["${MODIFIED_ENTRIES[$i]}"]=1
+done
+
+# Scan upstream skills/, commands/, agents/, hooks/ directories
+while IFS= read -r -d '' ufile; do
+  rel="${ufile#$UPSTREAM_DIR/}"
+  # Check if this path is known (either directly or via a parent directory entry)
+  known=0
+  for kp in "${!KNOWN_PATHS[@]}"; do
+    # Directory entry covers everything under it
+    if [[ "$kp" == */ && "$rel" == "$kp"* ]]; then
+      known=1
+      break
+    fi
+    if [[ "$rel" == "$kp" ]]; then
+      known=1
+      break
+    fi
+  done
+  if [[ "$known" -eq 0 ]]; then
+    printf "  ${YELLOW}NEW — needs triage${RESET}: %s\n" "$rel"
+    new_count=$((new_count + 1))
+  fi
+done < <(find "$UPSTREAM_DIR/skills" "$UPSTREAM_DIR/commands" "$UPSTREAM_DIR/agents" "$UPSTREAM_DIR/hooks" -type f -print0 2>/dev/null || true)
+
+if [[ "$new_count" -eq 0 ]]; then
+  printf "  ${GREEN}None${RESET}\n"
+fi
+
+# --- Update manifest frontmatter ---
+header "Updating Manifest"
+today=$(date +%Y-%m-%d)
+sed -i '' "s/^upstream_version: .*/upstream_version: $latest_tag/" "$MANIFEST"
+sed -i '' "s/^synced_at: .*/synced_at: $today/" "$MANIFEST"
+info "Updated upstream_version to $latest_tag, synced_at to $today"
+
+# --- Summary ---
+header "Sync Summary"
+printf "  Previous version:  %s\n" "$current_version"
+printf "  New version:       ${GREEN}%s${RESET}\n" "$latest_tag"
+printf "  Verbatim updated:  ${GREEN}%d${RESET}\n" "$auto_count"
+if [[ "$verbatim_fail" -gt 0 ]]; then
+  printf "  Verbatim missing:  ${RED}%d${RESET}\n" "$verbatim_fail"
+fi
+printf "  Modified (review): ${YELLOW}%d${RESET}\n" "$modified_count"
+printf "  New (triage):      ${YELLOW}%d${RESET}\n" "$new_count"
+echo
+if [[ "$modified_count" -gt 0 || "$new_count" -gt 0 ]]; then
+  warn "Manual review needed for modified/new files above."
+fi

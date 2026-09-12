@@ -8,7 +8,8 @@
       "Bash(agent-browser js:*)",
       "Bash(agent-browser exec:*)",
       "Bash(agent-browser:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python3 -)"
     ]
   }
 }

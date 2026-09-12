@@ -274,10 +274,13 @@ assistant: Done!
 
 | Requirement | Description |
 |-------------|-------------|
-| SHOULD prefer simple | Readable over clever solutions |
+| MUST prefer idiomatic | Use the ecosystem's standard, conventional tool or pattern. Do not invent a bespoke mechanism when a well-established one exists |
+| MUST push back on non-idiomatic asks | If the user proposes something that goes against best practice, convention, or the idiomatic approach, say so plainly and name the idiomatic alternative before proceeding. State it once — if the user reaffirms, proceed with their choice |
+| SHOULD prefer simple | Readable over clever solutions. Simple, reliable, and predictable beats comprehensive |
 | MUST NOT add obvious comments | Don't restate what code does |
 | MUST match conventions | Follow existing project patterns |
 | SHOULD NOT add unnecessary tests | Write only when requested or for non-trivial changes requiring test coverage |
+| MUST scale testing to the layer | Application code is test-driven and thoroughly verified — that is the target, not something to economize on. Build, CI, and GitOps configuration is the opposite: simple, reliable, and predictable, with no exhaustive matrices by reflex |
 
 ## Decision Making Under Uncertainty
 
@@ -315,8 +318,9 @@ When the user types `/graphify`, use the installed graphify skill or instruction
 
 In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
 
-- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
+- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them.
 - **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
+- **Reference docs** (MCP only): call `resources/list` then `resources/read` for the per-tool reference beyond this summary.
 
 If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
 <!-- CODEGRAPH_END -->

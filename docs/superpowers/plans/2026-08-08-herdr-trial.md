@@ -1,14 +1,6 @@
 # herdr trial
 
-**Branch:** `trial/herdr` · **Date:** 2026-08-08 · **Status: ADOPTED — herdr is
-the default multiplexer.** tmux stays installed and configured as a fallback and
-reference; `echo tmux > ~/.local/state/mux` returns to it for new windows.
-
-Adopted the same day the trial started, on the strength of criteria 1–3 plus
-hands-on use. What decided it: native per-pane agent session restore (the thing
-tmux-resurrect would have needed a frozen upstream and four workarounds to
-approximate), and the sidebar replacing four hand-written attention scripts.
-The accepted regression is unchanged — non-agent processes do not relaunch.
+**Branch:** `trial/herdr` · **Date:** 2026-08-08 · **Status:** trial, not adopted
 
 Evaluating [herdr](https://herdr.dev) as a replacement for the Ghostty+tmux agent
 cockpit described in `../specs/2026-06-13-ghostty-tmux-agent-cockpit-design.md`.
@@ -79,53 +71,6 @@ herdr integration status                 # expect Claude Code >= 6
 Do not skip the `chezmoi add` — a passing trial that silently stops passing
 after an unrelated `chezmoi apply` is the worst outcome available here.
 
-## Setup gotcha 2: herdr rewrites its own config.toml
-
-Confirmed 2026-08-08. Changing anything in herdr's settings UI **appends to
-`~/.config/herdr/config.toml`** — observed with `[ui.toast] delivery` and
-`[ui] show_agent_labels_on_pane_borders`. So the file has two writers, exactly
-like `~/.claude/settings.json`.
-
-chezmoi fails safe here: `chezmoi apply` refuses with *"has changed since
-chezmoi last wrote it"* rather than clobbering. But note the trap — a
-`herdr server reload-config` after a refused apply reloads the **old** config,
-so it can look like a config change had no effect.
-
-Policy for this trial: **config.toml is chezmoi-owned.** After using the
-settings UI, fold the change back into `dot_config/herdr/config.toml` by hand
-(or `chezmoi add`), then:
-
-```bash
-HERDR_CONFIG_PATH=dot_config/herdr/config.toml herdr config check
-chezmoi apply --force ~/.config/herdr
-herdr server reload-config
-```
-
-Only use `--force` once the UI's changes are actually merged into source.
-
-## Plugins
-
-534 repos carry the `herdr-plugin` topic. Shortlist below is limited to ones
-that close a gap this migration opens — adding more would confound the trial.
-
-| Plugin | ★ | Replaces |
-|---|---|---|
-| [thanhdat77/herdr-navigator](https://github.com/thanhdat77/herdr-navigator) | 62 | the sesh picker (`prefix o` / `M-s`) — jump to workspace/agent/project/directory |
-| [iurysza/termscope](https://github.com/iurysza/termscope) | 39 | extrakto + tmux-fingers — open files/links visible on screen |
-| [devashish2203/herdr-worktrunk](https://github.com/devashish2203/herdr-worktrunk) | 81 | nothing, but this setup lives in `.worktrees/` checkouts |
-| [nicosuave/memex](https://github.com/nicosuave/memex) | 89 | nothing — transcript search across Claude/Codex/Pi. No tmux equivalent, and this machine has ~2250 sessions per fortnight |
-
-Deliberately **not** installing `vim-herdr-navigation` / `herdr-splits.nvim`:
-vim-tmux-navigator was dropped from this setup on purpose (engram `ys4ahaca16`)
-in favour of native directional binds, and `[keys] focus_pane_*` restores
-`alt+hjkl` here.
-
-**Trust:** plugins are unsandboxed — they run as your user with full Herdr CLI
-access, and herdr neither reviews nor sandboxes them. `herdr plugin install`
-previews the source and commands in an interactive terminal; use `--ref` to pin
-a revision. Given this repo's public/no-plaintext-secrets posture, read the
-`herdr-plugin.toml` before confirming any install.
-
 ## Ghostty integration
 
 Ghostty's `command` is a single global value, so pointing it at herdr is a full
@@ -177,22 +122,19 @@ Trial fails if any of 1–4 fail. 5–7 are cost questions, not correctness.
    Layout, cwd, and agent sessions come back.
 3. **Nothing silently reverts.** Run `chezmoi apply` after setup, then repeat
    test 1. Catches the settings.json conflict above.
-4. **Shift+Enter / CSI-u under Ghostty.** There is an open herdr issue in this
+4. **Multiple Ghostty windows.** Open three. tmux needed a deliberate design
+   here — `new-session -t main` + `destroy-unattached on` — so each window got
+   an *independent view* of a shared window set rather than a mirror. Determine
+   what herdr does with several attached clients: independent focus per window,
+   or mirrored? If it mirrors, that is a real regression against the current
+   setup and `ghostty-tmux`'s grouped-session trick has no obvious analogue.
+5. **Shift+Enter / CSI-u under Ghostty.** There is an open herdr issue in this
    family; tmux.conf currently needs `bind -n S-Enter send-keys Escape "[13;2u"`.
    Determine whether an equivalent workaround exists.
-5. **fish + PATH inside panes.** `shell_mode = "auto"` should give login shells;
+6. **fish + PATH inside panes.** `shell_mode = "auto"` should give login shells;
    confirm Homebrew PATH is sane in a fresh pane.
-6. **The picker gap.** Decide whether workspaces + sidebar actually replace the
+7. **The picker gap.** Decide whether workspaces + sidebar actually replace the
    sesh picker for the ~30-directory rotation, or whether that is a real loss.
-
-### Not a criterion: multi-window mirroring
-
-Resolved 2026-08-08 — `ghostty-tmux` mirrors on new windows in practice, and
-herdr does too, so this is parity rather than a regression. Accepted as-is.
-
-Note the comment block in `dot_local/bin/executable_ghostty-tmux` still claims
-later windows are "NOT mirrored"; that comment is inaccurate and is a separate
-cleanup, untouched by this branch.
 
 ## Rollback
 

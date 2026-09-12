@@ -1,0 +1,556 @@
+{
+  "$schema": "../../pr-review/evals/evals.schema.json",
+  "skill_name": "jujutsu",
+  "evals": [
+    {
+      "id": "JJ-T1",
+      "type": "triggering",
+      "prompt": "I need to use jj to commit my changes",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should trigger jujutsu skill based on jj mention",
+      "assertions": [{"name": "triggers-jujutsu", "description": "Triggers the jujutsu skill", "type": "skill_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T2",
+      "type": "triggering",
+      "prompt": "how do I create a bookmark in jujutsu?",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should trigger jujutsu skill based on jujutsu mention",
+      "assertions": [{"name": "triggers-jujutsu", "description": "Triggers the jujutsu skill", "type": "skill_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T3",
+      "type": "triggering",
+      "prompt": "help me set up jj in this repo",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should trigger jujutsu skill; may also suggest /jj-init command",
+      "assertions": [{"name": "triggers-jujutsu", "description": "Triggers the jujutsu skill", "type": "skill_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T4",
+      "type": "triggering",
+      "prompt": "what's the jj equivalent of git cherry-pick?",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should trigger jujutsu skill and reference rebase",
+      "assertions": [{"name": "triggers-jujutsu", "description": "Triggers the jujutsu skill", "type": "skill_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T5",
+      "type": "negative",
+      "prompt": "commit this with a message",
+      "context": "No .jj/ directory exists in the repository root",
+      "expected_skill": null,
+      "expected_output": "Generic commit request should NOT trigger jujutsu unless .jj/ is present",
+      "assertions": [{"name": "does-not-trigger-jujutsu", "description": "Does not trigger jujutsu skill for generic commit", "type": "skill_not_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T6",
+      "type": "triggering",
+      "prompt": "check my repo status",
+      "context": "Repo root contains .jj/ directory",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should trigger jujutsu skill when .jj/ directory exists even without explicit jj mention",
+      "assertions": [{"name": "triggers-jujutsu-via-dotjj", "description": "Triggers jujutsu skill from .jj/ directory presence", "type": "skill_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T7",
+      "type": "negative",
+      "prompt": "run /jj-init to set up jujutsu in this repo",
+      "expected_skill": null,
+      "expected_output": "/jj-init is a slash command, not a skill — should invoke directly",
+      "assertions": [
+        {
+          "name": "invokes-command",
+          "description": "Invokes the /jj-init slash command",
+          "type": "command_invoked",
+          "check": "jj-init"
+        }
+      ]
+    },
+    {
+      "id": "JJ-T8",
+      "type": "negative",
+      "prompt": "help me resolve this git merge conflict",
+      "context": "Repo has .git/ directory but no .jj/ directory",
+      "expected_skill": null,
+      "expected_output": "Git-specific merge conflict with no .jj/ should NOT trigger jujutsu skill",
+      "assertions": [{"name": "does-not-trigger-jujutsu-for-git", "description": "Does not trigger jujutsu skill for git-only workflow", "type": "skill_not_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-T9",
+      "type": "triggering",
+      "prompt": "check my repo status",
+      "context": "Repo root contains both .jj/ and .git/ directories (colocated jj+git repo)",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should trigger jujutsu skill in colocated repo where both .jj/ and .git/ exist",
+      "assertions": [{"name": "triggers-jujutsu-colocated", "description": "Triggers jujutsu skill in colocated jj+git repo", "type": "skill_triggered", "check": "jujutsu"}]
+    },
+    {
+      "id": "JJ-B1",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "check my repo status",
+      "context": "Repo root contains .jj/ directory",
+      "expected_output": "Should use jj st instead of git status. Should detect .jj/ and activate jujutsu skill.",
+      "assertions": [
+        {
+          "name": "uses-jj-status",
+          "description": "Uses jj st for status check",
+          "type": "contains",
+          "check": "jj st"
+        },
+        {
+          "name": "does-not-use-git-status",
+          "description": "Does not fall back to git status",
+          "type": "not_contains",
+          "check": "git status"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B2",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "commit these changes with message 'fix: update config'",
+      "context": "Active repo is a jj repo",
+      "expected_output": "Should use jj commit -m, not jj desc + jj new, and not git add + git commit",
+      "assertions": [
+        {
+          "name": "uses-jj-commit",
+          "description": "Uses jj commit -m for committing",
+          "type": "contains",
+          "check": "jj commit"
+        },
+        {
+          "name": "no-staging",
+          "description": "Does not use git add or jj track for regular files",
+          "type": "not_contains",
+          "check": "git add"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B3",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "push my changes to the remote",
+      "context": "Active jj repo has bookmark 'feature-x'",
+      "expected_output": "Should use jj git push -b feature-x, not git push",
+      "assertions": [
+        {
+          "name": "uses-jj-git-push",
+          "description": "Uses jj git push with bookmark flag",
+          "type": "contains",
+          "check": "jj git push"
+        },
+        {
+          "name": "specifies-bookmark",
+          "description": "Includes -b or --bookmark flag",
+          "type": "contains",
+          "check": "-b "
+        }
+      ]
+    },
+    {
+      "id": "JJ-B4",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "split this commit into two",
+      "context": "Active repo is a jj repo",
+      "expected_output": "Should refuse or warn that jj split is interactive and cannot be used by agents",
+      "assertions": [
+        {
+          "name": "warns-interactive",
+          "description": "Warns that split is interactive",
+          "type": "manual",
+          "check": "Output mentions that jj split is interactive and not agent-safe"
+        },
+        {
+          "name": "warns-interactive-auto",
+          "description": "Automated check for interactive warning",
+          "type": "contains",
+          "check": "interactive"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B5",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "run git rebase in this repo",
+      "context": "Repo root contains .jj/ directory",
+      "expected_output": "Should warn against using mutating git commands in colocated jj repo",
+      "assertions": [
+        {
+          "name": "warns-no-git-mutate",
+          "description": "Warns against git mutating commands in jj repos",
+          "type": "manual",
+          "check": "Output warns that mutating git commands should not be used in jj repos"
+        },
+        {
+          "name": "suggests-jj-equivalent",
+          "description": "Automated check that response suggests the jj equivalent command",
+          "type": "contains",
+          "check": "jj rebase"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-NEG1",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "run git log to see recent commits in this jj repo",
+      "context": "Repo root contains both .jj/ and .git/ directories (colocated repo)",
+      "expected_output": "Should NOT warn against read-only git commands like git log in a colocated jj repo. May suggest jj log as alternative but should not block git log.",
+      "assertions": [
+        {
+          "name": "no-warning-for-git-log",
+          "description": "Does not warn against or block read-only git commands in colocated repo",
+          "type": "manual",
+          "check": "Verify no warning about using git log in jj repo; may suggest jj log as alternative but does not refuse"
+        },
+        {
+          "name": "no-warning-emitted-auto",
+          "description": "Automated check that no WARNING is emitted for read-only git log",
+          "type": "not_contains",
+          "check": "WARNING"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B6",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "create a jj workspace with the same name as an existing one",
+      "context": "Active repo is a jj repo",
+      "expected_output": "Should detect the naming collision and either use a unique name or report the conflict",
+      "assertions": [
+        {
+          "name": "handles-collision",
+          "description": "Handles workspace name collision gracefully",
+          "type": "manual",
+          "check": "Verify the agent detects or handles workspace name collision"
+        },
+        {
+          "name": "reports-collision-auto",
+          "description": "Automated check that response mentions collision or already exists",
+          "type": "contains",
+          "check": "already exists"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-WS1",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "create a worktree for feature work named 'my-feature'",
+      "context": "Repo root contains .jj/ directory. Worktree hooks are configured.",
+      "expected_output": "Should use worktree-{NAME} prefix format for workspace names (e.g., worktree-my-feature)",
+      "assertions": [
+        {
+          "name": "uses-worktree-prefix",
+          "description": "Workspace name uses worktree- prefix convention",
+          "type": "contains",
+          "check": "worktree-"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B7",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "initialize jj in this repo",
+      "context": "Repo already has .jj/ directory",
+      "expected_output": "Should detect existing .jj/ and inform user that jj is already initialized",
+      "assertions": [
+        {
+          "name": "detects-existing",
+          "description": "Detects existing jj initialization",
+          "type": "contains",
+          "check": "already"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B8",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "I'm in a jj repo and need to review a PR — what VCS commands should agents use?",
+      "expected_output": "Should reference VCS detection preamble and jj commands for agents",
+      "assertions": [
+        {
+          "name": "references-vcs-detection",
+          "description": "References the VCS detection preamble command",
+          "type": "contains",
+          "check": "jj root"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B9",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "check repo status",
+      "context": "Directory has no .jj/ or .git/ present",
+      "expected_output": "Should detect no VCS and report appropriately",
+      "assertions": [
+        {
+          "name": "detects-no-vcs",
+          "description": "Reports no VCS detected when neither .jj/ nor .git/ exists",
+          "type": "manual",
+          "check": "Verify agent reports no VCS or asks user to initialize"
+        },
+        {
+          "name": "no-jj-commands",
+          "description": "Does not run jj commands when no VCS is present",
+          "type": "not_contains",
+          "check": "jj st"
+        },
+        {
+          "name": "mentions-no-vcs",
+          "description": "Mentions that no VCS was detected",
+          "type": "contains",
+          "check": "no VCS"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B10",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "I need to push my current changes but I haven't set a bookmark. How do I push in jj?",
+      "expected_skill": "jujutsu",
+      "expected_output": "Should recommend jj git push --change or creating a bookmark first",
+      "context": "Repo root contains .jj/ directory. User has uncommitted changes with no bookmark set.",
+      "assertions": [
+        {
+          "name": "suggests-push-change",
+          "description": "Suggests jj git push --change or bookmark creation",
+          "type": "contains",
+          "check": "push"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-INIT1",
+      "type": "behavioral",
+      "skill": "jj-init",
+      "prompt": "/jj-init",
+      "context": "Repo has .jj/ directory already present",
+      "expected_output": "Should detect existing .jj/ and stop with 'already initialized' message",
+      "assertions": [
+        {
+          "name": "detects-already-initialized",
+          "description": "Reports that jj is already initialized",
+          "type": "contains",
+          "check": "already"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-INIT2",
+      "type": "behavioral",
+      "skill": "jj-init",
+      "prompt": "/jj-init",
+      "context": "Repo has .git/ directory but no .jj/ directory",
+      "expected_output": "Should run jj git init --colocate, update .gitignore, verify with jj st",
+      "assertions": [
+        {
+          "name": "runs-jj-git-init-colocate",
+          "description": "Runs jj git init --colocate",
+          "type": "contains",
+          "check": "jj git init --colocate"
+        },
+        {
+          "name": "updates-gitignore",
+          "description": "Updates .gitignore for jj",
+          "type": "contains",
+          "check": ".gitignore"
+        },
+        {
+          "name": "runs-verification",
+          "description": "Runs jj st to verify initialization succeeded",
+          "type": "contains",
+          "check": "jj st"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-INIT3",
+      "type": "behavioral",
+      "skill": "jj-init",
+      "prompt": "/jj-init",
+      "context": "Directory has no .git/ or .jj/ present",
+      "expected_output": "Should detect no git repo and report error, suggest git init first",
+      "assertions": [
+        {
+          "name": "suggests-git-init",
+          "description": "Suggests running git init first",
+          "type": "contains",
+          "check": "git init"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-INIT4",
+      "type": "behavioral",
+      "skill": "jj-init",
+      "prompt": "Initialize jj in this repo",
+      "context": "jj git init --colocate exits non-zero with error: 'Error: The Git repo is already colocated'",
+      "expected_output": "Should report the error text to the user and stop without modifying .gitignore or running verification",
+      "assertions": [
+        {
+          "name": "surfaces-error-text",
+          "description": "Surfaces the jj init error text to the user",
+          "type": "contains",
+          "check": "error"
+        },
+        {
+          "name": "reports-failure",
+          "description": "Reports that init failed rather than silently continuing",
+          "type": "not_contains",
+          "check": ".gitignore"
+        },
+        {
+          "name": "no-gitignore-shell-command",
+          "description": "Does not execute the step 4 gitignore modification shell command",
+          "type": "not_contains",
+          "check": "grep -qxF"
+        },
+        {
+          "name": "no-verification-run",
+          "description": "Does not proceed to the verification step after init failure",
+          "type": "not_contains",
+          "check": "jj st"
+        }
+      ]
+    },
+    {
+      "id": "JJ-T-NEG2",
+      "type": "negative",
+      "prompt": "git commit -m 'fix: update readme'",
+      "expected_skill": null,
+      "expected_output": "Should NOT trigger jujutsu skill for explicit git commands in a git-only repo",
+      "assertions": [
+        {
+          "name": "no-jujutsu-trigger",
+          "description": "Does not trigger jujutsu skill for explicit git commands",
+          "type": "skill_not_triggered",
+          "check": "jujutsu"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-INIT5",
+      "type": "behavioral",
+      "skill": "jj-init",
+      "prompt": "/jj-init",
+      "context": "jj binary is not installed (command -v jj returns non-zero)",
+      "expected_output": "Should detect missing jj, tell user to install it with URL, and stop without running any further steps",
+      "assertions": [
+        {"name": "surfaces-install-url", "description": "References jj install docs or suggests installation", "type": "contains", "check": "install"},
+        {"name": "stops-early", "description": "Does not proceed to git rev-parse or jj git init", "type": "not_contains", "check": "jj git init"}
+      ]
+    },
+    {
+      "id": "JJ-B-UNDO1",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "jj bookmark set failed, should I run jj undo twice to clean up?",
+      "context": "In a jj repo, jj bookmark set was attempted but failed with an error",
+      "expected_output": "Should explain that failed jj commands leave no op-log entry, so jj undo only needs to run once (or not at all for the failed operation)",
+      "assertions": [
+        {
+          "name": "no-undo-twice",
+          "description": "Does not recommend running jj undo twice",
+          "type": "not_contains",
+          "check": "undo twice"
+        },
+        {
+          "name": "explains-op-log",
+          "description": "Explains that failed operations leave no op-log entry",
+          "type": "contains",
+          "check": "op log"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-CLEANUP1",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "The worktree-create hook just printed the following to stderr and exited non-zero:\n\nERROR: cleanup: jj workspace forget worktree-my-feature failed — workspace metadata may be leaked\n\nWhat should I do?",
+      "context": "Agent received hook stderr output verbatim. The hook is worktree-create.sh. The workspace name 'worktree-my-feature' appears in the error text.",
+      "expected_output": "Should extract the workspace name 'worktree-my-feature' from the hook stderr output and tell the user to run 'jj workspace forget worktree-my-feature' manually. Should identify the error as coming from the hook stderr, not from a jj command the agent ran.",
+      "assertions": [
+        {
+          "name": "tells-user-forget-command",
+          "description": "Agent tells user to run jj workspace forget",
+          "type": "contains",
+          "check": "jj workspace forget"
+        },
+        {
+          "name": "names-specific-workspace",
+          "description": "Agent extracts and names the specific workspace from the stderr output",
+          "type": "contains",
+          "check": "worktree-my-feature"
+        },
+        {
+          "name": "indicates-manual-recovery",
+          "description": "Agent indicates that manual recovery is needed",
+          "type": "contains",
+          "check": "manual"
+        },
+        {
+          "name": "attributes-error-to-hook",
+          "description": "Agent identifies the error as coming from the hook stderr, not a jj command it ran",
+          "type": "manual",
+          "check": "Verify the agent attributes the error to hook stderr output (worktree-create.sh) rather than treating it as a jj command failure it caused"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-AT1",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "I just ran jj commit, verify the committed content is correct",
+      "context": "In a jj repo, user has just run jj commit -m 'fix: update config'",
+      "expected_output": "Should inspect @- (parent commit) not @ (empty working copy) to verify committed content",
+      "assertions": [
+        {
+          "name": "uses-at-minus",
+          "description": "Uses @- revision to inspect committed state",
+          "type": "contains",
+          "check": "@-"
+        },
+        {
+          "name": "does-not-inspect-at-alone",
+          "description": "Does not inspect @ alone (which is the empty working copy)",
+          "type": "manual",
+          "check": "Verify agent uses @- (parent) not @ (working copy) for verification"
+        }
+      ]
+    },
+    {
+      "id": "JJ-B-WS2",
+      "type": "behavioral",
+      "skill": "jujutsu",
+      "prompt": "The worktree-create hook failed with: ERROR: worktree path '/tmp/repo_worktrees/my-feature' already exists — refusing to create",
+      "context": "Agent is trying to create a worktree but the name already exists from a previous run",
+      "expected_output": "Should suggest removing the existing directory or using a different name",
+      "assertions": [
+        {
+          "name": "suggests-removal-or-rename",
+          "description": "Suggests removing existing directory or using different name",
+          "type": "manual",
+          "check": "Agent suggests either removing the existing worktree directory or choosing a different name"
+        },
+        {
+          "name": "mentions-existing-path",
+          "description": "References the existing path from the error",
+          "type": "contains",
+          "check": "already exists"
+        }
+      ]
+    }
+  ]
+}

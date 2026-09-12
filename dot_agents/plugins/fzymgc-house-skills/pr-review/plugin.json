@@ -1,0 +1,5 @@
+{
+  "name": "pr-review",
+  "version": "1.0.0",
+  "description": "PR review workflow with specialized review agents and automated fix loop"
+}

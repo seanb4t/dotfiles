@@ -1,0 +1,33 @@
+{
+  "name": "homelab",
+  "version": "0.7.0",
+  "description": "Infrastructure skills for homelab cluster (Grafana, Terraform)",
+  "author": {
+    "name": "Sean Brandt",
+    "email": "4678+seanb4t@users.noreply.github.com",
+    "url": "https://github.com/seanb4t"
+  },
+  "homepage": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "repository": "https://github.com/fzymgc-house/fzymgc-house-skills",
+  "license": "UNLICENSED",
+  "keywords": ["homelab", "grafana", "terraform", "skills"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Homelab",
+    "shortDescription": "Infrastructure skills for Grafana and Terraform workflows.",
+    "longDescription": "Codex wrapper for the homelab Claude plugin. Reuses the existing Grafana, Terraform, and skill QA workflows from this repository.",
+    "developerName": "fzymgc-house",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Run", "Write"],
+    "websiteURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "privacyPolicyURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "termsOfServiceURL": "https://github.com/fzymgc-house/fzymgc-house-skills",
+    "defaultPrompt": [
+      "Inspect Grafana alerts in the homelab cluster.",
+      "Check recent Terraform Cloud runs and workspace state.",
+      "Review a SKILL.md file for quality issues."
+    ],
+    "brandColor": "#0F766E"
+  }
+}

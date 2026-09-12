@@ -1,0 +1,56 @@
+{
+  "name": "fzymgc-house-skills",
+  "interface": {
+    "displayName": "Fzymgc House Skills"
+  },
+  "plugins": [
+    {
+      "name": "homelab",
+      "source": {
+        "source": "local",
+        "path": "./plugins/homelab"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "pr-review",
+      "source": {
+        "source": "local",
+        "path": "./plugins/pr-review"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "jj",
+      "source": {
+        "source": "local",
+        "path": "./plugins/jj"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "superpowers",
+      "source": {
+        "source": "local",
+        "path": "./plugins/superpowers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

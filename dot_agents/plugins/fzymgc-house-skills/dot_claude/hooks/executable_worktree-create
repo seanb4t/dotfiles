@@ -1,0 +1,303 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+# WorktreeCreate hook: create worktrees in sibling directory
+#
+# Input:  JSON on stdin with "name" field
+# Output: worktree path printed to stdout (framework reads this)
+#
+# Behavior:
+#   1. Validate name (reject path traversal, shell metacharacters, empty)
+#   2. Detect repo root via git rev-parse or jj root
+#   3. Create parent dir: <repo-parent>/<repo-name>_worktrees/
+#   4. VCS-aware workspace creation:
+#      - jj repos (.jj/): jj workspace add --name worktree-<name>
+#      - git repos: git worktree add -b worktree/<name>
+#   5. Install git hooks (lefthook) if configured
+#   6. Print worktree path to stdout
+#
+# Cleanup: atexit handler reverts partial state on failure (VCS deregistration,
+#          directory removal). Uses _parent_created and _workspace_created
+#          flags to avoid cleaning up resources that were never created.
+
+from __future__ import annotations
+
+import atexit
+import json
+import shutil
+import signal
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from worktree_helpers import (
+    cleanup_empty_parent,
+    detect_repo_root,
+    run_cmd,
+    sanitize_for_output,
+    validate_safe_name,
+)
+
+# Module-level state flags for cleanup handler
+_parent_created: bool = False
+_workspace_created: bool = False
+_cleanup_registered: bool = False
+
+# Will be set after argument parsing
+_name: str = ""
+_worktree_path: Path | None = None
+_worktree_parent: Path | None = None
+_repo_root: Path | None = None
+_is_jj: bool = False
+
+
+def _cleanup() -> None:
+    """Revert partial state on failure. Disarmed by setting _cleanup_registered=False."""
+    global _cleanup_registered
+    if not _cleanup_registered:
+        return
+    _cleanup_registered = False  # idempotent: prevent double-run via SIGTERM + atexit
+
+    if _repo_root is None or not _repo_root.is_dir():
+        print(
+            f"WARNING: cleanup: REPO_ROOT '{sanitize_for_output(str(_repo_root))}' "
+            "missing — VCS workspace cleanup skipped",
+            file=sys.stderr,
+        )
+        print(
+            "WARNING: cleanup: proceeding with directory removal despite missing REPO_ROOT",
+            file=sys.stderr,
+        )
+    elif _is_jj:
+        # jj repo: check jj availability before attempting workspace forget
+        if not _parent_created:
+            # mkdir -p failed before any workspace was created — nothing to forget
+            pass  # no-op: workspace directory was never created
+        elif shutil.which("jj") is not None:
+            # Always attempt workspace forget — safe even if workspace wasn't fully
+            # registered (jj workspace add may partially complete before failing).
+            result = run_cmd(
+                ["jj", "--no-pager", "workspace", "forget", f"worktree-{_name}"],
+                cwd=_repo_root,
+            )
+            if result.returncode != 0:
+                jj_err = sanitize_for_output((result.stderr or "").strip()[:500])
+                if _workspace_created:
+                    print(
+                        f"ERROR: cleanup: jj workspace forget worktree-{_name} failed "
+                        f"— workspace metadata may be leaked: {jj_err}",
+                        file=sys.stderr,
+                    )
+                    print(
+                        f"LEAKED_WORKSPACE: worktree-{_name}",
+                        file=sys.stderr,
+                    )
+                else:
+                    print(
+                        f"WARNING: cleanup: jj workspace forget worktree-{_name} failed "
+                        f"(may not have been registered) — run manually if needed: {jj_err}",
+                        file=sys.stderr,
+                    )
+        else:
+            if _workspace_created:
+                print(
+                    f"ERROR: cleanup: .jj/ found but jj not installed — workspace "
+                    f"'worktree-{_name}' was created and cannot be cleaned up; "
+                    f"run 'jj workspace forget worktree-{_name}' manually",
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    "INFO: cleanup: .jj/ found but jj not installed — no workspace was registered, no cleanup needed",
+                    file=sys.stderr,
+                )
+    elif _workspace_created and _worktree_path is not None:
+        # git repo: only remove worktree registration if it was actually created
+        result = run_cmd(
+            ["git", "worktree", "remove", "--force", str(_worktree_path)],
+            cwd=_repo_root,
+        )
+        if result.returncode != 0:
+            git_err = sanitize_for_output((result.stderr or "").strip()[:500])
+            print(
+                f"WARNING: cleanup: git worktree remove failed: {git_err}",
+                file=sys.stderr,
+            )
+            prune_result = run_cmd(["git", "worktree", "prune"], cwd=_repo_root)
+            if prune_result.returncode != 0:
+                prune_err = sanitize_for_output((prune_result.stderr or "").strip()[:500])
+                print(
+                    f"WARNING: cleanup: git worktree prune also failed: {prune_err} "
+                    "— stale metadata may remain",
+                    file=sys.stderr,
+                )
+    else:
+        # Partial git worktree add may leave stale metadata in .git/worktrees/
+        if _repo_root is not None and _repo_root.is_dir():
+            prune_result = run_cmd(["git", "worktree", "prune"], cwd=_repo_root)
+            if prune_result.returncode != 0:
+                prune_err = sanitize_for_output((prune_result.stderr or "").strip()[:500])
+                print(
+                    f"WARNING: cleanup: git worktree prune failed for partial create: {prune_err} "
+                    "— stale worktree metadata may remain",
+                    file=sys.stderr,
+                )
+
+    if _worktree_path is not None:
+        try:
+            shutil.rmtree(_worktree_path, ignore_errors=False)
+        except OSError as exc:
+            print(
+                f"WARNING: cleanup failed for '{sanitize_for_output(str(_worktree_path))}': "
+                f"{sanitize_for_output(str(exc)[:500])}",
+                file=sys.stderr,
+            )
+
+    if _worktree_parent is not None:
+        cleanup_empty_parent(_worktree_parent)
+
+
+def main() -> int:
+    global _parent_created, _workspace_created, _cleanup_registered
+    global _name, _worktree_path, _worktree_parent, _repo_root, _is_jj
+
+    # Parse JSON input
+    try:
+        raw = sys.stdin.read()
+        data = json.loads(raw)
+    except (json.JSONDecodeError, ValueError) as exc:
+        print(f"ERROR: failed to parse JSON input: {exc}", file=sys.stderr)
+        return 1
+
+    name = data.get("name") or ""
+    if not name:
+        print("ERROR: no worktree name provided", file=sys.stderr)
+        return 1
+
+    # Validate name
+    try:
+        validate_safe_name(name, "worktree name")
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    _name = name
+
+    # Detect repo root
+    try:
+        repo_root = detect_repo_root(cwd=Path.cwd())
+    except RuntimeError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    _repo_root = repo_root
+    repo_name = repo_root.name
+
+    # Validate repo directory name
+    try:
+        validate_safe_name(repo_name, "repository directory name")
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    worktree_parent = repo_root.parent / f"{repo_name}_worktrees"
+    worktree_path = worktree_parent / name
+
+    # Guard: refuse to overwrite a pre-existing directory
+    if worktree_path.exists():
+        print(
+            f"ERROR: worktree path '{sanitize_for_output(str(worktree_path))}' already exists "
+            f"— refusing to create (remove manually or use a different name)",
+            file=sys.stderr,
+        )
+        # Do NOT set _worktree_path — cleanup must not delete pre-existing data
+        return 1
+
+    _worktree_parent = worktree_parent
+    _worktree_path = worktree_path
+    _is_jj = (repo_root / ".jj").is_dir()
+
+    # Register cleanup handler
+    _cleanup_registered = True
+    atexit.register(_cleanup)
+
+    def _sigterm_handler(signum: int, frame: object) -> None:
+        """Handle SIGTERM by running cleanup, then exiting."""
+        _cleanup()
+        sys.exit(1)
+
+    signal.signal(signal.SIGTERM, _sigterm_handler)
+
+    # Check jj availability for jj repos
+    if _is_jj and shutil.which("jj") is None:
+        print("ERROR: .jj/ directory found but jj is not installed", file=sys.stderr)
+        return 1
+
+    # Create parent directory
+    try:
+        worktree_parent.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        print(
+            f"ERROR: failed to create worktree parent directory "
+            f"'{sanitize_for_output(str(worktree_parent))}': "
+            f"{sanitize_for_output(str(exc))}",
+            file=sys.stderr,
+        )
+        return 1
+    _parent_created = True
+
+    # VCS-aware workspace creation
+    if _is_jj:
+        result = run_cmd(
+            ["jj", "--no-pager", "workspace", "add", str(worktree_path), "--name", f"worktree-{name}"],
+            cwd=repo_root,
+        )
+        if result.returncode != 0:
+            jj_out = sanitize_for_output((result.stderr or result.stdout or "").strip())
+            # Check for old jj version that doesn't support --name
+            if "--name" in jj_out and any(
+                word in jj_out.lower() for word in ("unexpected", "unrecognized", "unknown")
+            ):
+                print(
+                    f"ERROR: jj version too old — 'jj workspace add --name' not supported "
+                    f"(jj output: {jj_out[:200]}). Update jj.",
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    f"ERROR: jj workspace add failed: {jj_out[:500]}",
+                    file=sys.stderr,
+                )
+            return 1
+        _workspace_created = True
+    else:
+        result = run_cmd(
+            ["git", "worktree", "add", str(worktree_path), "-b", f"worktree/{name}", "HEAD"],
+            cwd=repo_root,
+        )
+        if result.returncode != 0:
+            git_err = sanitize_for_output((result.stderr or "").strip()[:500])
+            print(f"ERROR: git worktree add failed: {git_err}", file=sys.stderr)
+            return 1
+        _workspace_created = True
+
+    # Install lefthook if configured
+    if (repo_root / "lefthook.yml").is_file():
+        if shutil.which("lefthook") is None:
+            print("WARNING: lefthook.yml found but lefthook not installed", file=sys.stderr)
+        else:
+            lh_result = run_cmd(["lefthook", "install"], cwd=worktree_path)
+            if lh_result.returncode != 0:
+                lh_err = sanitize_for_output((lh_result.stderr or "").strip()[:500])
+                print(f"WARNING: lefthook install failed in worktree: {lh_err}", file=sys.stderr)
+
+    # Disarm cleanup handler — success path
+    _cleanup_registered = False
+
+    print(worktree_path)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

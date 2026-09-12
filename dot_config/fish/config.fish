@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/sean/.docker/bin"
+# End of Docker Desktop section.
+
 if status is-interactive
   # Interactive config here
 
@@ -43,6 +47,9 @@ set -gx GIT_EDITOR nvim
 set -gx PAGER bat
 
 # Setup rust/cargo
+# Homebrew's rustup formula is keg-only and no longer creates ~/.cargo/bin;
+# its shims (cargo, rustc, clippy, rustfmt) live in the keg. See `brew info rustup`.
+fish_add_path /opt/homebrew/opt/rustup/bin
 fish_add_path $HOME/.cargo/bin
 
 
