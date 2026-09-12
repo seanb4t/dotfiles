@@ -1,0 +1,334 @@
+{
+  "cli_version": "1.5.26",
+  "agents": [
+    "claude-code",
+    "codex"
+  ],
+  "link_directories": [
+    ".claude/skills"
+  ],
+  "skills": [
+    {
+      "name": "agent-browser",
+      "source": "https://github.com/vercel-labs/agent-browser/tree/8c15ff9f71ae60c7e99e66afe1e2d4b9bf414fe2/skills/agent-browser",
+      "upstream": "vercel-labs/agent-browser"
+    },
+    {
+      "name": "agent-interface-design",
+      "source": "./agent-skill-sources/agent-interface-design"
+    },
+    {
+      "name": "algorithmic-art",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/algorithmic-art",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "archify",
+      "source": "https://github.com/tt-a1i/archify/tree/6db72a9aea3d0f67a6a034e41f8a5491476a11c1/archify",
+      "upstream": "tt-a1i/archify"
+    },
+    {
+      "name": "autofix",
+      "source": "https://github.com/coderabbitai/skills/tree/929b0ec6dae6871abf20f78e7e502d6b836e1379/skills/autofix",
+      "upstream": "coderabbitai/skills"
+    },
+    {
+      "name": "blindspot-pass",
+      "source": "./agent-skill-sources/blindspot-pass"
+    },
+    {
+      "name": "brainstorm-prototypes",
+      "source": "./agent-skill-sources/brainstorm-prototypes"
+    },
+    {
+      "name": "brand-guidelines",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/brand-guidelines",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "canvas-design",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/canvas-design",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "change-quiz",
+      "source": "./agent-skill-sources/change-quiz"
+    },
+    {
+      "name": "claude-api",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/claude-api",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "claude-automation-recommender",
+      "source": "https://github.com/anthropics/claude-plugins-official/tree/3deb821cb71ccfaaf2ffa9935e977df314ce5cd5/plugins/claude-code-setup/skills/claude-automation-recommender",
+      "upstream": "anthropics/claude-plugins-official"
+    },
+    {
+      "name": "code-review",
+      "source": "https://github.com/coderabbitai/skills/tree/929b0ec6dae6871abf20f78e7e502d6b836e1379/skills/code-review",
+      "upstream": "coderabbitai/skills"
+    },
+    {
+      "name": "code-review-excellence",
+      "source": "https://github.com/wshobson/agents/tree/a30778f8c4e6b0a87567941b7cca4f534bf642b6/plugins/developer-essentials/skills/code-review-excellence",
+      "upstream": "wshobson/agents"
+    },
+    {
+      "name": "codegraph",
+      "source": "./agent-skill-sources/codegraph"
+    },
+    {
+      "name": "computer-use",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/computer-use",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "context-audit",
+      "source": "./agent-skill-sources/context-audit"
+    },
+    {
+      "name": "create-agent",
+      "source": "https://github.com/OpenRouterTeam/agent-skills/tree/2a69d8c22cc260049305efe32d5d1d35456ebd09/skills/create-agent",
+      "upstream": "OpenRouterTeam/agent-skills"
+    },
+    {
+      "name": "defuddle",
+      "source": "https://github.com/kepano/obsidian-skills/tree/8ccef29ae8624eccc734e77ced4a6e54baf5d83a/skills/defuddle",
+      "upstream": "kepano/obsidian-skills"
+    },
+    {
+      "name": "doc-coauthoring",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/doc-coauthoring",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "docx",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/docx",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "find-docs",
+      "source": "./agent-skill-sources/find-docs"
+    },
+    {
+      "name": "find-skills",
+      "source": "https://github.com/vercel-labs/skills/tree/d667282815248da03a08a18272b5d2eef9caf77c/skills/find-skills",
+      "upstream": "vercel-labs/skills"
+    },
+    {
+      "name": "frontend-design",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/frontend-design",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "gh-stack",
+      "source": "https://github.com/github/gh-stack/tree/2bd699a544a09cb5c45a013d03416e0894b0454e/skills/gh-stack",
+      "upstream": "github/gh-stack"
+    },
+    {
+      "name": "graphify",
+      "source": "./agent-skill-sources/graphify"
+    },
+    {
+      "name": "herdr",
+      "source": "https://github.com/herdrdev/herdr/tree/f6060cf682f69ef8302c25e8924c0b27aef7ae16/skills/herdr",
+      "upstream": "herdrdev/herdr"
+    },
+    {
+      "name": "humanizer",
+      "source": "https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6/.",
+      "upstream": "blader/humanizer"
+    },
+    {
+      "name": "implementation-notes",
+      "source": "./agent-skill-sources/implementation-notes"
+    },
+    {
+      "name": "implementation-plan",
+      "source": "./agent-skill-sources/implementation-plan"
+    },
+    {
+      "name": "internal-comms",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/internal-comms",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "interview-me",
+      "source": "./agent-skill-sources/interview-me"
+    },
+    {
+      "name": "json-canvas",
+      "source": "https://github.com/kepano/obsidian-skills/tree/8ccef29ae8624eccc734e77ced4a6e54baf5d83a/skills/json-canvas",
+      "upstream": "kepano/obsidian-skills"
+    },
+    {
+      "name": "karakeep",
+      "source": "https://github.com/karakeep-app/karakeep/tree/5a2f009e2f6d266087f2f3f527e6e384cefd6de4/skills",
+      "upstream": "karakeep-app/karakeep"
+    },
+    {
+      "name": "linear-tickets",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/linear-tickets",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "mcp-builder",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/mcp-builder",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "obsidian-bases",
+      "source": "https://github.com/kepano/obsidian-skills/tree/8ccef29ae8624eccc734e77ced4a6e54baf5d83a/skills/obsidian-bases",
+      "upstream": "kepano/obsidian-skills"
+    },
+    {
+      "name": "obsidian-cli",
+      "source": "https://github.com/kepano/obsidian-skills/tree/8ccef29ae8624eccc734e77ced4a6e54baf5d83a/skills/obsidian-cli",
+      "upstream": "kepano/obsidian-skills"
+    },
+    {
+      "name": "obsidian-markdown",
+      "source": "https://github.com/kepano/obsidian-skills/tree/8ccef29ae8624eccc734e77ced4a6e54baf5d83a/skills/obsidian-markdown",
+      "upstream": "kepano/obsidian-skills"
+    },
+    {
+      "name": "orca-cli",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/orca-cli",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "orca-emulator",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/orca-emulator",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "orca-emulator-android",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/orca-emulator-android",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "orca-linear",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/orca-linear",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "orca-per-workspace-env",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/orca-per-workspace-env",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "orchestration",
+      "source": "https://github.com/stablyai/orca/tree/403b62a8d8fa6e896a93acc4c15405be0f0b7dc7/skills/orchestration",
+      "upstream": "stablyai/orca"
+    },
+    {
+      "name": "pdf",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/pdf",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "permissions-manager",
+      "source": "https://github.com/SpillwaveSolutions/claude_permissions_skill/tree/da74f448c0ce69eddd5047c5f94f08c10ab8a49d/.",
+      "upstream": "SpillwaveSolutions/claude_permissions_skill"
+    },
+    {
+      "name": "pitch-packager",
+      "source": "./agent-skill-sources/pitch-packager"
+    },
+    {
+      "name": "pptx",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/pptx",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "progressive-disclosure",
+      "source": "./agent-skill-sources/progressive-disclosure"
+    },
+    {
+      "name": "reference-hunt",
+      "source": "./agent-skill-sources/reference-hunt"
+    },
+    {
+      "name": "remembering-conversations",
+      "source": "https://github.com/obra/episodic-memory/tree/7e06519357777badd7a115d2014a7ef845904310/skills/remembering-conversations",
+      "upstream": "obra/episodic-memory"
+    },
+    {
+      "name": "shadcn-svelte",
+      "source": "https://github.com/huntabyte/shadcn-svelte/tree/7f5289a709281fb6ac893b8c5ca8a543404dcf0d/skills/shadcn-svelte",
+      "upstream": "huntabyte/shadcn-svelte"
+    },
+    {
+      "name": "simple-english",
+      "source": "https://github.com/AminBlg/SimpleEnglish/tree/61ee200efbd423050aab982eed94226229891ae0/skills/simple-english",
+      "upstream": "AminBlg/SimpleEnglish"
+    },
+    {
+      "name": "skill-creator",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/skill-creator",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "slack-gif-creator",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/slack-gif-creator",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "theme-factory",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/theme-factory",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "web-artifacts-builder",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/web-artifacts-builder",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "webapp-testing",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/webapp-testing",
+      "upstream": "anthropics/skills"
+    },
+    {
+      "name": "writing-clearly-and-concisely",
+      "source": "https://github.com/obra/the-elements-of-style/tree/05fc4f0d2b97b7c042dd9949ad658568e4a1324e/skills/writing-clearly-and-concisely",
+      "upstream": "obra/the-elements-of-style"
+    },
+    {
+      "name": "writing-hookify-rules",
+      "source": "https://github.com/anthropics/claude-plugins-official/tree/3deb821cb71ccfaaf2ffa9935e977df314ce5cd5/plugins/hookify/skills/writing-rules",
+      "upstream": "anthropics/claude-plugins-official"
+    },
+    {
+      "name": "xlsx",
+      "source": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/xlsx",
+      "upstream": "anthropics/skills"
+    }
+  ],
+  "plugin_owned_skills": {
+    "engram@engram": [
+      "curating-memory",
+      "curating-spine",
+      "discovering",
+      "migrating-from-beads",
+      "promoting-memory"
+    ],
+    "homelab@local-agent-plugins": [
+      "skill-qa",
+      "terraform"
+    ]
+  },
+  "plugin_skill_bridges": [
+    {
+      "marketplace": "engram",
+      "skills_path": "skill/engram/skills",
+      "skills": [
+        "curating-memory",
+        "curating-spine",
+        "discovering",
+        "migrating-from-beads",
+        "promoting-memory"
+      ]
+    }
+  ]
+}

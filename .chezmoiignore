@@ -7,3 +7,10 @@ README.md
 AGENTS.md
 
 CLAUDE.md
+
+# Source and verification assets for the shared agent setup.
+scripts/
+tests/
+docs/
+agent-skill-sources/
+agent-skills.json

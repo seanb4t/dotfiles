@@ -1,12 +1,11 @@
 {
   "mcpServers": {
-    "grafana": {
-      "type": "http",
-      "url": "https://mcp.grafana.fzymgc.house/mcp"
-    },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
     },
     "terraform": {
       "command": "docker",
@@ -14,8 +13,10 @@
         "run",
         "-i",
         "--rm",
-        "-e", "TFE_TOKEN",
-        "-e", "TFE_ADDRESS=https://app.terraform.io",
+        "-e",
+        "TFE_TOKEN",
+        "-e",
+        "TFE_ADDRESS=https://app.terraform.io",
         "hashicorp/terraform-mcp-server:latest"
       ],
       "env": {

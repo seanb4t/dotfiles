@@ -1,6 +1,8 @@
 # Local settings (machine-specific, not shared)
 .claude/settings.local.json
 .serena/
+__pycache__/
+*.pyc
 
 # Beads / Dolt files (added by bd init)
 .dolt/

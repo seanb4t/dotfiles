@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "homelab",
-      "description": "Infrastructure skills for homelab cluster (Grafana, Terraform)",
+      "description": "Infrastructure skills for homelab cluster (Terraform, skill QA)",
       "source": "./homelab"
     },
     {

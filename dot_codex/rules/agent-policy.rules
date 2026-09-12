@@ -1,0 +1,31 @@
+# Direct-command counterparts of the existing Claude deny/ask preferences.
+# These rules do not claim to implement Claude's file-read globs or guard every
+# possible shell wrapper. Keep the native sandbox and approval system enabled.
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "forbidden",
+    justification = "PR merging is reserved for the user under the existing Claude policy.",
+    match = ["gh pr merge 123"],
+    not_match = ["gh pr view 123"],
+)
+prefix_rule(
+    pattern = ["terraform", ["apply", "destroy"]],
+    decision = "prompt",
+    justification = "Review infrastructure changes before applying or destroying them.",
+    match = ["terraform apply", "terraform destroy"],
+    not_match = ["terraform plan"],
+)
+prefix_rule(
+    pattern = ["kubectl", "delete"],
+    decision = "prompt",
+    justification = "Confirm Kubernetes deletions under the existing user policy.",
+    match = ["kubectl delete pod example"],
+    not_match = ["kubectl get pods"],
+)
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "prompt",
+    justification = "Confirm recursive force deletion under the existing user policy.",
+    match = ["rm -rf example"],
+    not_match = ["rm -f example"],
+)

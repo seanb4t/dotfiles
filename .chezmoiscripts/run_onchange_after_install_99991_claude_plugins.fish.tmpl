@@ -1,0 +1,6 @@
+#!/usr/bin/env fish
+# settings: {{ include ".chezmoitemplates/claude-settings.json" | sha256sum }}
+# restorer: {{ include "scripts/restore-claude-plugins.py" | sha256sum }}
+# native skill bridges: {{ include "agent-skills.json" | sha256sum }}
+# Native plugins retain ownership of their hooks, agents, and bundled skills.
+python3 {{ joinPath .chezmoi.sourceDir "scripts/restore-claude-plugins.py" | quote }}

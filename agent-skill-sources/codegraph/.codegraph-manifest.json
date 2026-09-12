@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "codegraph_version": "dev",
+  "installed_at": "2026-09-10T14:28:37Z",
+  "location": "global",
+  "files": {
+    "hooks/session-nudge.sh": "sha256:9284614327bf9497002450142ae8eca1c6846df98f9e36edd3bad9f6d45f2f8e",
+    "settings.json#hooks.SessionStart": "sha256:464e63c0d7e5d4d579fb1b9e7c2193a1ea7778cc29b38719af77205fe0ffebe7",
+    "skills/codegraph/SKILL.md": "sha256:e711379d68094bffbd5d997cccd172bb43ec3c8fa9276e06c67a59b4ce647644"
+  }
+}

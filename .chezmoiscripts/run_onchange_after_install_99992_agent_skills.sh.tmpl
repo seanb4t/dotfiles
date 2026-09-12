@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+# selection: {{ include "agent-skills.json" | sha256sum }}
+# restorer: {{ include "scripts/agent-skills.py" | sha256sum }}
+exec python3 {{ joinPath .chezmoi.sourceDir "scripts/agent-skills.py" | quote }} restore

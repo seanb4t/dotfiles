@@ -1,0 +1,66 @@
+{{- $secrets := include ".chezmoitemplates/mcp-secrets.json.age" | decrypt | fromJson -}}
+{
+  "clickhouse_ro": {
+    "url": "https://llm.fzymgc.house/clickhouse_ro/mcp",
+    "http_headers": {{ index $secrets "clickhouse_ro" "http_headers" | toJson }}
+  },
+  "clickhouse_rw": {
+    "url": "https://llm.fzymgc.house/clickhouse_rw/mcp",
+    "http_headers": {{ index $secrets "clickhouse_rw" "http_headers" | toJson }}
+  },
+  "clickstack": {
+    "url": "https://hyperdx.fzymgc.house/api/mcp",
+    "http_headers": {{ index $secrets "clickstack" "http_headers" | toJson }}
+  },
+  "codegraph": {
+    "args": [
+      "serve",
+      "--mcp"
+    ],
+    "command": "codegraph"
+  },
+  "context7": {
+    "url": "https://llm.fzymgc.house/context7/mcp",
+    "http_headers": {{ index $secrets "context7" "http_headers" | toJson }}
+  },
+  "deepwiki": {
+    "url": "https://llm.fzymgc.house/deepwiki/mcp",
+    "http_headers": {{ index $secrets "deepwiki" "http_headers" | toJson }}
+  },
+  "engram": {
+    "url": "https://llm.fzymgc.house/engram/mcp",
+    "http_headers": {{ index $secrets "engram" "http_headers" | toJson }}
+  },
+  "exa": {
+    "url": "https://llm.fzymgc.house/exa/mcp",
+    "http_headers": {{ index $secrets "exa" "http_headers" | toJson }}
+  },
+  "fal": {
+    "url": "https://llm.fzymgc.house/fal/mcp",
+    "http_headers": {{ index $secrets "fal" "http_headers" | toJson }}
+  },
+  "firecrawl": {
+    "url": "https://llm.fzymgc.house/firecrawl/mcp",
+    "http_headers": {{ index $secrets "firecrawl" "http_headers" | toJson }}
+  },
+  "firewalla_ro": {
+    "url": "https://llm.fzymgc.house/firewalla_ro/mcp",
+    "http_headers": {{ index $secrets "firewalla_ro" "http_headers" | toJson }}
+  },
+  "karakeep": {
+    "args": [
+      "-y",
+      "@karakeep/mcp"
+    ],
+    "command": "npx",
+    "env": {{ index $secrets "karakeep" "env" | toJson }}
+  },
+  "kubernetes": {
+    "url": "https://llm.fzymgc.house/kubernetes/mcp",
+    "scopes": ["mcp-kubernetes", "groups", "offline_access"],
+    "http_headers": {{ index $secrets "kubernetes" "http_headers" | toJson }}
+  },
+  "sentry-holomush": {
+    "url": "https://mcp.sentry.dev/mcp/fzymgc/holomush"
+  }
+}

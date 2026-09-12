@@ -1,0 +1,8 @@
+---
+name: devops-code-reviewer
+description: Use this agent when you need to review infrastructure code, configuration files, or DevOps-related changes with a focus on simplicity, consistency, security, and best practices. Examples: <example>Context: The user has just written a new Ansible playbook for deploying a service. user: 'I've created a new playbook for deploying Redis to our k3s cluster. Here's the playbook...' assistant: 'Let me use the devops-code-reviewer agent to review this Ansible playbook for best practices, security, and consistency with our existing patterns.'</example> <example>Context: The user has modified Terraform configuration for Vault policies. user: 'I've updated the Vault policies in tf/vault/policy-redis.tf to add new permissions for the Redis service' assistant: 'I'll use the devops-code-reviewer agent to review these Vault policy changes to ensure they follow security best practices and maintain consistency with our existing policies.'</example> <example>Context: The user has created new Kubernetes manifests for an application. user: 'Here are the new Kubernetes manifests for our monitoring stack deployment' assistant: 'Let me review these Kubernetes manifests using the devops-code-reviewer agent to check for security configurations, resource management, and adherence to our cluster conventions.'</example>
+model: sonnet
+color: blue
+---
+
+{{ include ".chezmoitemplates/devops-reviewer.md" }}

@@ -9,7 +9,7 @@ Claude-specific addendum only.
 This repository publishes four source plugins for the fzymgc-house skills
 marketplace:
 
-- `homelab` - infrastructure skills for Grafana, Terraform, and skill QA
+- `homelab` - infrastructure skills for Terraform and skill QA
 - `pr-review` - PR review orchestrators plus review/fix/verification agents
 - `jj` - Jujutsu workflow guidance
 - `superpowers` - development workflow skills forked from obra/superpowers
@@ -135,7 +135,7 @@ All commits must follow Conventional Commits:
 Examples:
 
 ```text
-feat(grafana): add incident management support
+feat(terraform): add workspace inspection
 fix(review-pr): correct agent dispatch for security aspect
 docs: update agent instructions
 ```
@@ -173,7 +173,6 @@ When adding or removing a skill or plugin package, keep these in sync:
 
 Repo-level MCP servers are declared in `.mcp.json`:
 
-- `grafana`
 - `context7`
 - `terraform`
 

@@ -1,0 +1,13 @@
+{
+  "name": "local-agent-plugins",
+  "owner": {
+    "name": "Sean Brandt"
+  },
+  "plugins": [
+    {
+      "name": "homelab",
+      "description": "Terraform and skill QA",
+      "source": "./fzymgc-house-skills/homelab"
+    }
+  ]
+}

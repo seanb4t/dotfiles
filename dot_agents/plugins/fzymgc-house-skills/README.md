@@ -14,7 +14,6 @@ Infrastructure skills for interacting with the homelab cluster.
 
 | Skill | Description |
 |-------|-------------|
-| **grafana** | Grafana, Loki, and Prometheus operations — dashboards, logs, metrics, alerting, incidents, OnCall, profiling |
 | **terraform** | Terraform Cloud operations — runs, workspaces, state management, registry documentation |
 | **skill-qa** | Validates SKILL.md files against Claude Code best practices |
 
@@ -137,7 +136,6 @@ plugins/
 homelab/
   plugin.json           # Plugin manifest
   skills/
-    grafana/            # Grafana/Loki/Prometheus operations
     terraform/          # Terraform Cloud operations
     skill-qa/           # SKILL.md validation
 pr-review/
@@ -162,7 +160,7 @@ superpowers/
 All commits must follow [Conventional Commits](https://www.conventionalcommits.org/) format. This is enforced by a commit-msg hook via cocogitto.
 
 ```text
-feat(grafana): add incident management support
+feat(terraform): add workspace inspection
 fix(review-pr): correct agent dispatch for security aspect
 docs: update README
 ```

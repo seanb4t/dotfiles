@@ -1,2 +1,8 @@
 [features]
 hooks = true
+
+# This repository has no .codegraph index. Follow AGENTS.md's opt-in rule;
+# remove this override if the user explicitly indexes the repository later.
+# The installed server currently times out during the unindexed startup check.
+[mcp_servers.codegraph]
+enabled = false

@@ -1,0 +1,13 @@
+{{/* chezmoi:modify-template */ -}}
+{{- $current := dict -}}
+{{- if .chezmoi.stdin | trim -}}
+{{- $current = fromJson .chezmoi.stdin -}}
+{{- end -}}
+{{- $preferences := include ".chezmoitemplates/claude-settings.json" | fromJson -}}
+{{- range $name, $marketplace := get $preferences "extraKnownMarketplaces" | default dict -}}
+{{- $source := get $marketplace "source" -}}
+{{- if and (eq (get $source "source") "directory") (hasPrefix "~/" (get $source "path")) -}}
+{{- $_ := set $source "path" (joinPath $.chezmoi.homeDir (trimPrefix "~/" (get $source "path"))) -}}
+{{- end -}}
+{{- end -}}
+{{ mergeOverwrite $current $preferences | toPrettyJson }}

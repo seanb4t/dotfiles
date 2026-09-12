@@ -1,0 +1,15 @@
+{{/* chezmoi:modify-template */ -}}
+{{- $current := dict -}}
+{{- if .chezmoi.stdin | trim -}}
+{{- $current = fromToml .chezmoi.stdin -}}
+{{- end -}}
+{{- $settings := includeTemplate "codex-settings.toml.tmpl" . | fromToml -}}
+{{- $servers := includeTemplate "codex-mcp.json.tmpl" . | fromJson -}}
+{{- $merged := mergeOverwrite $current $settings -}}
+{{- $existingServers := get $merged "mcp_servers" | default dict -}}
+{{- range $name, $server := $servers -}}
+{{- /* Replace each owned server as a unit so old transports cannot survive. */ -}}
+{{- $_ := set $existingServers $name $server -}}
+{{- end -}}
+{{- $_ := set $merged "mcp_servers" $existingServers -}}
+{{ $merged | toToml }}

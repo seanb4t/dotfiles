@@ -8,7 +8,7 @@
       "name": "homelab",
       "source": {
         "source": "local",
-        "path": "./.agents/plugins/fzymgc-house-skills/plugins/homelab"
+        "path": "./.agents/plugins/fzymgc-house-skills/homelab"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -20,7 +20,7 @@
       "name": "pr-review",
       "source": {
         "source": "local",
-        "path": "./.agents/plugins/fzymgc-house-skills/plugins/pr-review"
+        "path": "./.agents/plugins/fzymgc-house-skills/pr-review"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -32,7 +32,7 @@
       "name": "jj",
       "source": {
         "source": "local",
-        "path": "./.agents/plugins/fzymgc-house-skills/plugins/jj"
+        "path": "./.agents/plugins/fzymgc-house-skills/jj"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -44,7 +44,7 @@
       "name": "superpowers",
       "source": {
         "source": "local",
-        "path": "./.agents/plugins/fzymgc-house-skills/plugins/superpowers"
+        "path": "./.agents/plugins/fzymgc-house-skills/superpowers"
       },
       "policy": {
         "installation": "AVAILABLE",

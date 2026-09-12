@@ -1,0 +1,67 @@
+<!-- chezmoi:user-preferences:start -->
+# User preferences
+
+These are Sean's working preferences across projects. Repository instructions
+add project-specific context; use the tools actually available in the session.
+
+## Communication and execution
+
+- Be direct and concise. Skip praise, unnecessary caveats, and repeated plans.
+- Ask only when the answer materially affects the work. Make reasonable,
+  reversible decisions within the authorized scope and explain significant assumptions.
+- Plan before editing. When the user requests planning only, wait for implementation authorization.
+- Complete authorized work and verify it before claiming success. Distinguish
+  implementation, deployment, and live behavioral verification.
+- Report failures and unresolved limitations plainly. Try appropriate alternatives
+  before asking the user to resolve a blocker.
+
+## Tools and context
+
+- Read relevant skills before using their workflows. Prefer a suitable skill,
+  then a purpose-built MCP tool, then an efficient native tool or CLI.
+- Use bounded searches and reads. Prefer `rg` for text and symbols and `sg`
+  for structural code searches. In an indexed repository, CodeGraph takes precedence.
+- Fetch current technical documentation with Context7 when applicable. Follow
+  the installed Context7 instructions, including library resolution before fetching docs.
+- Use `agent-browser` for browser automation when available and appropriate.
+- Read `BOOST.md` in the agent's configuration directory when present and follow
+  its command-output guidance. A bare `@BOOST.md` is not a substitute for reading it.
+- Apply GSD workflows only when explicitly requested. GSD owns its skills,
+  runtime adapters, agents, and hooks; do not migrate them with `npx skills`.
+- For non-GSD personal skills, use `npx skills` and `~/.agents/skills` as the
+  canonical installation. Keep agent-specific links where needed. Edit authored
+  sources, not installed copies; keep the chezmoi restore selection current.
+
+## Development and review
+
+- Confirm the working directory, branch, and worktree before edits. For PR
+  reviews, inspect the PR's actual branch or diff rather than assuming the main checkout.
+- Make coherent, focused changes. Preserve existing structure and local edits.
+- Prefer idiomatic, simple implementations. State concerns with a proposed
+  approach once, with a concrete alternative; respect the user's informed choice.
+- Avoid unnecessary boilerplate and comments that merely restate the code.
+- Investigate errors before suppressing them. Do not add ignore directives to
+  conceal problems or bypass TLS verification without explicit authorization.
+- Run meaningful checks appropriate to the change. Application behavior needs
+  coverage; avoid exhaustive tests for simple configuration or cosmetic edits.
+- Use available debugging and verification skills when their triggers apply.
+- For Terraform operations, use the installed skill first.
+
+## Git and shell
+
+- Use non-interactive commands. For file operations use `cp -f`, `mv -f`, and
+  `rm -f` (and recursive flags where required); use SSH batch mode.
+- Use `gh` for GitHub operations with structured JSON and bounded output.
+- Follow conventional commit messages and make atomic commits when authorized.
+  Do not amend or rebase unless requested. Follow the repository's authorship policy.
+- Do not send messages or publish external changes without authorization.
+- Install repository hooks when creating a worktree if its hook configuration requires them.
+- Prefer targeted changes and checks; preserve unrelated work and report pre-existing failures separately.
+- Do not create unsolicited README or LICENSE boilerplate. Use the available
+  review workflow before requesting review, and do not add issue reviewers manually.
+- Include the required AI authorship byline in authored commits and PR comments.
+- Verify the current date before time-sensitive searches and check current
+  documentation when selecting GitHub Actions versions.
+- Prefer Exa for general web search and Firecrawl for page extraction when
+  available; follow product-specific documentation skills where they apply.
+<!-- chezmoi:user-preferences:end -->
