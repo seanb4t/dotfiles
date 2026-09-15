@@ -15,12 +15,16 @@ tap "homebrew/core"
 tap "int128/kubelogin", trusted: true
 tap "jbangdev/tap", trusted: true
 tap "morantron/tmux-fingers"
+tap "namespacelabs/namespace"
 tap "nats-io/nats-tools", trusted: true
 tap "omnigent-ai/tap"
 tap "openhue/cli", trusted: true
 tap "oven-sh/bun", trusted: true
+tap "plaid/plaid-cli"
 tap "pulumi/tap", trusted: true
 tap "schpet/tap", trusted: true
+tap "seanb4t/tap", trusted: true
+tap "stablyai/orca"
 tap "yakitrak/yakitrak", trusted: true
 tap "zjrosen/perles", trusted: true
 # Static analysis and lint tool, for (ba)sh scripts
@@ -63,12 +67,8 @@ brew "bash-completion"
 brew "bat"
 # Bash Automated Testing System
 brew "bats-core"
-# Git for Data
-brew "dolt"
 # Memory upgrade for your coding agent
 brew "beads"
-# Compiler infrastructure and toolchain library for WebAssembly
-brew "binaryen"
 # Yet another cross-platform graphical process/system monitor
 brew "bottom"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
@@ -77,6 +77,10 @@ brew "btop"
 brew "buf"
 # Powerful, enterprise-ready, open source web server with automatic HTTPS
 brew "caddy"
+# Cargo plugin for linting your dependencies
+brew "cargo-deny"
+# Next-generation test runner for Rust
+brew "cargo-nextest"
 # CLI to facilitate terraforming your existing Cloudflare resources
 brew "cf-terraforming"
 # Manage your dotfiles across multiple diverse machines, securely
@@ -91,6 +95,8 @@ brew "cloudflared"
 brew "cmctl"
 # Conventional Commits toolbox
 brew "cocogitto"
+# See where your AI coding tokens go - by task, tool, model, and project
+brew "codeburn"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Container Signing
@@ -139,6 +145,8 @@ brew "git-delta"
 brew "git-extras"
 # Git extension for versioning large files
 brew "git-lfs"
+# Audit git repos for secrets
+brew "gitleaks"
 # Render markdown on the CLI
 brew "glow"
 # Library for USB device access
@@ -147,6 +155,8 @@ brew "libusb"
 brew "gnupg"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Task is a task runner/build tool that aims to be simpler and easier to use
+brew "go-task", link: false
 # Stricter gofmt
 brew "gofumpt"
 # Fast linters runner for Go
@@ -166,7 +176,7 @@ brew "grc"
 # Kubernetes package manager
 brew "helm"
 # Agent multiplexer that lives in your terminal
-brew "herdr"
+brew "herdr", restart_service: :changed
 # CLI email client written in Rust
 brew "himalaya"
 # Improved top (interactive process viewer)
@@ -229,8 +239,6 @@ brew "markdownlint-cli2"
 brew "mas"
 # Minimalist GNU for Windows and GCC cross-compilers
 brew "mingw-w64"
-# Replacement for ls, cp and other commands for object storage
-brew "minio-mc"
 # Deep clean and optimize your Mac
 brew "mole"
 # Ambitious Vim-fork focused on extensibility and agility
@@ -255,8 +263,6 @@ brew "plantuml"
 brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
-# Object-relational database system
-brew "postgresql@17"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Modern replacement for ps written in Rust
@@ -281,8 +287,6 @@ brew "rustup"
 brew "s3cmd"
 # Easily detect and prevent bugs and anti-patterns in your codebase
 brew "semgrep"
-# Command-line utility to interact with Sentry
-brew "sentry-cli"
 # Smart session manager for the terminal
 brew "sesh"
 # Work with remote images registries
@@ -301,12 +305,12 @@ brew "step"
 brew "stern"
 # CLI for generating a Software Bill of Materials from container images
 brew "syft"
+# TOML toolkit written in Rust
+brew "taplo"
 # Traceroute implementation using TCP packets
 brew "tcptraceroute"
 # Language Server Protocol for Terraform
 brew "terraform-lsp"
-# Linter for Terraform files
-brew "tflint"
 # Update version constraints in your Terraform configurations
 brew "tfupdate"
 # Terminal multiplexer
@@ -351,8 +355,8 @@ brew "antoniorodr/memo/memo"
 brew "bats-core/bats-core/bats-assert"
 # Supporting library for Bats test helpers
 brew "bats-core/bats-core/bats-support"
-# A fast, cross-platform build tool inspired by Make, designed for modern workflows.
-brew "go-task/tap/go-task"
+# Dagger is an integrated platform to orchestrate the delivery of applications
+brew "dagger/tap/dagger", trusted: true
 # Terraform
 brew "hashicorp/tap/terraform"
 # Vault
@@ -361,15 +365,17 @@ brew "hashicorp/tap/vault"
 brew "jbangdev/tap/jbang"
 # mouseless terminal interaction
 brew "morantron/tmux-fingers/tmux-fingers", trusted: true
-# A tool for creating NATS account and user access configurations
-brew "nats-io/nats-tools/nsc"
+# Container-optimized cloud infrastructure that just works.
+brew "namespacelabs/namespace/nsc", trusted: true
 # Meta-harness for AI agents
 brew "omnigent-ai/tap/omnigent", trusted: true
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
+# CLI for the Plaid API
+brew "plaid/plaid-cli/plaid", trusted: true
 # CLI for tracking coding agent changes with jujutsu
 brew "schpet/tap/jjagent"
-brew "yakitrak/yakitrak/notesmd-cli", link: false
+brew "yakitrak/yakitrak/notesmd-cli"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
@@ -408,12 +414,14 @@ cask "claude"
 cask "claude-code@latest"
 # Tool to remove unnecessary files and folders from disk
 cask "cleanmymac"
+# Command-line interface for CleanMyMac
+cask "cleanmymac-cli"
+# Pre-indexed code knowledge graph for coding agents
+cask "seanb4t/tap/codegraph", trusted: true
 # AI code review CLI
 cask "coderabbit"
 # OpenAI's coding agent that runs in your terminal
 cask "codex"
-# Claude code parallelisation
-cask "conductor"
 # Containerized environments for coding agents
 cask "dagger/tap/container-use"
 # OpenJDK distribution from Amazon
@@ -430,6 +438,8 @@ cask "disk-drill"
 cask "docker-desktop"
 # Sync DriveThruRPG libraries to compatible devices
 cask "drivethrurpg"
+# Self-hosted, correctable, OAuth-secured memory for coding agents
+cask "seanb4t/tap/engram", trusted: true
 # Calendar software
 cask "fantastical"
 # Email client
@@ -454,9 +464,11 @@ cask "font-noto-sans-mono"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "gcloud-cli"
 # Terminal emulator that uses platform-native UI and GPU acceleration
-cask "ghostty@tip"
+cask "ghostty"
 # Desktop client for GitHub repositories
 cask "github"
+# A fast, cross-platform build tool inspired by Make, designed for modern workflows.
+cask "go-task/tap/go-task", trusted: true
 # Web browser
 cask "google-chrome"
 # Client for the Google Drive storage service
@@ -487,6 +499,8 @@ cask "miniconda"
 cask "netnewswire@beta"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# IDE for orchestrating AI coding agents across terminals and worktrees
+cask "stablyai/orca/orca", trusted: true
 # Desktop virtualization software
 cask "parallels"
 # PDF reader, editor and annotator
@@ -519,10 +533,6 @@ cask "telegram"
 cask "atomicjar/tap/testcontainers-desktop"
 # Open-source code editor
 cask "visual-studio-code"
-# Web browser with built-in email client focusing on customization and control
-cask "vivaldi"
-# Multiplayer code editor
-cask "zed"
 # Video communication and virtual meeting platform
 cask "zoom"
 vscode "1password.op-vscode"
