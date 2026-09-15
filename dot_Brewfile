@@ -367,8 +367,6 @@ brew "jbangdev/tap/jbang"
 brew "morantron/tmux-fingers/tmux-fingers", trusted: true
 # Container-optimized cloud infrastructure that just works.
 brew "namespacelabs/namespace/nsc", trusted: true
-# Meta-harness for AI agents
-brew "omnigent-ai/tap/omnigent", trusted: true
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
 # CLI for the Plaid API
@@ -511,8 +509,6 @@ cask "raspberry-pi-imager"
 cask "raycast"
 # Window snapping tool
 cask "rectangle-pro"
-# CLI for managing DNS host entries via gRPC over mTLS
-cask "fzymgc-house/tap/router-hosts"
 # Open source virtual/remote desktop application
 cask "rustdesk"
 # Team communication and collaboration software
